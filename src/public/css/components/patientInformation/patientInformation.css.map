@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,iBAAiB,CAAA;EACb,OAAO,EAAE,IAAI;EACb,qBAAqB,EAAE,mBAAmB;EAC1C,UAAU,EAAE,MAAM;EAClB,gBAAgB,EAAE,KAAK;EACvB,aAAa,EAAE,iBAAiB;CAEnC",
+    "sources": [
+        "patientInformation.scss"
+    ],
+    "names": [],
+    "file": "patientInformation.css"
+}

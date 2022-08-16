@@ -1,0 +1,12 @@
+.patient-data-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    text-align: center;
+    background-color: white;
+    border-bottom: 1px solid #D2B6B6;
+    // padding-inline: 120px;
+}
+
+// .patient-data-row > * {
+//     border: 1px solid black;
+// }
