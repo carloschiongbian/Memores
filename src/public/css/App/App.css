@@ -1,0 +1,88 @@
+html {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#8860D0), color-stop(#A79BFF), to(#C1C8E4));
+  background-image: linear-gradient(to bottom, #8860D0, #A79BFF, #C1C8E4);
+  height: 100vh;
+}
+
+.App .homepage-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  margin-inline: 10%;
+}
+
+.App .homepage-content .homepage-left-section {
+  width: 60%;
+}
+
+.App .homepage-content .homepage-left-section .homepage-memores-introduction {
+  padding-inline: 30px;
+}
+
+.App .homepage-content .homepage-left-section .homepage-memores-introduction .homepage-introduction .homepage-introduction-content {
+  font-size: 23px;
+  text-align: justify;
+  text-indent: 40px;
+}
+
+.App .homepage-content .homepage-right-section {
+  width: 40%;
+}
+
+.App .homepage-content .homepage-right-section .homepage-user-login {
+  padding-block: 30%;
+}
+
+.App .homepage-content .homepage-right-section .homepage-user-login .login-modal {
+  margin-inline: 10px;
+  padding-block: 50px;
+  padding-inline: 50px;
+  background-color: #C4C4C4;
+  border-radius: 10px;
+}
+
+.App .homepage-content .homepage-right-section .homepage-user-login .login-modal .login-modal-header {
+  color: white;
+  font-size: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid white;
+}
+
+.App .homepage-content .homepage-right-section .homepage-user-login .login-modal .login-modal-inputs .login-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.App .homepage-content .homepage-right-section .homepage-user-login .login-modal .login-modal-inputs .login-form input[id="login-username"], .App .homepage-content .homepage-right-section .homepage-user-login .login-modal .login-modal-inputs .login-form input[id="login-password"] {
+  border-radius: 7px;
+  border: 1px solid #a0a0a0;
+  height: 35px;
+  margin-bottom: 7px;
+  padding-inline: 20px;
+  outline: none;
+}
+
+.App .homepage-content .homepage-right-section .homepage-user-login .login-modal .login-modal-inputs .login-form input[type="submit"] {
+  background-color: #ed31febc;
+  color: white;
+  border-radius: 7px;
+  border: 1px solid #a0a0a0;
+  height: 35px;
+  font-weight: bold;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.App .homepage-content .homepage-right-section .homepage-user-login .login-modal .login-modal-inputs .login-form input[type="submit"]:hover {
+  background-color: #EE31FE;
+}
+/*# sourceMappingURL=App.css.map */

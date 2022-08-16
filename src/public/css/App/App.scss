@@ -1,0 +1,85 @@
+html{
+    background-image: linear-gradient(to bottom,#8860D0, #A79BFF, #C1C8E4);
+    height: 100vh;
+}
+
+.App{
+
+    .homepage-content{
+        display: flex;
+        flex-direction: row;
+        margin-inline: 10%;
+
+        .homepage-left-section{
+            width: 60%;
+
+            .homepage-memores-introduction{
+                padding-inline: 30px;
+
+                .homepage-introduction{
+                    .homepage-introduction-content{
+                        font-size: 23px;
+                        text-align: justify;
+                        text-indent: 40px;
+                    }
+                }
+            }
+        }
+
+        .homepage-right-section{
+            width: 40%; 
+
+            .homepage-user-login{
+                // background-color: red;
+                padding-block: 30%;
+
+                .login-modal{
+                    margin-inline: 10px;
+                    // margin-top: 15%;
+                    padding-block: 50px;
+                    padding-inline: 50px;
+                    background-color: #C4C4C4;
+                    border-radius: 10px;
+
+                    .login-modal-header{
+                        color: white;
+                        font-size: 20px;
+                        padding-bottom: 10px;
+                        border-bottom: 1px solid white;
+                    }
+
+                    .login-modal-inputs{
+
+                        .login-form{
+                            display: flex;
+                            flex-direction: column; 
+
+                            input[id="login-username"], input[id="login-password"]{
+                                border-radius: 7px;
+                                border: 1px solid #a0a0a0;
+                                height: 35px;
+                                margin-bottom: 7px;
+                                padding-inline: 20px;
+                                outline: none;
+                            }
+
+                            input[type="submit"]{
+                                background-color: #ed31febc; 
+                                color: white;
+                                border-radius: 7px;
+                                border: 1px solid #a0a0a0;
+                                height: 35px;  
+                                font-weight: bold;
+                                transition: 0.2s;
+
+                                &:hover{
+                                    background-color: #EE31FE; 
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
