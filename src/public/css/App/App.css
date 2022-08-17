@@ -21,6 +21,7 @@ html {
 
 .App .homepage-content .homepage-left-section .homepage-memores-introduction {
   padding-inline: 30px;
+  padding-block: 20px;
 }
 
 .App .homepage-content .homepage-left-section .homepage-memores-introduction .homepage-introduction .homepage-introduction-content {
@@ -80,6 +81,7 @@ html {
   font-weight: bold;
   -webkit-transition: 0.2s;
   transition: 0.2s;
+  cursor: pointer;
 }
 
 .App .homepage-content .homepage-right-section .homepage-user-login .login-modal .login-modal-inputs .login-form input[type="submit"]:hover {

@@ -45,4 +45,22 @@ html{
             margin: 0;
         }
     }
+
+    .patient-records-navigation{
+        background-color: white;
+        padding-block: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+        .patient-records-page-display{
+            background-color: #CCCC;
+            padding-inline: 10px;
+            margin-inline: 10px;
+        }
+
+        h1{
+            margin: 0;
+        }
+    }
 }

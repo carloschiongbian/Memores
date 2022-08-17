@@ -15,6 +15,7 @@ html{
 
             .homepage-memores-introduction{
                 padding-inline: 30px;
+                padding-block: 20px;
 
                 .homepage-introduction{
                     .homepage-introduction-content{
@@ -71,6 +72,7 @@ html{
                                 height: 35px;  
                                 font-weight: bold;
                                 transition: 0.2s;
+                                cursor: pointer;
 
                                 &:hover{
                                     background-color: #EE31FE; 

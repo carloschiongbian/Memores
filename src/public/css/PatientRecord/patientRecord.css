@@ -47,4 +47,29 @@ html {
 .patient-records-container .patient-records-modal h1 {
   margin: 0;
 }
+
+.patient-records-container .patient-records-navigation {
+  background-color: white;
+  padding-block: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.patient-records-container .patient-records-navigation .patient-records-page-display {
+  background-color: #CCCC;
+  padding-inline: 10px;
+  margin-inline: 10px;
+}
+
+.patient-records-container .patient-records-navigation h1 {
+  margin: 0;
+}
 /*# sourceMappingURL=patientRecord.css.map */
