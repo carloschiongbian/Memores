@@ -1,6 +1,5 @@
-import './public/css/App/App.css';
-import HomePage from './homePage';
-import PatientRecord from './patientRecord';
+import HomePage from './pages/homePage';
+import PatientRecord from './pages/patientRecord';
 import { useState, useEffect } from 'react';
 import { Route, Routes, Navigate, BrowserRouter } from 'react-router-dom';
 
@@ -9,7 +8,6 @@ function App() {
   // this state variable accepts an array of objects
   const [data, setData] = useState([{}]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // useEffect(() => {
   //   fetch("/members").then(

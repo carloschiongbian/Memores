@@ -3,13 +3,21 @@ html{
 }
 
 .patient-records-container{
+    
     .patient-records-navbar{
         background-image: linear-gradient(to right, #8860D0, #A79BFF); 
-        // background-color: red;
         padding-block: 30px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
 
         h1{
             margin-top: 0;
+        }
+
+        &:first-child{
+            margin-left: 2%;
+            margin-right: 5%;
         }
     }
 

@@ -5,21 +5,23 @@ html{
 
 .App{
 
+    .homepage-content > * {
+        width: 100%;
+        height: 100vh;
+    }
+
     .homepage-content{
         display: flex;
         flex-direction: row;
         margin-inline: 10%;
 
-        .homepage-left-section{
-            width: 60%;
-
-            .homepage-memores-introduction{
+        .homepage-left-section{            
+            .homepage-memores-introduction{ 
                 padding-inline: 30px;
                 padding-block: 20px;
-
                 .homepage-introduction{
                     .homepage-introduction-content{
-                        font-size: 23px;
+                        font-size: 20px;
                         text-align: justify;
                         text-indent: 40px;
                     }
@@ -27,9 +29,8 @@ html{
             }
         }
 
-        .homepage-right-section{
-            width: 40%; 
-
+        .homepage-right-section{ 
+            // width: 40%;            
             .homepage-user-login{
                 // background-color: red;
                 padding-block: 30%;

@@ -1,13 +1,33 @@
-import './public/css/PatientRecord/patientRecord.css';
-import PatientInformation from './components/patientInformation';
+import '../public/css/PatientRecord/patientRecord.css';
+import PatientInformation from '../components/patientInformation';
+import UserNavigationMenu from '../components/userNavigationMenu';
+import { useState } from 'react';
 
 const PatientRecord = () => {
 
     // Data for the patients will be fetched from this page
 
+    const [pageCount, setPageCount] = useState(0);
+
+    //This function displays a sample of how the navigation page number would look like
+    const sampleNavigationDisplay = (action) => {
+        switch (action) {
+            case 'Prev':
+                if(pageCount > 0){
+                    setPageCount(pageCount - 1);
+                }
+                break;
+
+            case 'Next':
+                setPageCount(pageCount + 1);                
+        }
+    }
+
     return (
         <div className="patient-records-container">
+
             <div className="patient-records-navbar">
+                <UserNavigationMenu />
                 <h1>LOGO</h1>
             </div>
 
@@ -29,11 +49,11 @@ const PatientRecord = () => {
             </div>
 
             <div className="patient-records-navigation">
-                <button>Prev</button>
+                <button onClick={() => sampleNavigationDisplay('Prev')}>Prev</button>
                 <div className="patient-records-page-display">
-                    1
+                    { pageCount }
                 </div>
-                <button>Next</button>
+                <button onClick={() => sampleNavigationDisplay('Next')}>Next</button>
             </div>
         </div>
     );

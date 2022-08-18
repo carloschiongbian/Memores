@@ -8,7 +8,8 @@ const PatientInformation = () => {
     let year = dateObj.getUTCFullYear();
     let date = month + "/" + day + "/" + year;
 
-    const sample = [ { id: 1, name: "Gon Freecs", age: 16, screenedOn: date }, { id: 2, name: "Gordon Ramsay", age: 35, screenedOn: date } ]
+    const sample = [ { id: 1, name: "Gon Freecs", age: 16, screenedOn: date }, { id: 2, name: "Gordon Ramsay", age: 35, screenedOn: date } ];
+    const emptyData = { id: '-', name: '-', age: '-', screenedOn: '-' };
 
     return (
         <>

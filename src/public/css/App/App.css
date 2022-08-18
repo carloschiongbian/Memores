@@ -4,6 +4,11 @@ html {
   height: 100vh;
 }
 
+.App .homepage-content > * {
+  width: 100%;
+  height: 100vh;
+}
+
 .App .homepage-content {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -15,23 +20,15 @@ html {
   margin-inline: 10%;
 }
 
-.App .homepage-content .homepage-left-section {
-  width: 60%;
-}
-
 .App .homepage-content .homepage-left-section .homepage-memores-introduction {
   padding-inline: 30px;
   padding-block: 20px;
 }
 
 .App .homepage-content .homepage-left-section .homepage-memores-introduction .homepage-introduction .homepage-introduction-content {
-  font-size: 23px;
+  font-size: 20px;
   text-align: justify;
   text-indent: 40px;
-}
-
-.App .homepage-content .homepage-right-section {
-  width: 40%;
 }
 
 .App .homepage-content .homepage-right-section .homepage-user-login {

@@ -7,10 +7,25 @@ html {
   background-image: -webkit-gradient(linear, left top, right top, from(#8860D0), to(#A79BFF));
   background-image: linear-gradient(to right, #8860D0, #A79BFF);
   padding-block: 30px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 
 .patient-records-container .patient-records-navbar h1 {
   margin-top: 0;
+}
+
+.patient-records-container .patient-records-navbar:first-child {
+  margin-left: 2%;
+  margin-right: 5%;
 }
 
 .patient-records-container .patient-records-header {
