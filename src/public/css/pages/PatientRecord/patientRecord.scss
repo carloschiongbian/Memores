@@ -31,10 +31,45 @@ html{
             border-radius: 5px;
             padding-inline: 30px;
             color: #5686E1;
-        }
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
 
-        h2{
-            margin: 0;
+            h2{
+                margin: 0;
+            }
+
+            .patient-search-bar{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 7px;
+
+                input[id="search-patient"]{
+                    padding-block: 10px;
+                    border: 1px solid #CCC;
+                    background-color: #F0E4E4; 
+                    outline: none;
+                    border-radius: 3px;
+                    padding-inline: 7px;
+                    max-width: 200px;
+
+                    &:focus{    
+                        border: 1px solid grey;
+                        background-color: white;
+                    }
+                }
+
+                button[name="new-patient-button"]{
+                    background-color: #198754;
+                    border: none;
+                    padding-block: 10px;
+                    border-radius: 3px;
+                    color: white;
+                    font-weight: bold;
+                    padding-inline: 10px;
+                }
+            }
         }
     }
 

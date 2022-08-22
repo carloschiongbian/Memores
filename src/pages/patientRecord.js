@@ -1,4 +1,4 @@
-import '../public/css/PatientRecord/patientRecord.css';
+import '../public/css/pages/PatientRecord/patientRecord.css';
 import PatientInformation from '../components/patientInformation';
 import UserNavigationMenu from '../components/userNavigationMenu';
 import { useState } from 'react';
@@ -26,14 +26,19 @@ const PatientRecord = () => {
     return (
         <div className="patient-records-container">
 
-            <div className="patient-records-navbar">
+            {/* <div className="patient-records-navbar"> */}
                 <UserNavigationMenu />
-                <h1>LOGO</h1>
-            </div>
+                {/* <h1>LOGO</h1> */}
+            {/* </div> */}
 
             <div className="patient-records-header">
                 <div className="patient-search-bar-container">
                     <h2>Manage Patients</h2>
+
+                    <div className="patient-search-bar">
+                        <input type="text" name="search-patient" id="search-patient" placeholder="Search a Patient" />
+                        <button name="new-patient-button">New Patient</button>
+                    </div>
                 </div>
             </div>
 

@@ -1,4 +1,9 @@
 .user-navigation-menu-container{
+    width: 100%;
+    padding-block: 50px;
+    background-image: linear-gradient(to right, #8860D0, #A79BFF);
+    // margin: 0;
+
     #user-navigation-menu{
         height: 100%; /* 100% Full-height */
         width: 0; /* 0 width - change this with JavaScript */
@@ -87,7 +92,7 @@
     }
 
     .open-menu-button-container{
-        background-color: yellow;
+        margin-left: 20px;
         .open-menu-button{
             img{
                 background-image: transparent;

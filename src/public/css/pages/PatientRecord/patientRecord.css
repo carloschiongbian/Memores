@@ -39,10 +39,59 @@ html {
   border-radius: 5px;
   padding-inline: 30px;
   color: #5686E1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
-.patient-records-container .patient-records-header h2 {
+.patient-records-container .patient-records-header .patient-search-bar-container h2 {
   margin: 0;
+}
+
+.patient-records-container .patient-records-header .patient-search-bar-container .patient-search-bar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  gap: 7px;
+}
+
+.patient-records-container .patient-records-header .patient-search-bar-container .patient-search-bar input[id="search-patient"] {
+  padding-block: 10px;
+  border: 1px solid #CCC;
+  background-color: #F0E4E4;
+  outline: none;
+  border-radius: 3px;
+  padding-inline: 7px;
+  max-width: 200px;
+}
+
+.patient-records-container .patient-records-header .patient-search-bar-container .patient-search-bar input[id="search-patient"]:focus {
+  border: 1px solid grey;
+  background-color: white;
+}
+
+.patient-records-container .patient-records-header .patient-search-bar-container .patient-search-bar button[name="new-patient-button"] {
+  background-color: #198754;
+  border: none;
+  padding-block: 10px;
+  border-radius: 3px;
+  color: white;
+  font-weight: bold;
+  padding-inline: 10px;
 }
 
 .patient-records-container .patient-records-modal {

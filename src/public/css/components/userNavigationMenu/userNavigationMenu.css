@@ -1,3 +1,10 @@
+.user-navigation-menu-container {
+  width: 100%;
+  padding-block: 50px;
+  background-image: -webkit-gradient(linear, left top, right top, from(#8860D0), to(#A79BFF));
+  background-image: linear-gradient(to right, #8860D0, #A79BFF);
+}
+
 .user-navigation-menu-container #user-navigation-menu {
   height: 100%;
   /* 100% Full-height */
@@ -110,7 +117,7 @@
 }
 
 .user-navigation-menu-container .open-menu-button-container {
-  background-color: yellow;
+  margin-left: 20px;
 }
 
 .user-navigation-menu-container .open-menu-button-container .open-menu-button img {
