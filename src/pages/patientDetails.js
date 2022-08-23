@@ -64,7 +64,30 @@ const PatientDetails = () => {
                     </div>
 
                     <div className="patient-screening-details">
-                        <label htmlFor="screening-details">Screening Details</label>
+                        <div className="screening-details-label">
+                            <label htmlFor="screening-details">Screening Details</label>
+                        </div>
+
+                        <div className="patient-screening-details-top-section">
+                            <div className="screened-by">
+                                <label>Screened by:</label>
+                            </div>
+
+                            <div className="screened-on">
+                                <label>Screened on:</label>
+                            </div>
+                        </div>
+
+                        <div className="patient-screening-details-bottom-section">
+                            <div className="patient-screening-results-label">
+                                <label>Results</label>
+                            </div>
+
+                            <div className="patient-screening-results">
+                                <p>lorem lorem</p>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 
