@@ -1,8 +1,9 @@
 import HomePage from './pages/homePage';
 import PatientRecord from './pages/patientRecord';
 import PatientDetails from './pages/patientDetails';
-import { useState, useEffect } from 'react';
-import { Route, Routes, Navigate, BrowserRouter } from 'react-router-dom';
+import Dashboard from './pages/dashboard';
+import { useState } from 'react';
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           <Route path="/" element={ <HomePage /> } />
           <Route path="/patientRecord" element={ <PatientRecord /> } />
           <Route path="/patientDetails" element={ <PatientDetails /> } />
+          <Route path="/dashboard" element={ <Dashboard /> } />
         </Routes>
       </BrowserRouter>
 

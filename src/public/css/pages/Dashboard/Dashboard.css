@@ -1,0 +1,138 @@
+.dashboard-container {
+  background-color: #E5E5E5;
+}
+
+.dashboard-container .dashboard .dashboard-menu {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+  -webkit-column-gap: 10px;
+          column-gap: 10px;
+  row-gap: 10px;
+  padding: 20px;
+}
+
+.dashboard-container .dashboard .dashboard-menu .number-of-patients-container {
+  background-color: white;
+  text-align: center;
+}
+
+.dashboard-container .dashboard .dashboard-menu .number-of-patients-screened-container {
+  background-color: white;
+}
+
+.dashboard-container .dashboard .dashboard-menu .average-time-duration-of-screening-container {
+  background-color: white;
+  -ms-grid-column: 3;
+  -ms-grid-column-span: 2;
+  grid-column: 3/5;
+}
+
+.dashboard-container .dashboard .dashboard-menu .average-time-duration-of-screening-container .average-time {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto auto;
+      grid-template-columns: auto auto auto;
+}
+
+.dashboard-container .dashboard .dashboard-menu .average-time-duration-of-screening-container .average-time h1, .dashboard-container .dashboard .dashboard-menu .average-time-duration-of-screening-container .average-time h3 {
+  margin: 0;
+  padding: 5px;
+}
+
+.dashboard-container .dashboard .dashboard-menu .average-time-duration-of-screening-container .average-time .hours-number-format,
+.dashboard-container .dashboard .dashboard-menu .average-time-duration-of-screening-container .average-time .hours-string-format {
+  text-align: right;
+}
+
+.dashboard-container .dashboard .dashboard-menu .average-time-duration-of-screening-container .average-time .minutes-number-format,
+.dashboard-container .dashboard .dashboard-menu .average-time-duration-of-screening-container .average-time .minutes-string-format {
+  text-align: center;
+}
+
+.dashboard-container .dashboard .dashboard-menu .average-time-duration-of-screening-container .average-time .seconds-number-format,
+.dashboard-container .dashboard .dashboard-menu .average-time-duration-of-screening-container .average-time .seconds-string-format {
+  text-align: left;
+}
+
+.dashboard-container .dashboard .dashboard-menu .recently-screened-patients-container {
+  background-color: white;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-column: 1/3;
+  text-align: left;
+}
+
+.dashboard-container .dashboard .dashboard-menu .recently-screened-patients-container .recently-screened-patients-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-inline: 35px;
+}
+
+.dashboard-container .dashboard .dashboard-menu .recently-screened-patients-container .recently-screened-patients-header label[for="recently-screened-label"] {
+  font-weight: bolder;
+}
+
+.dashboard-container .dashboard .dashboard-menu .recently-screened-patients-container .recently-screened-patients-header label[for="view-all-hyperlink"] {
+  font-weight: bolder;
+  color: #8860D0;
+}
+
+.dashboard-container .dashboard .dashboard-menu .recently-screened-patients-container .recently-screened-patient-data {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 15px 35px 15px 35px;
+  border-bottom: 1px solid #a7a5a5;
+}
+
+.dashboard-container .dashboard .dashboard-menu .recently-screened-patients-container .recently-screened-patient-data .patient-name {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.dashboard-container .dashboard .dashboard-menu .recently-screened-patients-container .recently-screened-patient-data .screening-information-summary {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.dashboard-container .dashboard .dashboard-menu .graphical-representation-of-data-container {
+  background-color: white;
+  -ms-grid-column: 3;
+  -ms-grid-column-span: 2;
+  grid-column: 3/5;
+}
+
+.dashboard-container .dashboard .dashboard-menu > * {
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+/*# sourceMappingURL=Dashboard.css.map */
