@@ -6,6 +6,7 @@ import UserRecord from './pages/userRecord';
 import CreateUser from './pages/createUser';
 import { useState } from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import ScreeningPage from './pages/screeningPage';
 
 function App() {
 
@@ -32,6 +33,8 @@ function App() {
           <Route path="/patientRecord" element={ <PatientRecord /> } />
           <Route path="/patientDetails" element={ <PatientDetails /> } />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/userRecord" element={ <UserRecord/> } />
+          <Route path="/screening" element={ <ScreeningPage/> } />
           <Route path="/userRecord" element={<UserRecord />} />
           <Route path="/createUser" element={ <CreateUser/> } />
         </Routes>

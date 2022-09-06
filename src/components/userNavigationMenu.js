@@ -17,7 +17,7 @@ const UserNavigationMenu = () => {
 
     const navMenu = [ 
         {link: "/", linkName: "Dashboard"}, 
-        {link: "/patientRecord", linkName: "Screening"},
+        {link: "/screening", linkName: "Screening"},
         { link: "/patientRecord", linkName: "Patients" },
         { link: "/userRecord", linkName: "Manage Users"}
     ]
