@@ -5,6 +5,7 @@ import Dashboard from './pages/dashboard';
 import UserRecord from './pages/userRecord';
 import { useState } from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import ScreeningPage from './pages/screeningPage';
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="/patientDetails" element={ <PatientDetails /> } />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/userRecord" element={ <UserRecord/> } />
+          <Route path="/screening" element={ <ScreeningPage/> } />
         </Routes>
       </BrowserRouter>
 
