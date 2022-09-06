@@ -3,8 +3,8 @@ const SelectCountry = () => {
 
     return (
         <div>
-            <label for="country">Country</label>
-            <select id="country" name="country" placeholder="Select Country">
+            <label for="country" className="form-label">Country</label>
+            <select id="country" name="country" placeholder="Select Country" className="form-control">
                 <option value="Afghanistan">Afghanistan</option>
                 <option value="Åland Islands">Åland Islands</option>
                 <option value="Albania">Albania</option>
