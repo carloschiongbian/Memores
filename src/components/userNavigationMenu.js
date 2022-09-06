@@ -50,7 +50,7 @@ const UserNavigationMenu = () => {
                     </div>
 
                     <div className="close-menu-button">
-                        <button class="closebtn" onClick={() => closeNav()}>
+                        <button className="closebtn" onClick={() => closeNav()}>
                             <img src={ closeNavMenu } alt="close-menu" />
                         </button>
                     </div>
