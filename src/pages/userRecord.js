@@ -1,7 +1,8 @@
 import UserNavigationMenu from '../components/userNavigationMenu';
 import '../public/css/pages/PatientRecord/patientRecord.css';
-import { useState, useEffect } from 'react';
 import DataTable from '../components/dataTable';
+import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const UserRecord = () => {
 
@@ -57,6 +58,9 @@ const UserRecord = () => {
     return (
         <div className="patient-records-container">
             <UserNavigationMenu />
+                <Button component={Link} to="/createUser" variant="contained" color="success">
+                   Create a New User
+                </Button>
             <DataTable data={ randomData } header={ sampleHeader } />
         </div>
     );
