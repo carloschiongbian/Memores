@@ -9,7 +9,7 @@ const ScreeningPage = () => {
                 <div className="container mt-2">
                     <div className="vh-75 d-flex flex-column align-items-center justify-content-center">
                         <div>
-                            <h1 className='fw-bolder text-center text-primary pb-4'>Social Aniety Disorder Screening</h1>
+                            <h1 className='fw-bolder text-center text-primary pb-4'>Social Anxiety Disorder Screening</h1>
 
                             <h3 className='fw-bolder pb-4'>Instruction</h3>
 
