@@ -1,5 +1,5 @@
 import UserNavigationMenu from '../components/userNavigationMenu'
-import ScreeningWizard from '../components/screeningWizard';
+import ScreeningWizard from '../components/screening/screeningWizard';
 import '../public/css/pages/ScreeningPage/index.css'
 
 const ScreeningPage = () => (
@@ -74,7 +74,7 @@ const ScreeningPage = () => (
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                        <button type="button" className="btn btn-secondary">Proceed</button>
+                        <button type="button" className="btn btn-secondary" data-bs-target="#screening-wizard-modal" data-bs-toggle="modal" data-bs-dismiss="modal">Proceed</button>
                     </div>
                 </div>
             </div>

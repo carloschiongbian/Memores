@@ -13,15 +13,6 @@
     opacity: 1 !important;
 }
 
-.wizard {
-    /* position: absolute !important;
-    left: 50% !important;
-    top: -40px !important;
-    transform: translate(-50%) !important; */
-    width: 50%;
-    margin: 10px auto;
-}
-
 .wizard-content {
     max-height: 500px !important;
     overflow-y: scroll;
