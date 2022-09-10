@@ -90,7 +90,7 @@ const ScreeningPage = () => {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-secondary" data-bs-target="#screening-wizard-modal" data-bs-toggle="modal" data-bs-dismiss="modal">Proceed</button>
+                            <button type="button" className={`btn btn-secondary ${rowSelected ? '' : 'disabled'}`} data-bs-target="#screening-wizard-modal" data-bs-toggle="modal" data-bs-dismiss="modal">Proceed</button>
                         </div>
                     </div>
                 </div>
