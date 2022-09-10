@@ -55,7 +55,7 @@ const ScreeningWizard = () => {
 
                             {mustShowResult &&
                                 <button className="btn btn-primary" data-bs-dismiss="modal" onClick={handleReturn}>
-                                    Return
+                                    Return1
                                 </button>}
                         </div>
                     </div>
