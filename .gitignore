@@ -4,7 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
-
+/flask-server/venv
 # testing
 /coverage
 
