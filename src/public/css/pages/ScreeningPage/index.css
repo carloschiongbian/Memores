@@ -1,0 +1,40 @@
+.indicators {
+    display: flex !important;
+    justify-content: start !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.indicators [data-bs-target] {
+    background-color: #8866E9 !important;
+}
+
+.carousel-indicators .active {
+    opacity: 1 !important;
+}
+
+.wizard-content {
+    max-height: 500px !important;
+    overflow-y: scroll;
+}
+
+
+/* width */
+.custom-scroll::-webkit-scrollbar {
+    width: 3px;
+}
+
+/* Track */
+.custom-scroll::-webkit-scrollbar-track{
+    background: #f1f1f1;
+}
+
+/* Handle */
+.custom-scroll::-webkit-scrollbar-thumb{
+    background: #8866E9;
+}
+
+/* Handle on hover */
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+    background: #7e5ed8;
+}

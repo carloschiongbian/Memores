@@ -6,6 +6,11 @@
 /* I added another custom utilities */
 /* Custom Utilities */
 
+.bg-outline-primary {
+  border-color: #8866E9 !important;
+  background-color: #8966e9a4 !important;
+}
+
 .px-5 {
   padding-right: 2rem !important;
   padding-left: 2rem !important;
@@ -2486,7 +2491,7 @@ textarea.form-control-lg {
   -moz-appearance: none;
   appearance: none;
   -webkit-print-color-adjust: exact;
-  color-adjust: exact;
+  print-color-adjust: exact;
 }
 .form-check-input[type=checkbox] {
   border-radius: 0.25em;
