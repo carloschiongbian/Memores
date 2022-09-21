@@ -65,22 +65,20 @@ const UserPage = () => {
                         {/* Personal Information */}
                         <div className="col-12 col-lg-6">
                             <h5 className='fw-bold'>Personal Information</h5>
-                            <div>
+                            <div className='mb-3'>
                                 <label htmlFor="contact-number" className="form-label">Professional license</label>
 
 
-                                <div>
+                                <div className='position-relative'>
+                                    <img src={userInfo.licenseImage} alt="" className='professional-license' />
 
-                                    <div className='position-relative'>
-                                        <img src={userInfo.licenseImage} alt="" className='professional-license' />
+                                    <div className='upload-image-inner-container d-flex align-items-center justify-content-center'>
+                                        <div className='upload-button' title="Upload a new professional license...">
 
-
-                                        <div className='upload-image-inner-container'>
                                             <input className='inputfile' type="file" name="pic" accept="image/*" style={{ cursor: "pointer" }} />
                                             <label><i className="bi bi-camera-fill text-primary" height="30" width="30"></i></label>
                                         </div>
                                     </div>
-
                                 </div>
 
 

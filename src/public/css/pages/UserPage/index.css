@@ -4,48 +4,67 @@
 }
 
 .upload-image-inner-container {
-    background-color: #fff;
+    background-color: transparent;
     border: 1px solid #8866E9;
-    width: 40px;
-    height: 40px;
-    border-radius: 100%;
+    width: 100%;
+    height: 100%;
     position: absolute;
     bottom: 0;
     right: 0;
 }
-  
+
+
 .upload-image-inner-container:hover {
-    background-color: rgb(228, 228, 228);
-    cursor: pointer !important;
+    background: linear-gradient(hsl(0 0% 0% / 1),
+            transparent,
+            hsl(0 0% 0% / 1));
+    transition: filter 250ms ease;
+    filter: opacity(0.9);
+    cursor: pointer;
+}
+
+.upload-image-inner-container:hover .inputfile+label {
+    font-size: 2.25rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    overflow: hidden;
+    width: 38px;
+    height: 36px;
+    pointer-events: none;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .inputfile {
-      opacity: 0;
-      overflow: hidden;
-      position: absolute;
-      z-index: 1;
-      width: 40px;
-      height: 40px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: 1;
+    width: 40px;
+    height: 40px;
 }
 
-.inputfile + label {
-      font-size: 1.25rem;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      display: inline-block;
-      overflow: hidden;
-      width: 38px;
-      height: 36px;
-      pointer-events: none;
-      cursor: pointer;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+.inputfile+label {
+    font-size: 2.25rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 38px;
+    height: 36px;
+    pointer-events: none;
+    cursor: pointer;
+    text-align: center;
+    display: none;
+    align-items: center;
+    justify-content: center;
 }
 
-.inputfile + label svg {
-      fill: #fff;
+.inputfile+label svg {
+    fill: #fff;
 }
 
 .inputfile::file-selector-button {
