@@ -3,13 +3,17 @@ import '../public/css/pages/UserPage/index.css'
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useRef } from 'react';
 
 const UserPage = () => {
 
-    const [isEdittable, setIsEdittable] = useState(false)
-    
-    // better to use useReducer() hook
+    // better to use useReducer() hook for userInfo state
     const [userInfo, setUserInfo] = useState({})
+    const [isEdittable, setIsEdittable] = useState(false)
+    const passwordInput = useRef()
+    const confirmPasswordInput = useRef()
+    const [shouldShowConfirmPassword, setShouldShowConfirmPassword] = useState(false)
+    const [shouldShowPassword, setShouldShowPassword] = useState(false)
 
     useEffect(() => {
 
@@ -39,12 +43,43 @@ const UserPage = () => {
         setUserInfo(userInfo)
     }, [])
 
+    const handleShowPassword = (e, isReset = false) => {
+
+        // if the function is called via handleDiscardChanges or
+        // handleSaveChanges then, we reset its state back to
+        // 'password' and not perform any toggle
+        if (isReset) {
+            passwordInput.current.type = 'password'
+            confirmPasswordInput.current.type = 'password'
+            setShouldShowPassword(false)
+            setShouldShowConfirmPassword(false)
+            return
+        }
+
+        // Toggle event
+
+        if (!isEdittable) return
+        
+        let ref
+        if (e === 'password') {
+            ref = passwordInput
+            setShouldShowPassword(!shouldShowPassword)
+        } else {
+            ref = confirmPasswordInput
+            setShouldShowConfirmPassword(!shouldShowConfirmPassword)
+        }
+
+        ref.current.type = ref.current.type === 'text' ? 'password' : 'text'
+    }
+
     const handleDiscardChanges = () => {
 
         // reset userInfo object
         // ...
 
         setIsEdittable(false)
+        handleShowPassword('password', true)
+        handleShowPassword('confirm-password', true)
     }
 
     const hnadleSaveChanges = () => {
@@ -54,6 +89,9 @@ const UserPage = () => {
         // ...
 
         setIsEdittable(false)
+        handleShowPassword('password', true)
+        handleShowPassword('confirm-password', true)
+    
     }
 
     return (
@@ -170,11 +208,26 @@ const UserPage = () => {
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="password" className="form-label">Password</label>
-                                <input type="password" className="form-control" id="password" placeholder="Password" defaultValue={userInfo.password} readOnly={!isEdittable} />
+                                <div className="input-group">
+                                    <input ref={passwordInput} type="password" className="form-control" id="password" placeholder="Password" data-toggle="password" defaultValue={userInfo.password} readOnly={!isEdittable}/>
+                                    <div className="input-group-append" onClick={() => {handleShowPassword('password')}}>
+                                        <span className="input-group-text" id="basic-addon2">
+                                            <i className={`bi ${shouldShowPassword ? 'bi-eye-fill' : 'bi-eye-slash-fill'}`}></i>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
+
                             <div className="mb-3">
                                 <label htmlFor="confirm-password" className="form-label">Confirm Password</label>
-                                <input type="password" className="form-control" id="confirm-password" placeholder="Confirm Password" defaultValue={userInfo.confirmPassword} readOnly={!isEdittable} />
+                                <div className="input-group">
+                                    <input ref={confirmPasswordInput} type="password" className="form-control" id="confirm-password" placeholder="Confirm Password" defaultValue={userInfo.confirmPassword} readOnly={!isEdittable} />
+                                    <div className="input-group-append" onClick={() => { handleShowPassword('confirm-password') }}>
+                                        <span className="input-group-text" id="basic-addon2">
+                                            <i className={`bi ${shouldShowConfirmPassword ? 'bi-eye-fill' : 'bi-eye-slash-fill'}`}></i>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
 
                             <hr className='my-4' />
