@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useRef } from 'react';
+import Footer from '../components/footer';
 
 const UserPage = () => {
 
@@ -59,7 +60,7 @@ const UserPage = () => {
         // Toggle event
 
         if (!isEdittable) return
-        
+
         let ref
         if (e === 'password') {
             ref = passwordInput
@@ -91,7 +92,7 @@ const UserPage = () => {
         setIsEdittable(false)
         handleShowPassword('password', true)
         handleShowPassword('confirm-password', true)
-    
+
     }
 
     return (
@@ -101,7 +102,7 @@ const UserPage = () => {
 
                 {/* Breadcrumbs */}
                 <nav aria-label="breadcrumb" className='py-4 border-bottom d-flex justify-content-between flex-grow-1 flex-wrap'>
-                    <ol className="breadcrumb mb-0 align-items-center">
+                    <ol className="breadcrumb mb-0 align-items-center py-lg-0 py-2">
                         <li className="breadcrumb-item">
                             <Link to="/userRecord" className='text-decoration-none text-primary fw-bold'>
                                 Clinician List</Link>
@@ -140,7 +141,7 @@ const UserPage = () => {
                     </div>
                 </nav>
 
-                <section className='pt-4'>
+                <section className='py-4 mb-4'>
                     <div className='row'>
 
                         {/* Personal Information */}
@@ -209,8 +210,8 @@ const UserPage = () => {
                             <div className="mb-3">
                                 <label htmlFor="password" className="form-label">Password</label>
                                 <div className="input-group">
-                                    <input ref={passwordInput} type="password" className="form-control" id="password" placeholder="Password" data-toggle="password" defaultValue={userInfo.password} readOnly={!isEdittable}/>
-                                    <div className="input-group-append" onClick={() => {handleShowPassword('password')}}>
+                                    <input ref={passwordInput} type="password" className="form-control" id="password" placeholder="Password" data-toggle="password" defaultValue={userInfo.password} readOnly={!isEdittable} />
+                                    <div className="input-group-append" onClick={() => { handleShowPassword('password') }}>
                                         <span className="input-group-text" id="basic-addon2">
                                             <i className={`bi ${shouldShowPassword ? 'bi-eye-fill' : 'bi-eye-slash-fill'}`}></i>
                                         </span>
@@ -257,7 +258,9 @@ const UserPage = () => {
                     </div>
                 </section>
 
+
             </div>
+            
         </>
 
     );
