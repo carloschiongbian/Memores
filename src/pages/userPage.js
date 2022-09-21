@@ -1,27 +1,60 @@
 import UserNavigationMenu from '../components/userNavigationMenu';
 import '../public/css/pages/UserPage/index.css'
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const UserPage = () => {
 
-    const userInfo = {
-        licenseImage: require('../public/images/license.jpg'),
-        firstName: "Velvet",
-        lastName: "Crowe",
-        licenseNumber: "12345ABCD6789XXY",
-        emailAddress: "velvetcrowe@memores.org",
-        contactNumber: "09271231234",
-        dateOfBirth: "2000-08-08",
-        gender: "female",
-        userName: "velvet_crowe",
-        password: "p@ssw0rd",
-        confirmPassword: "",
-        streetAddress: "Aball, Village of Longing",
-        city: "Eastgand",
-        country: "Philippines",
-        zipCode: "6014"
+    const [isEdittable, setIsEdittable] = useState(false)
+    
+    // better to use useReducer() hook
+    const [userInfo, setUserInfo] = useState({})
+
+    useEffect(() => {
+
+        const userInfo = {
+            firstName: "Velvet",
+            lastName: "Crowe",
+            licenseNumber: "12345ABCD6789XXY",
+            emailAddress: "velvetcrowe@memores.org",
+            contactNumber: "09271231234",
+            dateOfBirth: "2000-08-08",
+            gender: "female",
+            userName: "velvet_crowe",
+            password: "p@ssw0rd",
+            confirmPassword: "",
+            streetAddress: "Aball, Village of Longing",
+            city: "Eastgand",
+            country: "Philippines",
+            zipCode: "6014"
+        }
+
+        try {
+            userInfo.licenseImage = require('../public/images/license.jpg')
+        } catch {
+            userInfo.licenseImage = require('../public/images/default-license-if-none-exists.jpg')
+        }
+
+        setUserInfo(userInfo)
+    }, [])
+
+    const handleDiscardChanges = () => {
+
+        // reset userInfo object
+        // ...
+
+        setIsEdittable(false)
     }
 
+    const hnadleSaveChanges = () => {
+
+        // do a post request
+        // update userInfo object
+        // ...
+
+        setIsEdittable(false)
+    }
 
     return (
         <>
@@ -43,19 +76,29 @@ const UserPage = () => {
                         </li>
                     </ol>
 
-                    <div>
+                    <div className='d-flex'>
                         <button className='btn btn-outline-primary me-2'>
                             <span><i className="bi bi-printer-fill"></i></span>
                         </button>
-                        <button className='btn btn-primary ms-2'>
-                            <span><i className="bi bi-pencil-square"></i></span> Edit Clinician
-                        </button>
-                        <button className='btn btn-danger ms-2'>
-                            <span><i className="bi bi-x-lg"></i></span>
-                        </button>
-                        <button className='btn btn-success ms-2'>
-                            <span><i className="bi bi-check-lg"></i></span>
-                        </button>
+
+                        {
+                            !isEdittable &&
+                            <button className='btn btn-primary ms-2' onClick={() => setIsEdittable(true)}>
+                                <span><i className="bi bi-pencil-square"></i></span> Edit Clinician
+                            </button>
+                        }
+
+                        {
+                            isEdittable &&
+                            <div>
+                                <button className='btn btn-danger ms-2' onClick={handleDiscardChanges}>
+                                    <span><i className="bi bi-x-lg"></i></span>
+                                </button>
+                                <button className='btn btn-success ms-2' onClick={hnadleSaveChanges}>
+                                    <span><i className="bi bi-check-lg"></i></span>
+                                </button>
+                            </div>
+                        }
                     </div>
                 </nav>
 
@@ -72,10 +115,9 @@ const UserPage = () => {
                                 <div className='position-relative'>
                                     <img src={userInfo.licenseImage} alt="" className='professional-license' />
 
-                                    <div className='upload-image-inner-container d-flex align-items-center justify-content-center'>
+                                    <div className={`d-flex align-items-center justify-content-center ${isEdittable ? 'upload-image-inner-container' : ''}`}>
                                         <div className='upload-button' title="Upload a new professional license...">
-
-                                            <input className='inputfile' type="file" name="pic" accept="image/*" style={{ cursor: "pointer" }} />
+                                            <input className='inputfile' type="file" name="professional-license" accept="image/*" />
                                             <label><i className="bi bi-camera-fill text-primary" height="30" width="30"></i></label>
                                         </div>
                                     </div>
@@ -86,31 +128,31 @@ const UserPage = () => {
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="license-number" className="form-label">License Number</label>
-                                <input type="text" className="form-control" id="license-number" placeholder="License Number" defaultValue={userInfo.licenseNumber} readOnly />
+                                <input type="text" className="form-control" id="license-number" placeholder="License Number" defaultValue={userInfo.licenseNumber} readOnly={!isEdittable} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="first-name" className="form-label">First Name</label>
-                                <input type="text" className="form-control" id="first-name" placeholder="First Name" defaultValue={userInfo.firstName} readOnly />
+                                <input type="text" className="form-control" id="first-name" placeholder="First Name" defaultValue={userInfo.firstName} readOnly={!isEdittable} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="last-name" className="form-label">Last Name</label>
-                                <input type="text" className="form-control" id="last-name" placeholder="Last Name" defaultValue={userInfo.lastName} readOnly />
+                                <input type="text" className="form-control" id="last-name" placeholder="Last Name" defaultValue={userInfo.lastName} readOnly={!isEdittable} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="email-address" className="form-label">Email Address</label>
-                                <input type="email" className="form-control" id="email-address" placeholder="Email Address" defaultValue={userInfo.emailAddress} readOnly />
+                                <input type="email" className="form-control" id="email-address" placeholder="Email Address" defaultValue={userInfo.emailAddress} readOnly={!isEdittable} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="contact-number" className="form-label">Contact Number</label>
-                                <input type="text" className="form-control" id="contact-number" placeholder="Contact Number" defaultValue={userInfo.contactNumber} readOnly />
+                                <input type="text" className="form-control" id="contact-number" placeholder="Contact Number" defaultValue={userInfo.contactNumber} readOnly={!isEdittable} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="birthdate" className="form-label">Date of Birth</label>
-                                <input type="date" className="form-control" id="birthdate" defaultValue={userInfo.dateOfBirth} readOnly />
+                                <input type="date" className="form-control" id="birthdate" defaultValue={userInfo.dateOfBirth} readOnly={!isEdittable} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="gender" className="form-label">Gender</label>
-                                <select name="gender" id="gender" className='form-select' defaultValue={userInfo.gender} disabled>
+                                <select name="gender" id="gender" className='form-select' defaultValue={userInfo.gender} disabled={!isEdittable}>
                                     <option defaultValue="male">Male</option>
                                     <option defaultValue="female">Female</option>
                                 </select>
@@ -124,15 +166,15 @@ const UserPage = () => {
                             <h5 className='fw-bold'>Account Information</h5>
                             <div className="mb-3">
                                 <label htmlFor="username" className="form-label">Username</label>
-                                <input type="text" className="form-control" id="username" placeholder="Username" defaultValue={userInfo.userName} readOnly />
+                                <input type="text" className="form-control" id="username" placeholder="Username" defaultValue={userInfo.userName} readOnly={!isEdittable} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="password" className="form-label">Password</label>
-                                <input type="password" className="form-control" id="password" placeholder="Password" defaultValue={userInfo.password} readOnly />
+                                <input type="password" className="form-control" id="password" placeholder="Password" defaultValue={userInfo.password} readOnly={!isEdittable} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="confirm-password" className="form-label">Confirm Password</label>
-                                <input type="password" className="form-control" id="confirm-password" placeholder="Confirm Password" defaultValue={userInfo.confirmPassword} readOnly />
+                                <input type="password" className="form-control" id="confirm-password" placeholder="Confirm Password" defaultValue={userInfo.confirmPassword} readOnly={!isEdittable} />
                             </div>
 
                             <hr className='my-4' />
@@ -140,22 +182,22 @@ const UserPage = () => {
                             <h5 className='fw-bold'>Address Information</h5>
                             <div className="mb-3">
                                 <label htmlFor="street-address" className="form-label">Street Address</label>
-                                <input type="text" className="form-control" id="street-address" placeholder="Street Address" defaultValue={userInfo.streetAddress} readOnly />
+                                <input type="text" className="form-control" id="street-address" placeholder="Street Address" defaultValue={userInfo.streetAddress} readOnly={!isEdittable} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="city" className="form-label">City</label>
-                                <input type="text" className="form-control" id="city" placeholder="City" defaultValue={userInfo.city} readOnly />
+                                <input type="text" className="form-control" id="city" placeholder="City" defaultValue={userInfo.city} readOnly={!isEdittable} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="country" className="form-label">Country</label>
-                                <select name="country" id="country" className='form-select' defaultValue={userInfo.country} disabled>
+                                <select name="country" id="country" className='form-select' defaultValue={userInfo.country} disabled={!isEdittable}>
                                     <option defaultValue="male">Philippines</option>
                                     <option defaultValue="female">South Korea</option>
                                 </select>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="zip-code" className="form-label">Zip Code</label>
-                                <input type="text" className="form-control" id="zip-code" placeholder="Zip Code" defaultValue={userInfo.zipCode} readOnly />
+                                <input type="text" className="form-control" id="zip-code" placeholder="Zip Code" defaultValue={userInfo.zipCode} readOnly={!isEdittable} />
                             </div>
                         </div>
 
