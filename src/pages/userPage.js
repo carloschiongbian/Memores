@@ -1,9 +1,11 @@
 import UserNavigationMenu from '../components/userNavigationMenu';
+import '../public/css/pages/UserPage/index.css'
 import { Link } from 'react-router-dom';
 
 const UserPage = () => {
 
     const userInfo = {
+        licenseImage: require('../public/images/license.jpg'),
         firstName: "Velvet",
         lastName: "Crowe",
         licenseNumber: "12345ABCD6789XXY",
@@ -16,7 +18,7 @@ const UserPage = () => {
         confirmPassword: "",
         streetAddress: "Aball, Village of Longing",
         city: "Eastgand",
-        Country: "Philippines",
+        country: "Philippines",
         zipCode: "6014"
     }
 
@@ -43,16 +45,16 @@ const UserPage = () => {
 
                     <div>
                         <button className='btn btn-outline-primary me-2'>
-                            <span><i class="bi bi-printer-fill"></i></span>
+                            <span><i className="bi bi-printer-fill"></i></span>
                         </button>
                         <button className='btn btn-primary ms-2'>
-                            <span><i class="bi bi-pencil-square"></i></span> Edit Clinician
+                            <span><i className="bi bi-pencil-square"></i></span> Edit Clinician
                         </button>
                         <button className='btn btn-danger ms-2'>
-                            <span><i class="bi bi-x-lg"></i></span>
+                            <span><i className="bi bi-x-lg"></i></span>
                         </button>
                         <button className='btn btn-success ms-2'>
-                            <span><i class="bi bi-check-lg"></i></span>
+                            <span><i className="bi bi-check-lg"></i></span>
                         </button>
                     </div>
                 </nav>
@@ -60,86 +62,96 @@ const UserPage = () => {
                 <section className='pt-4'>
                     <div className='row'>
 
-                        <div className="col">
+                        {/* Personal Information */}
+                        <div className="col-12 col-lg-6">
                             <h5 className='fw-bold'>Personal Information</h5>
                             <div>
-                            <label for="contact-number" class="form-label">Professional license</label>
-                                <div className='py-4 px-4 bg-gray text-white text-center'>
-                                    This is an image placeholder.
+                            <label htmlFor="contact-number" className="form-label">Professional license</label>
+
+
+                                <div>
+
+                                    <div className='position-relative'>
+                                        <img src={userInfo.licenseImage} alt="" className='professional-license'/>
+                                    </div>
+
                                 </div>
+
+
+
                             </div>
-                            <div class="mb-3">
-                                <label for="license-number" class="form-label">License Number</label>
-                                <input type="text" class="form-control" id="license-number" placeholder="License Number" />
+                            <div className="mb-3">
+                                <label htmlFor="license-number" className="form-label">License Number</label>
+                                <input type="text" className="form-control" id="license-number" placeholder="License Number" defaultValue={userInfo.licenseNumber} readOnly/>
                             </div>
-                            <div class="mb-3">
-                                <label for="first-name" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="first-name" placeholder="First Name" />
+                            <div className="mb-3">
+                                <label htmlFor="first-name" className="form-label">First Name</label>
+                                <input type="text" className="form-control" id="first-name" placeholder="First Name" defaultValue={userInfo.firstName} readOnly/>
                             </div>
-                            <div class="mb-3">
-                                <label for="last-name" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="last-name" placeholder="Last Name" />
+                            <div className="mb-3">
+                                <label htmlFor="last-name" className="form-label">Last Name</label>
+                                <input type="text" className="form-control" id="last-name" placeholder="Last Name" defaultValue={userInfo.lastName} readOnly/>
                             </div>
-                            <div class="mb-3">
-                                <label for="email-address" class="form-label">Email Address</label>
-                                <input type="email" class="form-control" id="email-address" placeholder="Email Address" />
+                            <div className="mb-3">
+                                <label htmlFor="email-address" className="form-label">Email Address</label>
+                                <input type="email" className="form-control" id="email-address" placeholder="Email Address" defaultValue={userInfo.emailAddress} readOnly/>
                             </div>
-                            <div class="mb-3">
-                                <label for="contact-number" class="form-label">Contact Number</label>
-                                <input type="text" class="form-control" id="contact-number" placeholder="Contact Number" />
+                            <div className="mb-3">
+                                <label htmlFor="contact-number" className="form-label">Contact Number</label>
+                                <input type="text" className="form-control" id="contact-number" placeholder="Contact Number" defaultValue={userInfo.contactNumber} readOnly/>
                             </div>
-                            <div class="mb-3">
-                                <label for="birthdate" class="form-label">Date of Birth</label>
-                                <input type="date" class="form-control" id="birthdate" value="2000-08-08" />
+                            <div className="mb-3">
+                                <label htmlFor="birthdate" className="form-label">Date of Birth</label>
+                                <input type="date" className="form-control" id="birthdate" defaultValue={userInfo.dateOfBirth} readOnly/>
                             </div>
-                            <div class="mb-3">
-                                <label for="gender" class="form-label">Gender</label>
-                                <select name="gender" id="gender" className='form-select'>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
+                            <div className="mb-3">
+                                <label htmlFor="gender" className="form-label">Gender</label>
+                                <select name="gender" id="gender" className='form-select' defaultValue={userInfo.gender} disabled>
+                                    <option defaultValue="male">Male</option>
+                                    <option defaultValue="female">Female</option>
                                 </select>
                             </div>
                         </div>
 
 
 
-
-                        <div className="col">
+                        {/* Account Information */}
+                        <div className="col-12 col-lg-6">
                             <h5 className='fw-bold'>Account Information</h5>
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" placeholder="Username" />
+                            <div className="mb-3">
+                                <label htmlFor="username" className="form-label">Username</label>
+                                <input type="text" className="form-control" id="username" placeholder="Username" defaultValue={userInfo.userName} readOnly/>
                             </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Password" />
+                            <div className="mb-3">
+                                <label htmlFor="password" className="form-label">Password</label>
+                                <input type="password" className="form-control" id="password" placeholder="Password" defaultValue={userInfo.password} readOnly/>
                             </div>
-                            <div class="mb-3">
-                                <label for="confirm-password" class="form-label">Confirm Password</label>
-                                <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password" />
+                            <div className="mb-3">
+                                <label htmlFor="confirm-password" className="form-label">Confirm Password</label>
+                                <input type="password" className="form-control" id="confirm-password" placeholder="Confirm Password" defaultValue={userInfo.confirmPassword} readOnly/>
                             </div>
 
                             <hr className='my-4'/>
 
                             <h5 className='fw-bold'>Address Information</h5>
-                            <div class="mb-3">
-                                <label for="street-address" class="form-label">Street Address</label>
-                                <input type="text" class="form-control" id="street-address" placeholder="Street Address" />
+                            <div className="mb-3">
+                                <label htmlFor="street-address" className="form-label">Street Address</label>
+                                <input type="text" className="form-control" id="street-address" placeholder="Street Address" defaultValue={userInfo.streetAddress} readOnly/>
                             </div>
-                            <div class="mb-3">
-                                <label for="city" class="form-label">City</label>
-                                <input type="text" class="form-control" id="city" placeholder="City" />
+                            <div className="mb-3">
+                                <label htmlFor="city" className="form-label">City</label>
+                                <input type="text" className="form-control" id="city" placeholder="City" defaultValue={userInfo.city} readOnly/>
                             </div>
-                            <div class="mb-3">
-                                <label for="country" class="form-label">Country</label>
-                                <select name="country" id="country" className='form-select'>
-                                    <option value="male">Philippines</option>
-                                    <option value="female">South Korea</option>
+                            <div className="mb-3">
+                                <label htmlFor="country" className="form-label">Country</label>
+                                <select name="country" id="country" className='form-select' defaultValue={userInfo.country} disabled>
+                                    <option defaultValue="male">Philippines</option>
+                                    <option defaultValue="female">South Korea</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="zip-code" class="form-label">Zip Code</label>
-                                <input type="text" class="form-control" id="zip-code" placeholder="Zip Code" />
+                            <div className="mb-3">
+                                <label htmlFor="zip-code" className="form-label">Zip Code</label>
+                                <input type="text" className="form-control" id="zip-code" placeholder="Zip Code" defaultValue={userInfo.zipCode} readOnly/>
                             </div>
                         </div>
 
