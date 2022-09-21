@@ -4610,7 +4610,7 @@ textarea.form-control-lg {
   float: left;
   padding-right: 0.5rem;
   color: rgba(255, 95, 4, .72);
-  content: var(--bs-breadcrumb-divider, "/") /* rtl: var(--bs-breadcrumb-divider, "/") */;
+  content: var(--bs-breadcrumb-divider, ">") /* rtl: var(--bs-breadcrumb-divider, "/") */;
 }
 .breadcrumb-item.active {
   color: rgba(255, 95, 4, .72);
