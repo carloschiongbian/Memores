@@ -1,11 +1,25 @@
 import UserNavigationMenu from '../components/userNavigationMenu'
+import ScreeningWizard from '../components/screening/screeningWizard';
 import '../public/css/pages/ScreeningPage/index.css'
+import { useState } from 'react';
 
 const ScreeningPage = () => {
+
+    const [rowSelected, setRowSelected] = useState(null)
+
+    const handleSelection = (key) => {
+        setRowSelected(key)
+    }
+
+    const handleStartScreening = () => {
+        setRowSelected(null)
+    }
+
+
     return (
         <>
             <UserNavigationMenu></UserNavigationMenu>
-            <div className='d-flex flex-column h-100'>
+            <div className='d-flex flex-column h-100 '>
                 <div className="container mt-2">
                     <div className="vh-75 d-flex flex-column align-items-center justify-content-center">
                         <div>
@@ -16,12 +30,17 @@ const ScreeningPage = () => {
                             <p className='pb-4'>The screening test is divided into 5 sections - namely, section 1: demographic, section 2: emotional, section 3: physical symptoms, section 4: Liebowitz Social Anxiety Scale (LSAS), and section 5: Social Phobia Inventory (SPIN). After taking the test, the probability of manifesting social anxiety disorder will be shown. Please read the questions carefully and let the patient answer as honest as possible.</p>
 
                             <div className='d-flex align-items-center mb-4 pb-4'>
-                                <button type="button" className='btn btn-secondary m-auto py-3 px-4' data-bs-toggle="modal" data-bs-target="#select-a-patient">Start Screening</button>
+                                <button type="button" className='btn btn-secondary m-auto py-3 px-4' data-bs-toggle="modal" data-bs-target="#select-a-patient" onClick={handleStartScreening}>Start Screening</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+            {/* Wizard */}
+            <ScreeningWizard />
+
 
 
 
@@ -36,16 +55,16 @@ const ScreeningPage = () => {
                             <div>
                                 <div className="row">
                                     <div className="col">
-                                        <input type="text" class="form-control" id="which-patient" placeholder="Search for a patient..." />
+                                        <input type="text" className="form-control" id="which-patient" placeholder="Search for a patient..." />
                                     </div>
                                     <div className="col-auto">
-                                        <button type="submit" class="btn btn-primary mb-3">Search</button>
+                                        <button type="submit" className="btn btn-primary mb-3">Search</button>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="table-responsive" style={{ "min-height": "200px", "max-height": "500px" }}>
-                                <table class="table table-striped table-hover">
+                            <div className="table-responsive custom-scroll" style={{ "minHeight": "200px", "maxHeight": "500px" }}>
+                                <table className="table table-striped table-hover">
                                     <thead className='bg-gray'>
                                         <tr className='text-light'>
                                             <th scope="col" className='w-15'>ID</th>
@@ -55,30 +74,29 @@ const ScreeningPage = () => {
                                         </tr>
                                     </thead>
                                     <tbody role="button">
-                                        {
-
-                                            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((item) => {
-                                                return <tr key={item}>
-                                                    <th scope="row">1</th>
-                                                    <td>Mark</td>
-                                                    <td>Mark</td>
-                                                    <td><span class="badge rounded-pill bg-success" style={{ "font-size": "9px" }}>Selected</span></td>
-                                                </tr>
-                                            })
-                                        }
+                                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((item) => {
+                                            return <tr id={`row${item}`} key={item} onClick={() => handleSelection(item)}>
+                                                <th scope="row">1</th>
+                                                <td>Mark</td>
+                                                <td>Mark</td>
+                                                <td>
+                                                    <span className={`badge rounded-pill bg-success ${rowSelected === item ? '' : 'd-none'}`} style={{ "fontSize": "9px" }}>Selected</span>
+                                                </td>
+                                            </tr>;
+                                        })}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-secondary">Proceed</button>
+                            <button type="button" className={`btn btn-secondary ${rowSelected ? '' : 'disabled'}`} data-bs-target="#screening-wizard-modal" data-bs-toggle="modal" data-bs-dismiss="modal">Proceed</button>
                         </div>
                     </div>
                 </div>
             </div>
         </>
-    );
+    )
 }
 
 export default ScreeningPage;
