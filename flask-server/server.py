@@ -1,5 +1,4 @@
 #input "python server.py" to run the flask server
-
 from flask import Flask
 
 app = Flask(__name__);

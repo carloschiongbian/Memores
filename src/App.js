@@ -10,20 +10,6 @@ import ScreeningPage from './pages/screeningPage';
 
 function App() {
 
-  // this state variable accepts an array of objects
-  const [data, setData] = useState([{}]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // useEffect(() => {
-  //   fetch("/members").then(
-  //     res => res.json()
-  //   ).then(
-  //     data => {
-  //       setData(data)
-  //     }
-  //   )
-  // })
-
   return (
     <div className="App"> 
 

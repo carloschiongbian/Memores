@@ -1,9 +1,8 @@
-import '../public/css/components/userNavigationMenu/userNavigationMenu.css';
-import samplePhoto from '../public/images/wave_navbar.png';
-import hamburgerMenuIcon from '../public/images/icons/hamburger-open-menu.png';
+import { Link } from 'react-router-dom';
 import closeNavMenu from '../public/images/icons/close-nav-menu.svg';
-import { BrowserRouter, Link } from 'react-router-dom';
-import { navigationLinkHoverStyles } from '../public/css/components/userNavigationMenu/navigationLinkStyles';
+import samplePhoto from '../public/images/icons/hamburger-open-menu.png';
+import '../public/css/components/userNavigationMenu/userNavigationMenu.css';
+import hamburgerMenuIcon from '../public/images/icons/hamburger-open-menu.png';
 
 const UserNavigationMenu = () => {
 
@@ -41,7 +40,7 @@ const UserNavigationMenu = () => {
                 <div className="navigation-top-section">
                     <div className="user-profile">
                         <div className="user-profile-photo">
-                            <img src={ samplePhoto } alt="user-photo" />
+                            <img src={ samplePhoto } alt="user-profile" />
                         </div>
 
                         <div className="user-name-display">
