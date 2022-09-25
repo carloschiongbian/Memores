@@ -1,30 +1,28 @@
 import pymysql.cursors
-from flask import Flask, redirect
+from flask import Flask, redirect, jsonify
 
 app = Flask(__name__);
 
-#when using routes, use the "@" symbol before the variable
-#which holds the imported module
-
-
-@app.route('/patientRecord')
+connection = pymysql.connect(
+    host='localhost',
+    user='root',
+    password='',
+    database='memores',
+    charset="utf8mb4",
+    cursorclass=pymysql.cursors.DictCursor
+)
+    
+@app.route('/patientRecord', methods=['GET'])
 
 def retrieveData():
-    connection = pymysql.connect(host='localhost',
-                                user='root',
-                                password='',
-                                database='memores',
-                                cursorclass=pymysql.cursors.DictCursor)
 
-    with connection:
-        with connection.cursor() as cursor:
-            # Create a new record
-            sql = "SELECT * FROM `patients`"
-            cursor.execute(sql)
-            result = cursor.fetchall()
-    
-    return result
-    
+    cursor = connection.cursor()
+    query = "SELECT * FROM `patients`"
+    cursor.execute(query)
+    records = cursor.fetchall()
+    cursor.close()
+    return jsonify(records)
+
 # def test():
 #     return { "members": ["Hans","Joshua","Julian","Angelica"] }
 

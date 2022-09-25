@@ -41,7 +41,7 @@ const HomePage = () => {
                             <p className="login-modal-header">Login here</p>
 
                             <div className="login-modal-inputs">
-                                <form className="login-form" action="/patientRecord">
+                                <form className="login-form" action="/patientRecord" >
                                 <input type="text" name="login-username" id="login-username" placeholder="Username" />
                                 <input type="password" name="login-password" id="login-password" placeholder="Password" />
                                 <input type="submit" name="login-submit-button" id="login-submit-button" />

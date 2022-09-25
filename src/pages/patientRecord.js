@@ -6,15 +6,15 @@ import { useState, useEffect } from 'react';
 import PatientDataTable from '../components/patientDataTable';
 
 const PatientRecord = () => {
-    const [data, setData] = useState([]);
+    const [patientRecords, setPatientRecords] = useState([]);
     const [pageCount, setPageCount] = useState(0);
 
     const columns = [
-        { field: 'id', headerName: 'Patient ID', width: 200, headerAlign: 'center'},
+        { field: 'id', headerName: 'Patient ID', width: 250, headerAlign: 'center'},
         {
           field: 'firstName',
           headerName: 'First name',
-          width: 200,
+          width: 300,
           fontSize: 23,
           editable: true,
           headerAlign: 'center',
@@ -22,7 +22,7 @@ const PatientRecord = () => {
         {
           field: 'lastName',
           headerName: 'Last name',
-          width: 200,
+          width: 300,
           editable: true,
           headerAlign: 'center',
         },
@@ -30,7 +30,7 @@ const PatientRecord = () => {
           field: 'age',
           headerName: 'Age',
           type: 'number',
-          width: 150,
+          width: 231,
           editable: true,
           headerAlign: 'center',
         },
@@ -38,7 +38,7 @@ const PatientRecord = () => {
           field: 'actions',
           headerName: 'Actions',
           sortable: false,
-          width: 200,
+          width: 300,
           headerAlign: 'center',
         },
       ];
@@ -54,45 +54,41 @@ const PatientRecord = () => {
         { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
     ];
 
-    const sampleNavigationDisplay = (action) => {
-        switch (action) {
-            case 'Prev':
-                if(pageCount > 0){
-                    setPageCount(pageCount - 1);
-                }
-                break;
+    //sql query for inserting data
+    //INSERT INTO `patients`(`id`, `fname`, `lname`, `age`, `email`, `phone`, `bday`, `gender`, `street`, `city`, `country`, `zip`, `created_at`, `updated_at`) VALUES ('','Robin','Hood','25','robinhood@mail.com','09170910917','May 13, 1994','Male','Cameolot','Camelot','Camelot','0000','','')
 
-            case 'Next':
-                setPageCount(pageCount + 1);                
-                break;
-
-            default:
-                break;
-        }
+    const updatePatientRecords = (data) => {    
+        data.forEach(data => {
+            let patientRecord = {
+                id: data.id,
+                firstName: data.fname,
+               lastName: data.lname,
+                age: data.age
+            }
+            setPatientRecords(patientRecords => [...patientRecords, patientRecord])
+        });
     }
 
-
     useEffect(() => {
-        var test;
-        const fetchData = async () => {
-            test = await fetch("http://localhost:5000/patientRecord",{
-                mode: 'no-cors',
-                headers: {
-                  'Access-Control-Allow-Origin':'*'
-                }
-              })
-              console.log(test)
+        fetch('/patientRecord', {
+            methods: 'GET',
+            headers: {
+                'Access-Control-Allow-Origin':'*',
+                "Content-Type": "application/json"
             }
-
-        fetchData().catch(console.error)
-        // fetch("https://localhost:5000/test").then(
-        //     res => res.json()
-        // ).then(
-        //     data => {
-        //         console.log(data)
-        //     }
-        // )
-    }, [])
+        }).then((response) =>
+            response.json()
+        ).then((response) =>
+            // console.log(response[0])
+            // objVariable = response[0]
+            // objVariable.id = response[0].id
+            // response[0]
+            // setPatientRecords([...patientRecords, response[0]])
+            updatePatientRecords(response)
+        ).catch((error) => 
+            console.log(error)
+        )
+    },[])
 
     return (
         <div className="patient-records-container">
@@ -103,17 +99,19 @@ const PatientRecord = () => {
             {/* </div> */}
 
             {/* <Box sx={{ height: 400, width: '100%' }}> */}
+            <div className="test" style={{paddingInline: '5%', backgroundImage: 'linear-gradient(to right,#8860D0, #A79BFF)'}}>
+            <div className="data-table">
                 <PatientDataTable 
-                    data={rows} 
+                    data={patientRecords} 
                     header={columns} 
                 />
+            </div>
+            </div>
 
-                {/* <div className="test">
-                    data.map(data => (
-                        <div className="testtest">
-                            <p> {data} </p>
-                        </div>
-                    ))
+                {/* <div className="test" style={{backgroundColor: 'white', height: '200px', width: '100px'}}>
+                    {patientRecords.map(data => (
+                        <p>{data.fname}</p>
+                    ))}
                 </div> */}
             {/* </Box> */}
 
