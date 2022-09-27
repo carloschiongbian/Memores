@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import UserNavigationMenu from "../components/userNavigationMenu";
 import '../public/css/pages/PatientDetails/patientDetails.css';
 
@@ -11,6 +10,7 @@ const PatientDetails = () => {
     const[patientDetails, setPatientDetails] = useState({})
 
     useEffect(() => {
+        console.log(id)
         fetch('/patientDetails/id=' + id, {
             methods: 'GET',
             headers: {
@@ -24,6 +24,7 @@ const PatientDetails = () => {
         ).catch((error) => 
             console.log(error)
         )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

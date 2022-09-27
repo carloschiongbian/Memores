@@ -22,22 +22,14 @@ def retrieveData():
     return jsonify(records)
 
 @app.route('/patientDetails/id=<id>', methods=['GET'])
-def retrievePatient(id):
+def retrievePatientDetails(id):
     cursor = connection.cursor()
     query = ("SELECT * FROM `patients` WHERE id =" + id)
     cursor.execute(query)
     record = cursor.fetchall()
-    print("poop")
+    print(record)
     cursor.close()
     return jsonify(record)
-
-@app.route('/patientRecord/id=<id>', methods=['DELETE'])
-def deletePatient(id):
-    cursor = connection.cursor()
-    query = ("DELETE FROM `patients` WHERE id =" + id)
-    cursor.execute(query)
-    cursor.close()
-    redirect('/patientRecord')
 
 if __name__ == "__main__":
     app.run(debug=True)
