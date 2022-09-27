@@ -1,92 +1,72 @@
 # input "python server.py" to run the flask server
 import os
-from flask import Flask, request, abort, flash
-from flask.json import jsonify
-import pymysql
+from flask import Flask, request, abort, flash, jsonify
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
+
+# Additionals
+import sys
+from connection.connection import db, ma
+from routes.routes import *
+from dotenv import load_dotenv
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
+dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '.env'))
+load_dotenv(dotenv_path)
+
+# Init app
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['SECRET_KEY'] = "super secret key"
 
+# Secret Key
+# NOTE: I am not sure what this is for
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+
+# Config database
+# syntax: 'mysql://username:password@localhost/db_name'
+# NOTE: These credentials need to be inside the .env file
+#           Create your own .env file
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQL_ALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
+
+# Init bcrypt
 bcrypt = Bcrypt(app)
 
-connection = pymysql.connect(host="localhost",
-                             user="user",
-                             password="",
-                             database="memores",
-                             charset="utf8mb4",
-                             cursorclass=pymysql.cursors.DictCursor)
+# Init db
+db.init_app(app)
+
+# Init ma : marshmallow -> this is for sqlalchemy schema
+ma.init_app(app)
 
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+"""
+IMPORT MODULES TO BE EXECUTED IN EACH API URL RULE.
+
+SYNTAX FOR add_url_rule method:
+
+app.add_url_rule('<URL>', '<NICKNAME>', <FUNCTION_NAME>, methods = ["GET", "POST", "DELETE", "PUT"])
+
+    WHERE:
+            <URL> - URL of the API Route -> can be found inside /routes/routes.py
+"""
+from controllers import index
+
+# Index
+app.add_url_rule(INDEX, 'index', index.index, methods = ['GET'])
 
 
-@app.route("/register", methods=["POST"])
-def register():
-    # Store form data values to variable.
-    fname = request.form['firstname']
-    lname = request.form['lastname']
-    email = request.form['email']
-    license = request.form['license']
-    gender = request.form['gender']
-    bday = request.form['birthday']
-    contact = request.form['contact']
-    uname = request.form['username']
-    pwd = request.form['password']
-    confirm = request.form['confirm']
-    addr = request.form['address']
-    city = request.form['city']
-    country = request.form['country']
-    zipcode = request.form['zipcode']
-
-    # Check if username and email exist in the Database, if exist returns 1, if not 0
-    cursor = connection.cursor()
-    cursor.execute(
-        f"SELECT COUNT(*) FROM users WHERE uname ='{uname}' OR email ='{email}'")
-    user_exist = cursor.fetchone()
-    cursor.close()
-    if user_exist['COUNT(*)']:
-        abort(409)
-
-    # Hash passwords then check if password and confirm password is equal
-    hashed_password = bcrypt.generate_password_hash(
-        pwd).decode('utf-8')
-    if bcrypt.check_password_hash(hashed_password, confirm) is False:
-        abort(409)
-
-    # Save profile picture and license within the web application's folder, and encrypt the path.
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'img' not in request.files:
-            flash('No file part')
-            return {"error": "Please upload a file"}
-        file = request.files['img']
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            flash('No selected file')
-            return {"error": "Please submit a file"}
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(os.path.abspath(os.path.dirname(
-                __file__)), app.config['UPLOAD_FOLDER'], filename))
-            if filename:
-                # Finally, Insert data to user table in mysql
-                cursor = connection.cursor()
-                cursor.execute(
-                    f"INSERT INTO users (uname,pwd,fname,lname,email,phone,bday,gender,license,license_id,street,city,country,zip) VALUES ('{uname}', '{hashed_password}', '{fname}', '{lname}', '{email}', '{contact}', '{bday}', '{gender}', '{filename}', '{license}', '{addr}', '{city}', '{country}', '{zipcode}'  )")
-                connection.commit()
-                cursor.close()
-
-    return 'Done', 201
-
+# To create database tables inside the database,
+# run the command: python server.py --create-db
+if len(sys.argv) > 1 and sys.argv[1] == "--create-db":
+    """
+    We need to import the models so that db.create_all() knows which 
+    database model we are trying to create.
+    """
+    from models import admins, assessment_questions, assessment_responses, assessments, options, patients, questions, responses, users
+    with app.app_context():
+        db.create_all()
 
 if __name__ == "__main__":
     app.run(debug=True)
