@@ -20,5 +20,11 @@
         "offcanvas",
         "pymysql",
         "Targaryen"
+        "bday",
+        "CURSORCLASS",
+        "firstname",
+        "jsonify",
+        "lastname",
+        "memores"
     ]
 }
