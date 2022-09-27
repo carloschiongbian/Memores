@@ -11,7 +11,6 @@ import UserPage from './pages/userPage';
 import Footer from './components/footer';
 
 function App() {
-
   // this state variable accepts an array of objects
   const [data, setData] = useState([{}]);
   const [isLoading, setIsLoading] = useState(true);
