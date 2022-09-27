@@ -1,16 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 
+$modalColor: #f0e0e0;
+
 *{
     font-family: 'Inter', sans-serif;
 }
 
 html{
     background-image: linear-gradient(to bottom,#8860D0, #A79BFF, #C1C8E4);
-    height: 100vh;
 }
 
 .App{
-
+    background-image: linear-gradient(to bottom,#8860D0, #A79BFF, #C1C8E4);
     .homepage-content > * {
         width: 100%;
         height: 100vh;
@@ -19,67 +20,72 @@ html{
     .homepage-content{
         display: flex;
         flex-direction: row;
-        margin-inline: 10%;
-
-        .homepage-left-section{            
+        
+        .homepage-left-section{   
+            display: flex;
+            flex-direction: column;
+            justify-content: center;       
             .homepage-memores-introduction{ 
+                padding-block: 30px;
                 padding-inline: 30px;
-                padding-block: 20px;
+                border-radius: 7px;
+                background-color: #f0e0e0;
                 .homepage-introduction{
                     .homepage-introduction-content{
-                        font-size: 20px;
+                        font-size: 17px;
                         text-align: justify;
                         text-indent: 40px;
                     }
                 }
             }
         }
-
+        
         .homepage-right-section{ 
-            // width: 40%;            
-            .homepage-user-login{
-                // background-color: red;
-                padding-block: 30%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
 
+            .homepage-user-login{
+
+                padding-inline: 50px;
                 .login-modal{
+                    border-radius: 7px;
                     margin-inline: 10px;
-                    // margin-top: 15%;
                     padding-block: 50px;
                     padding-inline: 50px;
-                    background-color: #C4C4C4;
-                    border-radius: 10px;
+                    background-color: $modalColor;
 
                     .login-modal-header{
-                        color: white;
+                        color: black;
                         font-size: 20px;
+                        font-weight: 500;
                         padding-bottom: 10px;
-                        border-bottom: 1px solid white;
+                        border-bottom: 1px solid grey;
                     }
 
                     .login-modal-inputs{
-
                         .login-form{
                             display: flex;
                             flex-direction: column; 
 
                             input[id="login-username"], input[id="login-password"]{
-                                border-radius: 7px;
-                                border: 1px solid #a0a0a0;
                                 height: 35px;
+                                outline: none;
+                                border-radius: 7px;
                                 margin-bottom: 7px;
                                 padding-inline: 20px;
-                                outline: none;
+                                border: 1px solid #a0a0a0;
                             }
 
                             input[type="submit"]{
-                                background-color: #ed31febc; 
+                                height: 35px;  
                                 color: white;
+                                cursor: pointer;
+                                transition: 0.2s;
+                                font-weight: bold;
                                 border-radius: 7px;
                                 border: 1px solid #a0a0a0;
-                                height: 35px;  
-                                font-weight: bold;
-                                transition: 0.2s;
-                                cursor: pointer;
+                                background-color: #ed31febc; 
 
                                 &:hover{
                                     background-color: #EE31FE; 

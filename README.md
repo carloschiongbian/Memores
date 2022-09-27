@@ -1,10 +1,5 @@
 ### Developer Notes ###
 
-# Icon Collection Used
-https://icons8.com/icon/set/user-interface/material-outlined--static
-
-### Developer Notes ###
-
 
 # Getting Started with Create React App
 

@@ -10,21 +10,7 @@ import ScreeningPage from './pages/screeningPage';
 import UserPage from './pages/userPage';
 import Footer from './components/footer';
 
-function App() {
-  // this state variable accepts an array of objects
-  const [data, setData] = useState([{}]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // useEffect(() => {
-  //   fetch("/members").then(
-  //     res => res.json()
-  //   ).then(
-  //     data => {
-  //       setData(data)
-  //     }
-  //   )
-  // })
-
+const App = () => {
   return (
     <>
       <div className="App wrapper">

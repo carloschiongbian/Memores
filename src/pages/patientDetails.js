@@ -1,7 +1,31 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import UserNavigationMenu from "../components/userNavigationMenu";
 import '../public/css/pages/PatientDetails/patientDetails.css';
 
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+
 const PatientDetails = () => {
+
+    const { id } = useParams()
+    const[patientDetails, setPatientDetails] = useState({})
+
+    useEffect(() => {
+        fetch('/patientDetails/id=' + id, {
+            methods: 'GET',
+            headers: {
+                'Access-Control-Allow-Origin':'*',
+                'Content-Type': 'application/json'
+            }
+        }).then((response) =>
+            response.json()
+        ).then((response) =>
+            setPatientDetails(response[0])
+        ).catch((error) => 
+            console.log(error)
+        )
+    }, [])
+
     return (
         <div className="patient-details-page-container">
             <UserNavigationMenu />
@@ -13,38 +37,38 @@ const PatientDetails = () => {
             <div className="patient-details-container">
                 <div className="patient-details">
                     <div className="patient-name">
-                        patient name
+                        {patientDetails.fname + " " + patientDetails.lname}
                     </div>
 
                     <div className="patient-information">
                         <div className="patient-gender">
                             <label htmlFor="gender">Gender</label>
-                            <span>Male</span>
+                            <span>{ patientDetails.gender }</span>
                         </div>
 
                         <div className="patient-birthday">
                             <label htmlFor="birthday">Birthday</label>
-                            <span>January 1, 2022</span>
+                            <span>{ patientDetails.bday }</span>
                         </div>
 
                         <div className="patient-contact-number">
                             <label htmlFor="contact-number">Contact Number</label>
-                            <span>0917-777-7777</span>
+                            <span>{ patientDetails.phone }</span>
                         </div>
 
                         <div className="patient-street-address">
                             <label htmlFor="street-address">Street Address</label>
-                            <span>123 Maple Street</span>
+                            <span>{ patientDetails.street }</span>
                         </div>
 
                         <div className="patient-address-city">
                             <label htmlFor="city-address">City</label>
-                            <span>Cebu City</span>
+                            <span>{ patientDetails.city }</span>
                         </div>
 
                         <div className="patient-zip-code">
                             <label htmlFor="zip-code">Zip Code</label>
-                            <span>1234</span>
+                            <span>{ patientDetails.zip }</span>
                         </div>
 
                         <div className="patient-registered-date">

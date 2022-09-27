@@ -1,8 +1,95 @@
 html{
     background-image: linear-gradient(to right, #8860D0, #A79BFF);
-}
+    
+    
+    .patient-records-container{
+    #modal-container{
+        display: none;
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        padding-block: 100px;
+        overflow: hidden; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    
+        .modal-dialog.modal-dialog-centered{
+            border-radius: 10px;
+            background-color: white;
+            height: 100px !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
 
-.patient-records-container{
+            .delete-record-modal{
+                height: 100%;
+                width: 100%;
+                text-align: center;
+
+                .modal-header{
+                    height: 17%;
+                    background-color: red;
+                    color: white;
+                }
+
+                .modal-content{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    height: 50%;
+                    border: none;
+                    padding-inline: 20px;
+                }
+
+                .modal-actions{
+                    z-index: 3;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    gap: 20px;
+
+                    button{
+                        border-radius: 5px;
+                        border: 1px solid rgb(210, 200, 200);
+                        padding-block: 10px;
+                        padding-inline: 30px;
+                        font-weight: 500;
+                        pointer-events: all;
+                        cursor: pointer;
+
+                        &[id='cancel']{
+                            background: #A79BFF;
+                            color: white;
+                        }
+
+                        // &[id='delete']{
+                        //     background-color: red;
+                        //     color: white;
+                        // }
+                    }
+
+                    a{
+                        border-radius: 5px;
+                        border: 1px solid rgb(210, 200, 200);
+                        padding-block: 10px;
+                        padding-inline: 30px;
+                        font-weight: 500;
+                        pointer-events: all;
+                        cursor: pointer;
+                        text-decoration: none;
+                        background-color: red;
+                        color: white;
+
+                    }
+                }
+            }
+        }
+    }
+}
     
     .patient-records-navbar{
         background-image: linear-gradient(to right, #8860D0, #A79BFF); 
