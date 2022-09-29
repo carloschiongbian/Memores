@@ -4,6 +4,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import UserNavigationMenu from '../components/userNavigationMenu';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 import PatientDataTable from '../components/patientDataTable';
 
@@ -124,6 +126,9 @@ const PatientRecord = () => {
 
             {/* <div className="patient-records-navbar"> */}
             <UserNavigationMenu />
+                <Button component={Link} to="/createPatient" variant="contained" color="success">
+                    Create New Patient
+                </Button>
                 {/* <h1>LOGO</h1> */}
             {/* </div> */}
 
