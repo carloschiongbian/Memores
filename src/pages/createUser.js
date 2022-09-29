@@ -5,7 +5,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Select from "react-select";
 import SelectCountries from "../components/countriesSelect";
-// const FILE_SIZE = 720 * 720;
+import dayjs from 'dayjs';
+
+// .test("required", "You need to provide a file", (file) => file ? true : false)
+//     .test("fileSize", "The file is too large", (file) => file && file.size <= 5 * 1024 * 1024)
+//     .test("fileFormat","Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value[0].type)),
+
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
 
 const options = [
@@ -15,18 +20,32 @@ const options = [
 ];
 const schema = yup
   .object({
-    img: yup.mixed(),
-    // .test("Image", "You need to provide an image", (value) => {
-    //   if (value.size > 0) {
-    //     return true;
-    //   }
-    //   return false;
-    // })
-    // .test(
-    //   "fileFormat",
-    //   "Unsupported Format",
-    //   (value) => value && SUPPORTED_FORMATS.includes(value.type)
-    // ),
+    profile: yup.mixed()
+    .test("required", "Profile photo is required", (file) => file.length ? true : false)
+    .test("fileSize", "The file is too large", (file) => {
+      if(file.length){
+          return file[0].size > 2000000 ? false : true
+      }
+    })
+    .test("fileFormat","Unsupported Format", 
+      (file) => {
+        if(file.length){
+          return SUPPORTED_FORMATS.includes(file[0].type)
+        }
+    }),
+    img: yup.mixed()
+    .test("required", "License photo is required", (file) => file.length ? true : false)
+    .test("fileSize", "The file is too large", (file) => {
+      if(file.length){
+        return file[0].size > 2000000 ? false : true
+      }
+    })
+    .test("fileFormat","Unsupported Format", 
+      (file) => {
+        if(file.length){
+          return SUPPORTED_FORMATS.includes(file[0].type)
+        }
+      }),
     license: yup.string().required(),
     firstname: yup
       .string()
@@ -98,24 +117,39 @@ const CreateUser = () => {
   const onSubmit = async (data) => {
     let formData = new FormData();
     formData.append("img", data.img[0]);
+    formData.append("profile", data.profile[0]);
+
     for (let key in data) {
       if (key === "gender") {
         formData.append(key, data[key].label);
       } else if (key === "country") {
         formData.append(key, data[key].label);
-      } else if (key === "img") {
+      } else if (key === "birthday"){
+        const formatted_date = dayjs( data[key]).format("YYYY-MM-DD")
+        formData.append(key, formatted_date);
       } else {
         formData.append(key, data[key]);
       }
+
     }
 
-    const response = await fetch("/register", {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const response = await fetch("/api/add-user", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json()
 
-    if (response.ok) {
-      console.log("Registered Successfully!");
+      if (response.ok) {
+        alert(`Success: ${response.status}, ${data.success}`);
+      }
+
+      if(response.status === 409 || response.status === 400){
+        alert(`Error: ${response.status}, ${data.error}`)
+      }
+
+    } catch(error){
+      alert(error)
     }
   };
 
@@ -125,13 +159,32 @@ const CreateUser = () => {
       <form
         method="post"
         onSubmit={handleSubmit(onSubmit)}
-        enctype="multipart/form-data"
+        encType="multipart/form-data"
       >
         <div className="container">
           <div className="row">
             <div className="col">
               <h3>Setup Personal Information</h3>
               <hr />
+              <div className="form-group">
+                <label htmlFor="profile" className="form-label">
+                  Profile Photo
+                </label>
+                <input
+                  {...register("profile")}
+                  type="file"
+                  name="profile"
+                  className="form-control"
+                />
+                {errors.profile && (
+                  <span
+                    className="text-danger"
+                    style={{ fontSize: "12px", marginBottom: "0px" }}
+                  >
+                    {errors.profile.message}
+                  </span>
+                )}
+              </div>
               <div className="form-group">
                 <label htmlFor="img" className="form-label">
                   Please upload a clear image of the person's professional
@@ -143,7 +196,6 @@ const CreateUser = () => {
                   name="img"
                   id="img"
                   className="form-control"
-                  onChange={(e) => console.log(e.target.files[0])}
                 />
                 {errors.img && (
                   <span

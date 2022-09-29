@@ -52,10 +52,12 @@ app.add_url_rule('<URL>', '<NICKNAME>', <FUNCTION_NAME>, methods = ["GET", "POST
             <URL> - URL of the API Route -> can be found inside /routes/routes.py
 """
 from controllers import index
+from controllers import register_user
 
 # Index
 app.add_url_rule(INDEX, 'index', index.index, methods = ['GET'])
-
+#add_user
+app.add_url_rule(ADD_USER, 'register_user', register_user.register_user, methods = ['POST'])
 
 # To create database tables inside the database,
 # run the command: python server.py --create-db
@@ -64,7 +66,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "--create-db":
     We need to import the models so that db.create_all() knows which 
     database model we are trying to create.
     """
-    from models import admins, assessment_questions, assessment_responses, assessments, options, patients, questions, responses, users
+    from models import assessment_questions, assessment_responses, assessments, options, patients, questions, responses, users
     with app.app_context():
         db.create_all()
 

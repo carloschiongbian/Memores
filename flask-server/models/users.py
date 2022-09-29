@@ -10,21 +10,22 @@ class Users(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     uname = db.Column(db.String(255), nullable = False, unique = True)
     pwd = db.Column(db.String(255), nullable = False)
+    role = db.Column(db.String(255), nullable = False, server_default = 'user')
     fname = db.Column(db.String(255), nullable = False)
     lname = db.Column(db.String(255), nullable = False)
     email = db.Column(db.String(255), nullable = False, unique = True)
     phone = db.Column(db.String(255), nullable = False)
-    bday = db.Column(db.DateTime, nullable = False)
+    bday = db.Column(db.Date, nullable = False)
     gender = db.Column(db.String(10), nullable = False)
-    photo = db.Column(db.String(255), nullable = True)
-    license = db.Column(db.String(255), nullable = False)
+    photo = db.Column(db.String(255), nullable = False)
+    license = db.Column(db.LargeBinary, nullable = False)
     license_id = db.Column(db.String(255), nullable = False)
     street = db.Column(db.String(255), nullable = False)
     city = db.Column(db.String(255), nullable = False)
     country = db.Column(db.String(255), nullable = False)
     zip = db.Column(db.String(255), nullable = False)
     created_at = db.Column(db.DateTime, nullable = False, server_default=func.now())
-    updated_at = db.Column(db.DateTime, nullable = False, onupdate=func.now())
+    updated_at = db.Column(db.DateTime, nullable = True, onupdate=func.now())
 
 
 # User Schema
@@ -32,7 +33,7 @@ class UserSchema(ma.Schema):
     """This is a database schema."""
     class Meta:
         """Specify which fields you want to see in RESTful API"""
-        fields = ('id', 'uname', 'pwd', 'fname', 'lname', 'email', 'phone', 'bday', 'gender', 'photo','license', 'license_id', 'street', 'city', 'country', 'zip', 'created_at', 'updated_at')
+        fields = ('id', 'uname', 'pwd', 'role','fname', 'lname', 'email', 'phone', 'bday', 'gender', 'photo','license', 'license_id', 'street', 'city', 'country', 'zip', 'created_at', 'updated_at')
 
 
 """
