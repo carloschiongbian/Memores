@@ -4,14 +4,17 @@ import '../public/css/pages/PatientDetails/patientDetails.css';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+//INSERT INTO `patients_screening_details`(`id`, `patient_id`, `patient_notes`, `results`, `screened_by`, `last_edited_by`, `screened_on`, `last_edited_on`, `created_at`, `updated_at`) VALUES ('','','This patient shows signs of SAD','has SAD','Dr. Strange','Dr. Murphy','April 3, 2022','May 3, 2022','','')
+//INSERT INTO `patients_screening_details`(`id`, `patient_id`, `patient_notes`, `results`, `screened_by`, `last_edited_by`, `screened_on`, `last_edited_on`, `created_at`, `updated_at`) VALUES ('','','This patient shows symptoms but does not have SAD','has no SAD','Dr. Holmes','Dr. Poller','April 3, 2022','June 3, 2022','','')
+//INSERT INTO `patients_screening_details`(`id`, `patient_id`, `patient_notes`, `results`, `screened_by`, `last_edited_by`, `screened_on`, `last_edited_on`, `created_at`, `updated_at`) VALUES ('','','This patient has SAD','has SAD','Dr. Scrubs','Dr. Logan','April 3, 2022','July 3, 2022','','')
+
 const PatientDetails = () => {
 
     const { id } = useParams()
     const[patientDetails, setPatientDetails] = useState({})
 
     useEffect(() => {
-        console.log(id)
-        fetch('/patientDetails/id=' + id, {
+        fetch('/patientDetails/id='+id, {
             methods: 'GET',
             headers: {
                 'Access-Control-Allow-Origin':'*',
@@ -95,11 +98,11 @@ const PatientDetails = () => {
 
                         <div className="patient-screening-details-top-section">
                             <div className="screened-by">
-                                <label>Screened by:</label>
+                                <label>Screened by: {patientDetails.screened_by} </label>
                             </div>
 
                             <div className="screened-on">
-                                <label>Screened on:</label>
+                                <label>Screened on: {patientDetails.screened_on}</label>
                             </div>
                         </div>
 
@@ -109,7 +112,7 @@ const PatientDetails = () => {
                             </div>
 
                             <div className="patient-screening-results">
-                                <p>lorem lorem</p>
+                                <p>{patientDetails.results}</p>
                             </div>
 
                         </div>
@@ -121,7 +124,7 @@ const PatientDetails = () => {
                         <label htmlFor="patient-notes-label">Notes</label>
 
                         <div className="patient-notes">
-                            notes
+                            {patientDetails.patient_notes}
                         </div>
 
                         <div className="patient-notes-actions">
@@ -131,12 +134,12 @@ const PatientDetails = () => {
                         <div className="patient-notes-status">
                             <div className="patient-notes-editor">
                                 <label htmlFor="notes-edited-by">Last Edited By:</label>
-                                Greg
+                                <p>{patientDetails.last_Edited_by}</p>
                             </div>
 
                             <div className="patient-notes-edited-date">
                             <label htmlFor="date-edited-on">Last Edited On:</label>
-                                08 / 20 / 2022
+                            <p>{patientDetails.last_edited_on}</p>
                             </div>
                         </div>
 

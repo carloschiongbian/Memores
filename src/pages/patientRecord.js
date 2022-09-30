@@ -58,12 +58,7 @@ const PatientRecord = () => {
             renderCell: (cellData) => {
                 return(
                     <>
-                        <button style={{width: '100%'}} 
-                        onClick={() => 
-                            handleRecordAction(cellData.row, recordActions.EDIT)
-                            // console.log(cellData.row)
-                        }
-                        >Edit</button>
+                        <button style={{width: '100%'}} onClick={() => handleRecordAction(cellData.row, recordActions.EDIT)}>View</button>
                         <button style={{width: '100%'}} onClick={() => handleRecordAction(cellData.row, recordActions.DELETE)}>Delete</button>
                     </>
                 );
@@ -90,15 +85,14 @@ const PatientRecord = () => {
     }
 
     const handleRecordAction = (data, action) => {
-        console.log(data.id)
         switch (action) {
             case recordActions.EDIT:
                 navigate('/patientDetails/id=' + data.id)
                 break;
         
             case recordActions.DELETE:
-                setGetRecord(data)
                 handleModalEvent()
+                setGetRecord(data)
                 break;
 
             default:
@@ -150,7 +144,8 @@ const PatientRecord = () => {
                         </div>
 
                         <div className="modal-actions">
-                            <a href={"/patientRecord/id=" + getRecord.id}  id="delete">Delete</a>
+                            <button id="delete">Delete</button>    
+                            {/* <a href={"/patientRecord/delete=" + getRecord.id}  id="delete">Delete</a> */}
                             <button id="cancel" onClick={() => handleModalEvent()}>Cancel</button>
                         </div>
                     </div>

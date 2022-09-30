@@ -6,9 +6,9 @@ dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.en
 load_dotenv(dotenv_path)
 
 my_db = pymysql.connect(
-    host =  os.environ.get('DATABASE_HOST'),
-    user =  os.environ.get('DATABASE_USER'),
-    passwd= os.environ.get('DATABASE_PASSWORD')
+    host =  'localhost',
+    user =  'root',
+    passwd= ''
 )
 my_cursor = my_db.cursor()
 
