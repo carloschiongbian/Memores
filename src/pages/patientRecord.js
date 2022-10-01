@@ -32,7 +32,7 @@ const PatientRecord = () => {
             field: 'firstName',
             headerName: 'First name',
             width: 250,
-            fontSize: 23,          
+            fontSize: 93,          
             headerAlign: 'center',
         },
         {

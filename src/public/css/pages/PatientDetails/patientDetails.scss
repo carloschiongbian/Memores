@@ -1,16 +1,20 @@
 .patient-details-page-container{
+    padding-inline: 10%;
+    background-image: linear-gradient(to right, #8860D0, #A79BFF);
     .patient-details-path-bar{
         border-top: 1px solid #B9B9B9;
         border-bottom: 1px solid #B9B9B9;
         background-color: #E5E5E5;
         padding: 15px 0 15px 30px;
+        border-radius: 10px 10px 0 0;
     }
 
     .patient-details-container{
         display: flex;
         flex-direction: row;
         background-color: #E5E5E5;
-        height: 450px;
+        height: 550px;
+        border-radius: 0 0 10px 10px;
 
         .patient-details{
             width: 60%;
@@ -24,13 +28,14 @@
             .patient-screening-details{
                 background-color: white;
                 padding: 20px;
+                font-size: 20px;
                 border-radius: 7px;
             }
 
             .patient-information{
                 display: grid;
                 grid-template-columns: 1fr 1fr 1fr;
-                font-size: 12px;
+                font-size: 16px;
     
                 label{
                     color: #949494;
@@ -53,7 +58,7 @@
                     padding-bottom: 5px;
                     border-bottom: 1px solid #E5E5E5;
                     label{
-                        font-size: 14px;
+                        font-size: 16px;
                         width: 100%;
                     }
                 }
@@ -62,6 +67,7 @@
                     padding-block: 5px;
                     label{
                         color: #949494;
+                        font-size: 18px;
                         font-weight: bold;
                         font-size: 12px;
                     }
@@ -82,6 +88,7 @@
                     .patient-screening-results{
                         text-align: justify;
                         text-indent: 5px;
+                        font-size: 16px;
                         p{
                             font-size: 12px;
                         }

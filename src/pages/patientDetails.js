@@ -1,8 +1,11 @@
 import UserNavigationMenu from "../components/userNavigationMenu";
-import '../public/css/pages/PatientDetails/patientDetails.css';
+import '../public/css/pages/PatientDetails/patientDetails.scss';
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+
+//for dummy data, make sure that patient_id corresponds to 
+//already-existing id numbers from the patients table in order to link data
 
 //INSERT INTO `patients_screening_details`(`id`, `patient_id`, `patient_notes`, `results`, `screened_by`, `last_edited_by`, `screened_on`, `last_edited_on`, `created_at`, `updated_at`) VALUES ('','','This patient shows signs of SAD','has SAD','Dr. Strange','Dr. Murphy','April 3, 2022','May 3, 2022','','')
 //INSERT INTO `patients_screening_details`(`id`, `patient_id`, `patient_notes`, `results`, `screened_by`, `last_edited_by`, `screened_on`, `last_edited_on`, `created_at`, `updated_at`) VALUES ('','','This patient shows symptoms but does not have SAD','has no SAD','Dr. Holmes','Dr. Poller','April 3, 2022','June 3, 2022','','')
@@ -31,8 +34,9 @@ const PatientDetails = () => {
     }, [])
 
     return (
-        <div className="patient-details-page-container">
+        <>
             <UserNavigationMenu />
+        <div className="patient-details-page-container">
 
             <div className="patient-details-path-bar">
                 path bar
@@ -147,6 +151,7 @@ const PatientDetails = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 }
  
