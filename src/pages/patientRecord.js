@@ -3,6 +3,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import UserNavigationMenu from '../components/userNavigationMenu';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 import PatientDataTable from '../components/patientDataTable';
 
@@ -119,7 +121,13 @@ const PatientRecord = () => {
     return (
         <div className="patient-records-container">
             <UserNavigationMenu />
-                
+                <Button component={Link} to="/createPatient" variant="contained" color="success">
+                    Create New Patient
+                </Button>
+                {/* <h1>LOGO</h1> */}
+            {/* </div> */}
+
+            {/* <Box sx={{ height: 400, width: '100%' }}> */}
             <div className="data-table-container" style={{paddingInline: '5%', backgroundImage: 'linear-gradient(to right,#8860D0, #A79BFF)'}}>
                 <div className="data-table">
                     <PatientDataTable 
