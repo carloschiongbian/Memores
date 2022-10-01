@@ -2,7 +2,7 @@ html{
     background-image: linear-gradient(to right, #8860D0, #A79BFF);
     
     
-    .patient-records-container{
+.patient-records-container{
     #modal-container{
         display: none;
         position: fixed; /* Stay in place */
@@ -66,25 +66,25 @@ html{
                             color: white;
                         }
 
-                        // &[id='delete']{
-                        //     background-color: red;
-                        //     color: white;
-                        // }
+                        &[id='delete']{
+                            background-color: red;
+                            color: white;
+                        }
                     }
 
-                    a{
-                        border-radius: 5px;
-                        border: 1px solid rgb(210, 200, 200);
-                        padding-block: 10px;
-                        padding-inline: 30px;
-                        font-weight: 500;
-                        pointer-events: all;
-                        cursor: pointer;
-                        text-decoration: none;
-                        background-color: red;
-                        color: white;
+                    // a{
+                    //     border-radius: 5px;
+                    //     border: 1px solid rgb(210, 200, 200);
+                    //     padding-block: 10px;
+                    //     padding-inline: 30px;
+                    //     font-weight: 500;
+                    //     pointer-events: all;
+                    //     cursor: pointer;
+                    //     text-decoration: none;
+                    //     background-color: red;
+                    //     color: white;
 
-                    }
+                    // }
                 }
             }
         }
