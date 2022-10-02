@@ -25,11 +25,11 @@ def retrieveData():
 @app.route('/dashboard', methods=['GET'])
 def retrieveDashboardContent():
     cursor = connection.cursor()
-    query = ("SELECT COUNT(id) FROM patients")
+    query = ("SELECT p.id, p.fname, p.lname, sd.screened_on FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id ORDER BY sd.screened_on")
     cursor.execute(query)
     records = cursor.fetchall()
     cursor.close()
-    print('dashboard')
+    print(records)
     return jsonify(records)
 
 # @app.route('/patientDetails/id=<id>', methods=['GET'])

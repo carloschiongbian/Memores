@@ -1,10 +1,11 @@
 import UserNavigationMenu from "../components/userNavigationMenu";
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import '../public/css/pages/Dashboard/Dashboard.css';
 
 const Dashboard = () => {
 
-    const [dashboardContent, setDashboardContent] = useState()
+    const [dashboardContent, setDashboardContent] = useState([])
 
     var dateObj = new Date();
     var day = dateObj.getUTCDay();
@@ -30,7 +31,8 @@ const Dashboard = () => {
         }).then((response) =>
             response.json()
         ).then((response) =>
-            console.log(response[0].COUNT)
+            // console.log(response[0])
+            setDashboardContent(response)
         ).catch((error) => 
             console.log(error)
         )
@@ -48,7 +50,7 @@ const Dashboard = () => {
 
                     <div className="number-of-patients-container">
                         <h3>Patients</h3>
-                        {/* <h1>{ dashboardContent.COUNT }</h1> */}
+                        <h1>{ dashboardContent.length }</h1>
                     </div>
 
                     <div className="number-of-patients-screened-container">
@@ -88,20 +90,20 @@ const Dashboard = () => {
                     <div className="recently-screened-patients-container">
                         <div className="recently-screened-patients-header">
                             <label htmlFor="recently-screened-label">Recently Screened Patients</label>
-                            <label htmlFor="view-all-hyperlink">View All</label>
+                            <label htmlFor="view-all-hyperlink"><Link to="/patientRecord">View All</Link></label>
                         </div>
                         {
-                            samplePatients.map((patient, index) => (
+                            dashboardContent.map((patient, index) => (
                                 <div className="recently-screened-patient-data" key={ index }>
                                     <div className="patient-profile">
                                         <div className="patient-name">
-                                            { patient.patientName }
+                                            { patient.fname + " " + patient.lname }
                                         </div>
                                     </div>
 
                                     <div className="screening-information-summary">
                                         <div className="screening-information-summary-date">
-                                            { patient.screeningDate }
+                                            { patient.screened_on }
                                         </div>
 
                                         <div className="screening-information-summary-time">
