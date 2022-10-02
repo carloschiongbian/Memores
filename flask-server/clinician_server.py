@@ -15,11 +15,21 @@ connection = pymysql.connect(
 @app.route('/patientRecord', methods=['GET'])
 def retrieveData():
     cursor = connection.cursor()
-    query = "SELECT * FROM `patients`"
+    query = ("SELECT p.id, p.fname, p.lname, p.age, sd.screened_by FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id")
     cursor.execute(query)
     records = cursor.fetchall()
     cursor.close()
-    print('got records')
+    print(records)
+    return jsonify(records)
+
+@app.route('/dashboard', methods=['GET'])
+def retrieveDashboardContent():
+    cursor = connection.cursor()
+    query = ("SELECT COUNT(id) FROM patients")
+    cursor.execute(query)
+    records = cursor.fetchall()
+    cursor.close()
+    print('dashboard')
     return jsonify(records)
 
 # @app.route('/patientDetails/id=<id>', methods=['GET'])

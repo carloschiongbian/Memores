@@ -1,7 +1,10 @@
 import UserNavigationMenu from "../components/userNavigationMenu";
+import { useState, useEffect } from 'react';
 import '../public/css/pages/Dashboard/Dashboard.css';
 
 const Dashboard = () => {
+
+    const [dashboardContent, setDashboardContent] = useState()
 
     var dateObj = new Date();
     var day = dateObj.getUTCDay();
@@ -17,6 +20,24 @@ const Dashboard = () => {
         { patientName: "Jay Garrick", screeningDate: date, screeningTime: time },
     ];
 
+    useEffect(() => {
+        fetch('/dashboard', {
+            methods: 'GET',
+            headers: {
+                'Access-Control-Allow-Origin':'*',
+                'Content-Type': 'application/json'
+            }
+        }).then((response) =>
+            response.json()
+        ).then((response) =>
+            console.log(response[0].COUNT)
+        ).catch((error) => 
+            console.log(error)
+        )
+        console.log(dashboardContent)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     return (
         <div className="dashboard-container">
             <UserNavigationMenu />
@@ -27,7 +48,7 @@ const Dashboard = () => {
 
                     <div className="number-of-patients-container">
                         <h3>Patients</h3>
-                        <h1>302</h1>
+                        {/* <h1>{ dashboardContent.COUNT }</h1> */}
                     </div>
 
                     <div className="number-of-patients-screened-container">

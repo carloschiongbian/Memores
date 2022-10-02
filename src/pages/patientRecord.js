@@ -52,6 +52,13 @@ const PatientRecord = () => {
             headerAlign: 'center',
         },
         {
+            field: 'screened_by',
+            headerName: 'Screened By',            
+            width: 200,
+            editable: true,
+            headerAlign: 'center',
+        },
+        {
             field: 'actions',
             headerName: 'Actions',
             sortable: false,
@@ -75,6 +82,7 @@ const PatientRecord = () => {
                 firstName: data.fname,
                 lastName: data.lname,
                 age: data.age,
+                screened_by: data.screened_by,
                 action: DeleteIcon
             }
             setPatientRecords(patientRecords => [...patientRecords, patientRecord])
@@ -121,14 +129,23 @@ const PatientRecord = () => {
     return (
         <div className="patient-records-container">
             <UserNavigationMenu />
-                <Button component={Link} to="/createPatient" variant="contained" color="success">
-                    Create New Patient
-                </Button>
-                {/* <h1>LOGO</h1> */}
-            {/* </div> */}
-
-            {/* <Box sx={{ height: 400, width: '100%' }}> */}
+        
             <div className="data-table-container" style={{paddingInline: '5%', backgroundImage: 'linear-gradient(to right,#8860D0, #A79BFF)'}}>
+                
+                <div className="data-table-header">
+
+                    <div className="table-header">
+                        <h4>Manage Patients</h4>
+                    </div>
+
+                    <div className="patient-search-bar">
+                        <input type="text" id="search-patient" />
+                        <Button component={Link} to="/createPatient" variant="contained" color="success">
+                            Create New Patient
+                        </Button>
+                    </div>
+                </div>
+                
                 <div className="data-table">
                     <PatientDataTable 
                         data={patientRecords} 
