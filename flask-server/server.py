@@ -9,6 +9,7 @@ import sys
 from connection.connection import db, ma
 from routes.routes import *
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -18,6 +19,7 @@ load_dotenv(dotenv_path)
 
 # Init app
 app = Flask(__name__)
+CORS(app) # allows Cross-Origin Resource Sharing
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Secret Key
@@ -52,9 +54,13 @@ app.add_url_rule('<URL>', '<NICKNAME>', <FUNCTION_NAME>, methods = ["GET", "POST
             <URL> - URL of the API Route -> can be found inside /routes/routes.py
 """
 from controllers import index
+from controllers.screening import get_questions
 
 # Index
 app.add_url_rule(INDEX, 'index', index.index, methods = ['GET'])
+
+# Assessment Quesions
+app.add_url_rule(QUESTIONS, 'questions', get_questions.get_questions, methods = ['GET'])
 
 
 # To create database tables inside the database,

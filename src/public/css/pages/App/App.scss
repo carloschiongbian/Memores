@@ -11,7 +11,8 @@ html{
 }
 
 .App{
-    background-image: linear-gradient(to bottom,#8860D0, #A79BFF, #C1C8E4);
+    // PLS DO NOT INCLUDE THIS OTHERWISE OTHER PAGES WILL HAVE THIS BACKGROUND
+    // background-image: linear-gradient(to bottom,#8860D0, #A79BFF, #C1C8E4);
     .homepage-content > * {
         width: 100%;
         height: 100vh;

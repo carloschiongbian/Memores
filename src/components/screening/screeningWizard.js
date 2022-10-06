@@ -4,6 +4,7 @@ import ScreeningResult from "./screeningResult";
 import { useState } from "react";
 import { sections } from "./dummy";
 import { useEffect } from "react";
+import Api from "../../services/api";
 
 const ScreeningWizard = () => {
 
@@ -11,6 +12,7 @@ const ScreeningWizard = () => {
     const [mustShowResult, setMustShowResult] = useState(false)
     const [totalQuestions, setTotalQuestions] = useState(0)
     const [shouldEnableSubmit, setShouldEnableSubmit] = useState(false)
+    const [questions, setQuestions] = useState([]);
 
     useEffect(() => {
         const total = sections.reduce((total, currentElement) => {
@@ -19,6 +21,16 @@ const ScreeningWizard = () => {
         
         setTotalQuestions(total)
     }, [])
+
+    useEffect(() => {
+        // fetch assessment questions
+        Api().get("/get-assessment-questions")
+            .then(res => setQuestions(res.data))
+            .catch(err => console.log(err))
+    }, []);
+
+    console.log(questions)
+
 
     const handleOptionChange = (item) => {
         const radios = document.getElementsByClassName('form-check-input')

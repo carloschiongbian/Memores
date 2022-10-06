@@ -13,3 +13,4 @@ ROUTE FORMAT SAMPLE:
 
 # This is a sample route. To be removed.
 INDEX = "/"
+QUESTIONS = '/api/get-assessment-questions'
