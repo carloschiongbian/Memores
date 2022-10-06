@@ -5,6 +5,7 @@ import { useState } from "react";
 import { sections } from "./dummy";
 import { useEffect } from "react";
 import Api from "../../services/api";
+import { parseQuestions } from "../../lib/parseAssessmentQuestions";
 
 const ScreeningWizard = () => {
 
@@ -25,11 +26,16 @@ const ScreeningWizard = () => {
     useEffect(() => {
         // fetch assessment questions
         Api().get("/get-assessment-questions")
-            .then(res => setQuestions(res.data))
+            .then(res => {
+                const q = parseQuestions(res.data)
+
+
+                // setQuestions(res.data)
+            })
             .catch(err => console.log(err))
     }, []);
 
-    console.log(questions)
+    // console.log(questions)
 
 
     const handleOptionChange = (item) => {
@@ -45,7 +51,6 @@ const ScreeningWizard = () => {
         if (totalQuestions === totalChecks)
             setShouldEnableSubmit(true)
     }
-
 
     const handleSubmit = () => {
         setHasSubmitted(true)

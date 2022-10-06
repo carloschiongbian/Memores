@@ -1,3 +1,7 @@
+// Edit this file as you see fit lang,
+// Especially sa katong na assign sa authorization
+
+
 import axios from 'axios'
 
 const BaseApi = axios.create({
