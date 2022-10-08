@@ -31,18 +31,38 @@
             display: grid;
             row-gap: 20px;
             column-gap: 20px;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr;
 
             .street-address-field{
-                grid-column: 1/4;
+                grid-column: 1/3;
             }
         }
 
-        .patient-notes{
-            height: 100%;
-
-            .patient-notes-field{    
+        .screening-details{
+            display: grid;
+            row-gap: 20px;
+            column-gap: 20px;
+            grid-template-columns: 1fr 1fr;
+            
+            .patient-notes-field{ 
                 width: 100%;
+                grid-column: 1/3;
+            }
+
+            .screened-on-field,
+            .screened-date-field{
+                
+                // ::-webkit-datetime-edit-year-field:not([aria-valuenow]),
+                // ::-webkit-datetime-edit-month-field:not([aria-valuenow]),
+                // ::-webkit-datetime-edit-day-field:not([aria-valuenow])
+
+                .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input:not(:placeholder-shown){
+                    color: transparent;
+                }
+            }
+
+            .results-field{
+                grid-column: 1/3;
             }
         }
     }

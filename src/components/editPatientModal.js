@@ -2,21 +2,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-
 import '../public/css/components/editPatientModal/editPatientModal.scss'
-
-// const style = {
-//     top: '50%',
-//     width: '60%',
-//     left: '50%',
-//     boxShadow: 24,
-//     position: 'absolute',
-//     border: '1px solid #000',
-//     transform: 'translate(-50%, -50%)',
-//     backgroundColor: 'background.paper',
-//     padding: '30px'
-//   };
 
 const EditPatientModal = ({patientDetails, openModal, setOpen}) => {
 
@@ -53,23 +39,36 @@ const EditPatientModal = ({patientDetails, openModal, setOpen}) => {
                         <div className="patient-profile">
                             <TextField id="first-name-field" label="First Name" placeholder={patientDetails.fname} variant="outlined" />
                             <TextField id="last-name-field" label="Last Name" placeholder={patientDetails.lname} variant="outlined" />
-                            <TextField id="contact-number-field" label="Contact Number" placeholder={patientDetails.phone} variant="outlined" />
+                            <TextField id="gender-field" label="Gender" placeholder={patientDetails.gender} variant="outlined" />
 
                             <TextField id="birth-date-field" label="Birthday" placeholder={patientDetails.bday} variant="outlined" />
                             <TextField id="city-field" label="City" placeholder={patientDetails.city} variant="outlined" />
                             <TextField id="zip-code-field" label="Zip Code" placeholder={patientDetails.zip} variant="outlined" />
 
+                            <TextField id="registered-date-field" label="Registered Time" placeholder={patientDetails.bday} variant="outlined" />
+                            <TextField id="contact-number-field" label="Contact Number" placeholder={patientDetails.phone} variant="outlined" />
+                            {/* <TextField id="screened-time-field" label="Screened Time" placeholder={patientDetails.city} variant="outlined" />
+                            <TextField id="screened-date-field" label="Screened Date" placeholder={patientDetails.zip} variant="outlined" /> */}
+
                             <TextField className="street-address-field" label="Street Address" placeholder={patientDetails.street} variant="outlined" />
                         </div>
 
-                        <div className="patient-notes">
+                        <div className="screening-details">
                             <TextField
-                                className='patient-notes-field'
-                                label="Multiline"
                                 multiline
-                                rows={5}
+                                rows={4.3}
+                                label="Patient Notes"
+                                className='patient-notes-field'
                                 placeholder={patientDetails.patient_notes}
                             />
+
+                            <TextField id="screened-time-field" label="Screened Time" placeholder={patientDetails.city} variant="outlined" />
+                            <TextField className="screened-date-field" type='date' label="Screened Date" placeholder={patientDetails.zip} variant="outlined" />
+
+                            <TextField id="screened-by-field" label="Screened By" placeholder={patientDetails.screened_by} variant="outlined" />
+                            <TextField className="screened-on-field" label="Screened On" type='date' placeholder={patientDetails.screened_on} variant="outlined" />
+
+                            <TextField className="results-field" label="Results" placeholder={patientDetails.results} variant="outlined" />
                         </div>
                     </div>
 
