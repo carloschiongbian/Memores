@@ -9,9 +9,10 @@ import sys
 from connection.connection import db, ma
 from routes.routes import *
 from dotenv import load_dotenv
+import redis 
+from flask_session import Session
 
 UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '.env'))
 load_dotenv(dotenv_path)
@@ -19,6 +20,12 @@ load_dotenv(dotenv_path)
 # Init app
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# SESSION CONFIGURATION USING REDIS FOR SERVER-SIDE AUTHENTICATION/ PERSIST DATA SERVER SIDE
+app.config['SESSION_TYPE'] = 'redis'
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_REDIS'] = redis.from_url("redis://127.0.0.1:6379")
 
 # Secret Key
 # NOTE: I am not sure what this is for
@@ -30,6 +37,9 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 #           Create your own .env file
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQL_ALCHEMY_DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
+
+#init Session
+server_session = Session(app)
 
 # Init bcrypt
 bcrypt = Bcrypt(app)
@@ -51,13 +61,17 @@ app.add_url_rule('<URL>', '<NICKNAME>', <FUNCTION_NAME>, methods = ["GET", "POST
     WHERE:
             <URL> - URL of the API Route -> can be found inside /routes/routes.py
 """
-from controllers import index
-from controllers import register_user
-
+from controllers import index, login, register_user, get_current_user, logout
 # Index
 app.add_url_rule(INDEX, 'index', index.index, methods = ['GET'])
 #add_user
 app.add_url_rule(ADD_USER, 'register_user', register_user.register_user, methods = ['POST'])
+#login
+app.add_url_rule(LOGIN, 'login', login.login, methods = ['POST'])
+#get current authenticated user
+app.add_url_rule(CURRENT_USER, 'get_current_user', get_current_user.get_current_user, methods = ['GET'])
+#logout
+app.add_url_rule(LOGOUT, 'logout', logout.logout_user, methods = ['POST'])
 
 # To create database tables inside the database,
 # run the command: python server.py --create-db

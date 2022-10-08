@@ -19,7 +19,7 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard-container">
-            <UserNavigationMenu />
+            <UserNavigationMenu/>
 
             <div className="dashboard">
 
