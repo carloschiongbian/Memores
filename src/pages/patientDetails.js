@@ -1,5 +1,6 @@
 import UserNavigationMenu from "../components/userNavigationMenu";
 import '../public/css/pages/PatientDetails/patientDetails.scss';
+import EditPatientModal from '../components/editPatientModal'
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -14,6 +15,7 @@ import { useParams } from 'react-router-dom';
 const PatientDetails = () => {
 
     const { id } = useParams()
+    const [open, setOpen] = useState(false);
     const[patientDetails, setPatientDetails] = useState({})
 
     useEffect(() => {
@@ -27,6 +29,7 @@ const PatientDetails = () => {
             response.json()
         ).then((response) =>
             setPatientDetails(response[0])
+            // setPatientDetails({...patientDetails, response[0].bday: formatDate(response[0].bday)})
         ).catch((error) => 
             console.log(error)
         )
@@ -132,7 +135,8 @@ const PatientDetails = () => {
                         </div>
 
                         <div className="patient-notes-actions">
-                            <button name="patient-notes-edit-button">Edit</button>
+                            <button name="patient-notes-edit-button" onClick={() => setOpen(true)}>Edit</button>
+                            <EditPatientModal patientDetails={patientDetails} openModal={open} setOpen={setOpen} />
                         </div>
 
                         <div className="patient-notes-status">

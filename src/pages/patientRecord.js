@@ -89,6 +89,37 @@ const PatientRecord = () => {
         });
     }
 
+    const retrieveRecords = () => {
+        fetch('/patientRecord', {
+            methods: 'GET',
+            headers: {
+                'Access-Control-Allow-Origin':'*',
+                'Content-Type': 'application/json'
+            }
+        }).then((response) =>
+            response.json()
+        ).then((response) =>
+            updatePatientRecords(response)
+        ).catch((error) => 
+            console.log(error)
+        )
+    }
+
+    const handlePatientFilter = () => {
+
+        let value = document.getElementById('search-patient').value
+        
+        if(value.trim().length !== 0){
+            let newArr = patientRecords.filter((record) => record.firstName.includes(value) || record.lastName.includes(value))
+            console.log(newArr)
+            setPatientRecords(newArr)
+        } else {
+            retrieveRecords()
+        }
+        
+        
+    }
+
     const handleModalEvent = () => {
         let display = document.getElementById('modal-container').style.display;
         document.getElementById('modal-container').style.display=(display === "none") ? "block" : "none";
@@ -111,19 +142,8 @@ const PatientRecord = () => {
     }
 
     useEffect(() => {
-        fetch('/patientRecord', {
-            methods: 'GET',
-            headers: {
-                'Access-Control-Allow-Origin':'*',
-                'Content-Type': 'application/json'
-            }
-        }).then((response) =>
-            response.json()
-        ).then((response) =>
-            updatePatientRecords(response)
-        ).catch((error) => 
-            console.log(error)
-        )
+        retrieveRecords()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -139,7 +159,7 @@ const PatientRecord = () => {
                     </div>
 
                     <div className="patient-search-bar">
-                        <input type="text" id="search-patient" />
+                        <input type="text" id="search-patient" onChange={() => handlePatientFilter()} />
                         <Button component={Link} to="/createPatient" variant="contained" color="success">
                             Create New Patient
                         </Button>

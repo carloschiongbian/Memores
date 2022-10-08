@@ -1,7 +1,7 @@
 import UserNavigationMenu from "../components/userNavigationMenu";
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import '../public/css/pages/Dashboard/Dashboard.css';
+import '../public/css/pages/Dashboard/Dashboard.scss';
 
 const Dashboard = () => {
 
@@ -14,12 +14,6 @@ const Dashboard = () => {
 
     var date = day + '/' + month + '/' + year;
     var time = dateObj.getHours() + ':' + dateObj.getMinutes();
-
-    const samplePatients = [
-        { patientName: "Bart Allen", screeningDate: date, screeningTime: time },
-        { patientName: "Barry Allen", screeningDate: date, screeningTime: time },
-        { patientName: "Jay Garrick", screeningDate: date, screeningTime: time },
-    ];
 
     useEffect(() => {
         fetch('/dashboard', {
@@ -40,9 +34,13 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    //GRAPH SHOWS NUMBER OF PATIENTS AND NUMBER OF PATIENTS SCREENED
+
     return (
-        <div className="dashboard-container">
-            <UserNavigationMenu />
+        <>
+        <UserNavigationMenu />
+        {/* <div className="container"> */}
+        <div className="dashboard-container" style={{backgroundImage: 'linear-gradient(to right, #8860D0, #A79BFF)'}}>
 
             <div className="dashboard">
 
@@ -121,6 +119,8 @@ const Dashboard = () => {
                 </div>
             </div>
         </div>
+        {/* </div> */}
+        </>
     );
 }
  

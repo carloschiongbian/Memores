@@ -1,0 +1,56 @@
+.edit-patient-modal{
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    row-gap: 15px;
+    display: flex;
+    padding: 30px;
+    position: absolute;
+    border-radius: 7px;
+    flex-direction: column;
+    background-color: white;
+    border: 1px solid #A79BFF;
+    transform: translate(-50%, -50%);
+
+    .modal-header{
+        grid-column: 1/4;
+        border-bottom: none;
+    }
+
+    .modal-content{
+        border: none;
+        display: flex;
+        flex-direction: row;
+        column-gap: 20px;
+
+        & > * {
+            width: 100%;
+        }
+
+        .patient-profile{
+            display: grid;
+            row-gap: 20px;
+            column-gap: 20px;
+            grid-template-columns: 1fr 1fr 1fr;
+
+            .street-address-field{
+                grid-column: 1/4;
+            }
+        }
+
+        .patient-notes{
+            height: 100%;
+
+            .patient-notes-field{    
+                width: 100%;
+            }
+        }
+    }
+
+    .modal-actions{
+        display: flex;
+        column-gap: 10px;
+        flex-direction: row;
+        justify-content: center;
+    }
+}
