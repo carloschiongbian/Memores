@@ -1,8 +1,7 @@
 # input "python server.py" to run the flask server
 import os
-from flask import Flask, request, abort, flash, jsonify
+from flask import Flask
 from flask_bcrypt import Bcrypt
-from werkzeug.utils import secure_filename
 
 # Additionals
 import sys
@@ -35,7 +34,7 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 # syntax: 'mysql://username:password@localhost/db_name'
 # NOTE: These credentials need to be inside the .env file
 #           Create your own .env file
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/memores'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQL_ALCHEMY_DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
 
 #init Session

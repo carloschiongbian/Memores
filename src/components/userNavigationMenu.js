@@ -8,9 +8,11 @@ import AuthContext from '../auth/AuthContext';
 
 const UserNavigationMenu = () => {
     const authUser = useContext(AuthContext)
-    console.log(authUser)
+
     const openNav = () => {
         document.getElementById("user-navigation-menu").style.width = "320px";
+        console.log(authUser)
+
     }
 
     const closeNav = () => {
@@ -21,7 +23,6 @@ const UserNavigationMenu = () => {
         {link: "/", linkName: "Dashboard"}, 
         {link: "/screening", linkName: "Screening"},
         { link: "/patientRecord", linkName: "Patients" },
-        { link: "/userRecord", linkName: "Manage Users"}
     ]
 
     const adminMenu = [ 
