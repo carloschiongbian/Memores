@@ -1,6 +1,54 @@
 import '../public/css/pages/App/App.scss';
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
-const HomePage = () => {
+
+const schema = yup.object({
+    user: yup
+    .string()
+    .required(),
+    password: yup
+    .string()
+    .required(),
+})
+
+const HomePage = ({setUser}) => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+      } = useForm({
+        resolver: yupResolver(schema),
+      });
+
+   
+
+    const onSubmit = async ( data ) => {
+        try {
+            const response = await fetch("/api/login", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            const responseData = await response.json()
+
+            if (response.ok && response.status === 200) {
+                console.log(responseData)
+                setUser(responseData)
+                localStorage.setItem("user", JSON.stringify(responseData))
+            }
+
+            if(response.status === 401){
+                alert(`Error: ${response.status}, ${responseData.error}`)
+            }
+        } catch (error){
+            alert(error)
+        }
+    }
+
     return (
         <div className="container">
             <div className="homepage-content">
@@ -41,9 +89,25 @@ const HomePage = () => {
                             <p className="login-modal-header">Login here</p>
 
                             <div className="login-modal-inputs">
-                                <form className="login-form" action="/patientRecord" >
-                                <input type="text" name="login-username" id="login-username" placeholder="Username" />
-                                <input type="password" name="login-password" id="login-password" placeholder="Password" />
+                                <form className="login-form" method="post" onSubmit={handleSubmit(onSubmit)} >
+                                <input {...register("user")} type="text" name="user" id="login-username" placeholder="Username" />
+                                {errors.user && (
+                                                    <span 
+                                                    className="text-danger"
+                                                    style={{ fontSize: "12px", marginBottom: "0px" }}
+                                                    >
+                                                    {errors.user.message}
+                                                    </span>
+                                                )}
+                                <input {...register("password")} type="password" name="password" id="login-password" placeholder="Password" />
+                                {errors.password && (
+                                                    <span 
+                                                    className="text-danger"
+                                                    style={{ fontSize: "12px", marginBottom: "0px" }}
+                                                    >
+                                                    {errors.password.message}
+                                                    </span>
+                                                )}
                                 <input type="submit" name="login-submit-button" id="login-submit-button" />
                                 </form>
                             </div>
