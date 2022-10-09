@@ -1,27 +1,29 @@
 from sqlalchemy.sql import func
 from connection.connection import db, ma
 
-# Admin Class/Model
-class Admins(db.Model):
+# Patient Class/Model
+class PatientsScreeningDetails(db.Model):
     """
     This is a database model.
     """
-    # __tablename__ = 'admins'
+    # __tablename__ = 'patients_screening_details'
     id = db.Column(db.Integer, primary_key = True)
-    uname = db.Column(db.String(255), nullable = False, unique = True)
-    pwd = db.Column(db.String(255), nullable = False)
-    fname = db.Column(db.String(255), nullable = False)
-    lname = db.Column(db.String(255), nullable = False)
+    patient_notes = db.Column(db.Text, nullable = False)
+    results = db.Column(db.Text, nullable = False)
+    screened_by = db.Column(db.String(255), nullable = False)
+    last_edited_by = db.Column(db.String(255), nullable = False)
+    screened_on = db.Column(db.DateTime, nullable = False)
+    last_edited_on = db.Column(db.DateTime, nullable = False)
     created_at = db.Column(db.DateTime, nullable = False, server_default=func.now())
     updated_at = db.Column(db.DateTime, nullable = False, onupdate=func.now())
 
 
-# Admin Schema
-class AdminSchema(ma.Schema):
+# Patient Schema
+class PatientScreeningDetailsSchema(ma.Schema):
     """This is a database schema."""
     class Meta:
         """Specify which fields you want to see in RESTful API"""
-        fields = ('id', 'uname', 'pwd', 'fname', 'lname', 'created_at', 'updated_at')
+        fields = ('id', 'patient_notes', 'results', 'screened_by', 'last_edited_by', 'screened_on', 'last_edited_on', 'created_at', 'updated_at')
 
 
 """
@@ -42,5 +44,5 @@ def get_specific_user(id):
     user = Users.query.get(id)
     return user_schema.jsonify(user)    <--- Notice the schema used (singular)
 """
-admin_schema = AdminSchema()
-admins_schema = AdminSchema(many = True)
+patient_screening_details_schema = PatientScreeningDetailsSchema()
+patient_screening_details_schema = PatientScreeningDetailsSchema(many = True)

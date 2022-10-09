@@ -14,3 +14,7 @@ ROUTE FORMAT SAMPLE:
 # This is a sample route. To be removed.
 INDEX = "/"
 QUESTIONS = '/api/get-assessment-questions'
+ADD_USER = "/api/add-user"
+LOGIN = "/api/login"
+CURRENT_USER = "/api/@me"
+LOGOUT = "/api/logout"

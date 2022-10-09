@@ -11,6 +11,5 @@ my_db = pymysql.connect(
     passwd= os.environ.get('DATABASE_PASSWORD')
 )
 my_cursor = my_db.cursor()
-
 my_cursor.execute("CREATE DATABASE memores_v2")
 
