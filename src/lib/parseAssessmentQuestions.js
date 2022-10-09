@@ -7,7 +7,7 @@ const parseDemographicOptions = (questionObject) => {
     if (questionObject.options === null) {
         return {
             ...questionObject,
-            options: { age: null }
+            options: null
         }
     }
 
@@ -24,7 +24,8 @@ const parseDemographicOptions = (questionObject) => {
      *  From the array of options, we convert each element to a key/value pair, therefore, an
      *  array becomes an object where the elements become their own key/value pair.
      * 
-     *      <string>  : will be the corresponding label / input's name
+     *      acronym   : will be the name of the input
+     *      <string>  : will be the corresponding label
      *      <integer> : will be the input's corresponding value
      *      options = {
      *         <string>: <integer>,
@@ -144,9 +145,20 @@ const parseLSASOptions = (questionObject) => {
  *    questions: <array> => received from an api request
  *    array format:
  *    [ 
- *       {"acronym": "", "id": "", "options": "", section: "", "text_option": ""},
- *       {"acronym": "", "id": "", "options": "", section: "", "text_option": ""},
+ *       {"acronym": "", "id": "", "options": "", section: "", "text_option": ""},      <--- questionObject
+ *       {"acronym": "", "id": "", "options": "", section: "", "text_option": ""},      <--- questionObject
  *    ]
+ * 
+ * 
+ *     Return value: The function must return the sections containing each questions.
+ *      NOTE: See each section (components/screening/[section]Section.js) to know attributes.
+ *      {
+ *          LSAS: {},
+ *          SPIN: {},
+ *          demographic: {},
+ *          emotional: {},
+ *          physical: {]}
+ *      }
  * 
  */
 export const parseQuestions = (questions) => {
@@ -210,5 +222,7 @@ export const parseQuestions = (questions) => {
 
         sections[question.section].push(transformedQuestion)
     })
-    console.log(sections)
+    
+    // console.log(sections)
+    return sections
 }
