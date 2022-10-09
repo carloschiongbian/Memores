@@ -19,51 +19,47 @@
 
     .modal-content{
         border: none;
-        display: flex;
-        flex-direction: row;
-        column-gap: 20px;
-
-        & > * {
-            width: 100%;
-        }
-
-        .patient-profile{
-            display: grid;
-            row-gap: 20px;
+        
+        form{
+            border: none;
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
             column-gap: 20px;
-            grid-template-columns: 1fr 1fr;
 
-            .street-address-field{
-                grid-column: 1/3;
-            }
-        }
-
-        .screening-details{
-            display: grid;
-            row-gap: 20px;
-            column-gap: 20px;
-            grid-template-columns: 1fr 1fr;
-            
-            .patient-notes-field{ 
-                width: 100%;
-                grid-column: 1/3;
-            }
-
-            .screened-on-field,
-            .screened-date-field{
-                
-                // ::-webkit-datetime-edit-year-field:not([aria-valuenow]),
-                // ::-webkit-datetime-edit-month-field:not([aria-valuenow]),
-                // ::-webkit-datetime-edit-day-field:not([aria-valuenow])
-
-                .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input:not(:placeholder-shown){
-                    color: transparent;
+            .patient-profile{
+                display: grid;
+                row-gap: 20px;
+                column-gap: 20px;
+                grid-template-columns: 1fr 1fr;
+    
+                .street{
+                    grid-column: 1/3;
                 }
             }
-
-            .results-field{
-                grid-column: 1/3;
-            }
+    
+            .screening-details{
+                display: grid;
+                row-gap: 20px;
+                column-gap: 20px;
+                grid-template-columns: 1fr 1fr;
+                
+                .patient-notes{ 
+                    width: 100%;
+                    grid-column: 1/3;
+                }
+    
+                .screened-on,
+                .screened-date{
+                    .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input:visited{
+                        color: black;
+                    }
+                }
+    
+                .results{
+                    grid-column: 1/3;
+                }
+            }   
         }
     }
 

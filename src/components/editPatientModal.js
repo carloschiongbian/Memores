@@ -1,24 +1,57 @@
+import {useState} from 'react'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+
+import { Controller } from "react-hook-form";
+import Select from "react-select";
+
+import countriesSelect from './countriesSelect';
+
 import '../public/css/components/editPatientModal/editPatientModal.scss'
+import { height } from '@mui/system';
+
+const editValues = {
+    fname: "",
+    lname: "",
+    gender: "",
+    bday: "",
+    city: "",
+    country: "",
+    zip: "",
+    phone: "",
+    street: "",
+    patient_notes: "",
+    screened_time: "",
+    screened_date: "",
+    screened_by: "",
+    screened_on: "",
+    results: ""
+}
 
 const EditPatientModal = ({patientDetails, openModal, setOpen}) => {
 
+    const [editForm, setEditForm] = useState(editValues)
+
     const handleClose = () => setOpen(false);
 
-    const handleUpdateEvent = () => {
-        console.log('update')
-
-        fetch("/patientDetails/id=<id>", {
-            method: "PUT",
+    const handleFormSubmit = () => {
+    };
+    
+    const handleUpdateEvent = async () => {
+    
+        await fetch("/patientDetails/id="+patientDetails.id, {
+            method: 'PUT',
             headers: {
                 "Content-Type" : "application/json"
-            },
+            }, 
+            body: JSON.stringify(editForm)
         });
-
-        handleClose()
+        
+        console.log(editForm)
+        // handleClose()
     }
     
     return (
@@ -36,40 +69,142 @@ const EditPatientModal = ({patientDetails, openModal, setOpen}) => {
                     </div>
 
                     <div className="modal-content">
-                        <div className="patient-profile">
-                            <TextField id="first-name-field" label="First Name" placeholder={patientDetails.fname} variant="outlined" />
-                            <TextField id="last-name-field" label="Last Name" placeholder={patientDetails.lname} variant="outlined" />
-                            <TextField id="gender-field" label="Gender" placeholder={patientDetails.gender} variant="outlined" />
+                        <form method="PUT" action="#" onSubmit={() => handleFormSubmit()} form="edit-form">
+                            <div className="patient-profile">
+                                <TextField 
+                                    id="fname"
+                                    value={editForm.fname} 
+                                    onChange={(e) => setEditForm({...editForm, 'fname': e.target.value})} 
+                                    label="First Name" 
+                                    placeholder={patientDetails.fname} 
+                                    variant="outlined" 
+                                />
 
-                            <TextField id="birth-date-field" label="Birthday" placeholder={patientDetails.bday} variant="outlined" />
-                            <TextField id="city-field" label="City" placeholder={patientDetails.city} variant="outlined" />
-                            <TextField id="zip-code-field" label="Zip Code" placeholder={patientDetails.zip} variant="outlined" />
+                                <TextField 
+                                    id="lname" 
+                                    value={editForm.lname}
+                                    onChange={(e) => setEditForm({...editForm, 'lname': e.target.value})} 
+                                    label="Last Name" 
+                                    placeholder={patientDetails.lname} 
+                                    variant="outlined" 
+                                />
 
-                            <TextField id="registered-date-field" label="Registered Time" placeholder={patientDetails.bday} variant="outlined" />
-                            <TextField id="contact-number-field" label="Contact Number" placeholder={patientDetails.phone} variant="outlined" />
-                            {/* <TextField id="screened-time-field" label="Screened Time" placeholder={patientDetails.city} variant="outlined" />
-                            <TextField id="screened-date-field" label="Screened Date" placeholder={patientDetails.zip} variant="outlined" /> */}
+                                <TextField 
+                                    id="gender" 
+                                    value={editForm.gender} 
+                                    onChange={(e) => setEditForm({...editForm, 'gender': e.target.value})} 
+                                    label="Gender" 
+                                    placeholder={patientDetails.gender} 
+                                    variant="outlined" 
+                                />
 
-                            <TextField className="street-address-field" label="Street Address" placeholder={patientDetails.street} variant="outlined" />
-                        </div>
+                                <TextField 
+                                    id="bday" 
+                                    value={editForm.bday} 
+                                    onChange={(e) => setEditForm({...editForm, 'bday': e.target.value})} 
+                                    label="Birthday" 
+                                    placeholder={patientDetails.bday} 
+                                    variant="outlined" 
+                                />
 
-                        <div className="screening-details">
-                            <TextField
-                                multiline
-                                rows={4.3}
-                                label="Patient Notes"
-                                className='patient-notes-field'
-                                placeholder={patientDetails.patient_notes}
-                            />
+                                <Select 
+                                    options={countriesSelect}
+                                />
 
-                            <TextField id="screened-time-field" label="Screened Time" placeholder={patientDetails.city} variant="outlined" />
-                            <TextField className="screened-date-field" type='date' label="Screened Date" placeholder={patientDetails.zip} variant="outlined" />
+                                {/* <TextField 
+                                    id="country" 
+                                    type="select"
+                                    value={editForm.country} 
+                                    onChange={(e) => setEditForm({...editForm, 'country': e.target.value})} 
+                                    label="Country" 
+                                    placeholder={patientDetails.country} 
+                                    variant="outlined" 
+                                /> */}
 
-                            <TextField id="screened-by-field" label="Screened By" placeholder={patientDetails.screened_by} variant="outlined" />
-                            <TextField className="screened-on-field" label="Screened On" type='date' placeholder={patientDetails.screened_on} variant="outlined" />
+                                <TextField 
+                                    id="city" 
+                                    value={editForm.city} 
+                                    onChange={(e) => setEditForm({...editForm, 'city': e.target.value})} 
+                                    label="City" 
+                                    placeholder={patientDetails.city} 
+                                    variant="outlined" 
+                                />
 
-                            <TextField className="results-field" label="Results" placeholder={patientDetails.results} variant="outlined" />
-                        </div>
+                                <TextField 
+                                    id="zip" 
+                                    value={editForm.zip} 
+                                    onChange={(e) => setEditForm({...editForm, 'zip': e.target.value})} 
+                                    label="Zip Code" 
+                                    placeholder={patientDetails.zip} 
+                                    variant="outlined" 
+                                />
+                                {/* <TextField id="registered-date-field" value={editForm.registered_date} label="Registered Time" placeholder={patientDetails.bday} variant="outlined" /> */}
+
+                                <TextField 
+                                    id="phone" 
+                                    value={editForm.phone} 
+                                    onChange={(e) => setEditForm({...editForm, 'phone': e.target.value})} 
+                                    label="Contact Number" 
+                                    placeholder={patientDetails.phone} 
+                                    variant="outlined" 
+                                />
+
+                                <TextField 
+                                    className="street" 
+                                    value={editForm.street} 
+                                    onChange={(e) => setEditForm({...editForm, 'street': e.target.value})} 
+                                    label="Street Address" 
+                                    placeholder={patientDetails.street} 
+                                    variant="outlined" 
+                                />
+                            </div>
+
+                            <div className="screening-details">
+                                <TextField
+                                    multiline
+                                    rows={4.3}
+                                    value={editForm.patient_notes}
+                                    label="Patient Notes"
+                                    className='patient-notes'
+                                    onChange={(e) => setEditForm({...editForm, 'patient_notes': e.target.value})}
+                                    placeholder={patientDetails.patient_notes}
+                                />
+
+                                {/* <TextField id="screened-time-field" value={editForm.screened} label="Screened Time" placeholder={patientDetails.city} variant="outlined" /> */}
+                                {/* <TextField className="screened-date-field" type='date' label="Screened Date" placeholder={patientDetails.screened_date} variant="outlined" /> */}
+
+                                <TextField 
+                                    id="screened_by" 
+                                    value={editForm.screened_by} 
+                                    onChange={(e) => setEditForm({...editForm, 'screened_by': e.target.value})} 
+                                    label="Screened By" 
+                                    placeholder={patientDetails.screened_by} 
+                                    variant="outlined" 
+                                />
+
+                                <TextField 
+                                    className="screened_on" 
+                                    value={editForm.screened_on} 
+                                    onChange={(e) => setEditForm({...editForm, 'screened_on': e.target.value})} 
+                                    label="Screened On" 
+                                    type='date' 
+                                    placeholder={patientDetails.screened_on} 
+                                    variant="outlined"
+                                />
+
+                                <TextField 
+                                    className="results" 
+                                    multiline
+                                    value={editForm.results} 
+                                    rows={4.3}
+                                    onChange={(e) => setEditForm({...editForm, 'results': e.target.value})} 
+                                    label="Results" 
+                                    placeholder={patientDetails.results} 
+                                    variant="outlined" 
+                                />
+                            </div>
+                            
+                        </form>
                     </div>
 
                     <div className="modal-actions">
@@ -77,18 +212,19 @@ const EditPatientModal = ({patientDetails, openModal, setOpen}) => {
                             variant='outlined' 
                             size='large' 
                             onClick={() => {
-                                handleUpdateEvent()
+                                setOpen(false)
                             }}
                         >
                             Cancel
                         </Button>
                         <Button 
+                            type="submit"
                             size='large'
                             variant='contained' 
                             onClick={() => {
                                 handleUpdateEvent()
                             }}
-                        >
+                            >
                             Save
                         </Button>
                     </div>

@@ -85,17 +85,17 @@ const PatientDetails = () => {
 
                             <div className="patient-registered-date">
                                 <label htmlFor="registered-date">Registered Date</label>
-                                <span>March 25, 2022</span>
+                                <span>{patientDetails.registered_date}</span>
                             </div>
 
                             <div className="patient-screened-time">
                                 <label htmlFor="screened-time">Screened Time</label>
-                                <span>3:30 PM</span>
+                                <span>{patientDetails.screened_time}</span>
                             </div>
 
                             <div className="patient-screened-date">
                                 <label htmlFor="screened-date">Screened Date</label>
-                                <span>March 25, 2022</span>
+                                <span>{patientDetails.screened_on}</span>
                             </div>
                         </div>
 
