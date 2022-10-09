@@ -7,8 +7,10 @@ class Questions(db.Model):
     """
     # __tablename__ = 'questions'
     id = db.Column(db.Integer, primary_key = True)
+    section = db.Column(db.String(255), nullable = False)
     text_option = db.Column(db.String(255), nullable = False)
     acronym = db.Column(db.String(255), nullable = False)
+    options = db.Column(db.String(255), nullable = True)
 
 
 # Questions Schema
@@ -16,7 +18,7 @@ class QuestionsSchema(ma.Schema):
     """This is a database schema."""
     class Meta:
         """Specify which fields you want to see in RESTful API"""
-        fields = ('id', 'question_id', 'text_option', 'acronym')
+        fields = ('id', 'section', 'text_option', 'acronym', 'options')
 
 
 """

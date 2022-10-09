@@ -1,2 +1,3 @@
 # system generated files
 __pycache__/
+.env

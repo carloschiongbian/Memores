@@ -8,6 +8,7 @@ import sys
 from connection.connection import db, ma
 from routes.routes import *
 from dotenv import load_dotenv
+from flask_cors import CORS
 import redis 
 from flask_session import Session
 
@@ -18,6 +19,7 @@ load_dotenv(dotenv_path)
 
 # Init app
 app = Flask(__name__)
+CORS(app) # allows Cross-Origin Resource Sharing
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # SESSION CONFIGURATION USING REDIS FOR SERVER-SIDE AUTHENTICATION/ PERSIST DATA SERVER SIDE
@@ -61,8 +63,11 @@ app.add_url_rule('<URL>', '<NICKNAME>', <FUNCTION_NAME>, methods = ["GET", "POST
             <URL> - URL of the API Route -> can be found inside /routes/routes.py
 """
 from controllers import index, login, register_user, get_current_user, logout
+from controllers.screening import get_questions
 # Index
 app.add_url_rule(INDEX, 'index', index.index, methods = ['GET'])
+# Assessment Quesions
+app.add_url_rule(QUESTIONS, 'questions', get_questions.get_questions, methods = ['GET'])
 #add_user
 app.add_url_rule(ADD_USER, 'register_user', register_user.register_user, methods = ['POST'])
 #login
