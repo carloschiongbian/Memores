@@ -1,9 +1,7 @@
-import json
 from flask import request, session
 from flask.json import jsonify
 from models.users import Users
 from flask_bcrypt import check_password_hash
-import pymysql
 
  
 def login():

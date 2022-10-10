@@ -19,7 +19,7 @@ load_dotenv(dotenv_path)
 
 # Init app
 app = Flask(__name__)
-CORS(app) # allows Cross-Origin Resource Sharing
+CORS(app, supports_credentials=True) # allows Cross-Origin Resource Sharing
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # SESSION CONFIGURATION USING REDIS FOR SERVER-SIDE AUTHENTICATION/ PERSIST DATA SERVER SIDE
@@ -62,10 +62,10 @@ app.add_url_rule('<URL>', '<NICKNAME>', <FUNCTION_NAME>, methods = ["GET", "POST
     WHERE:
             <URL> - URL of the API Route -> can be found inside /routes/routes.py
 """
-from controllers import index, login, register_user, get_current_user, logout
+from controllers import get_users, login, register_user, get_current_user, logout
 from controllers.screening import get_questions
-# Index
-app.add_url_rule(INDEX, 'index', index.index, methods = ['GET'])
+# Get Users
+app.add_url_rule(GET_USERS, 'get_users', get_users.get_users, methods = ['GET'])
 # Assessment Quesions
 app.add_url_rule(QUESTIONS, 'questions', get_questions.get_questions, methods = ['GET'])
 #add_user

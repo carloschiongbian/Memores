@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, session
 from flask.json import jsonify
 from models.users import Users
 from flask import current_app as app
@@ -32,8 +32,18 @@ def register_user():
     city = request.form['city']
     country = request.form['country']
     zipcode = request.form['zipcode']
+
+    #Check if session exist
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Unauthorized"}), 401
     
-    #Check if user exist in the database
+    #Check if role is admin
+    user = Users.query.filter_by(id = user_id).first()
+    if user.role != "admin":
+        return jsonify({"error": "Unauthorized"}), 401
+
+    #Check if username or email exist in the database
     user_exist = Users.query.filter_by(uname = uname, email = email).first() is not None
     if user_exist:
         return jsonify({"error": "Username or email already exist!"}), 409
