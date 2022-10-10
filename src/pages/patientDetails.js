@@ -1,4 +1,3 @@
-import UserNavigationMenu from "../components/userNavigationMenu";
 import '../public/css/pages/PatientDetails/patientDetails.scss';
 import EditPatientModal from '../components/editPatientModal'
 
@@ -6,6 +5,7 @@ import BreadCrumbs from '../components/BreadCrumbs';
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import Layout from "../components/Layout";
 
 //for dummy data, make sure that patient_id corresponds to 
 //already-existing id numbers from the patients table in order to link data
@@ -18,28 +18,27 @@ const PatientDetails = () => {
 
     const { id } = useParams()
     const [open, setOpen] = useState(false);
-    const[patientDetails, setPatientDetails] = useState({})
+    const [patientDetails, setPatientDetails] = useState({})
 
     useEffect(() => {
-        fetch('/patientDetails/id='+id, {
+        fetch('/patientDetails/id=' + id, {
             methods: 'GET',
             headers: {
-                'Access-Control-Allow-Origin':'*',
+                'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json'
             }
         }).then((response) =>
             response.json()
         ).then((response) =>
             setPatientDetails(response[0])
-        ).catch((error) => 
+        ).catch((error) =>
             console.log(error)
         )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
-        <>
-            <UserNavigationMenu />
+        <Layout>
             <div className="patient-details-page-container">
 
                 <div className="patient-details-path-bar">
@@ -156,8 +155,8 @@ const PatientDetails = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </Layout>
     );
 }
- 
+
 export default PatientDetails;

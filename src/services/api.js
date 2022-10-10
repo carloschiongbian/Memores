@@ -15,11 +15,6 @@ export const BaseApi = axios.create({
 })
 
 const Api = function () {
-    let token = localStorage.getItem("token")
-    if (token) {
-        BaseApi.defaults.headers.common["Authorization"] = `Bearer ${token}`
-        BaseApi.defaults.headers.common["Accept"] = "application/json"
-    }
     return BaseApi
 }
 
