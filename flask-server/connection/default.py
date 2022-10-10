@@ -2,6 +2,10 @@ import pymysql
 import os
 from dotenv import load_dotenv
 
+
+dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.env'))
+load_dotenv(dotenv_path)
+
 #create default admin account 
 new_conn = pymysql.connect(
     host =  os.environ.get('DATABASE_HOST'),
