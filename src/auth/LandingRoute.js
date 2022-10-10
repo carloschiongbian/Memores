@@ -1,12 +1,11 @@
 import { useContext } from 'react';
 import AuthContext from './AuthContext';
-import Dashboard from '../pages/dashboard';
-
+import { Navigate } from 'react-router-dom';
 const LandingRoute = ({ children }) => {
     const authUser = useContext(AuthContext)
 
     if (authUser.user.role === 'user') {
-      return <Dashboard/>;
+      return <Navigate to="/dashboard" replace />;
     }
   
     return children;

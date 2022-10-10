@@ -2,7 +2,7 @@ import '../public/css/pages/App/App.scss';
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import { BaseApi } from '../services/api';
 
 const schema = yup.object({
     user: yup
@@ -21,31 +21,16 @@ const HomePage = ({setUser}) => {
       } = useForm({
         resolver: yupResolver(schema),
       });
-
    
 
     const onSubmit = async ( data ) => {
         try {
-            const response = await fetch("/api/login", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-            const responseData = await response.json()
-
-            if (response.ok && response.status === 200) {
-                console.log(responseData)
-                setUser(responseData)
-                localStorage.setItem("user", JSON.stringify(responseData))
-            }
-
-            if(response.status === 401){
-                alert(`Error: ${response.status}, ${responseData.error}`)
+            const response = await BaseApi.post("/login", data)
+            if(response.status === 200){
+                setUser(response.data)
             }
         } catch (error){
-            alert(error)
+            console.log(error)
         }
     }
 
@@ -89,7 +74,7 @@ const HomePage = ({setUser}) => {
                             <p className="login-modal-header">Login here</p>
 
                             <div className="login-modal-inputs">
-                                <form className="login-form" method="post" onSubmit={handleSubmit(onSubmit)} >
+                                <form className="login-form" method="POST" onSubmit={handleSubmit(onSubmit)} >
                                 <input {...register("user")} type="text" name="user" id="login-username" placeholder="Username" />
                                 {errors.user && (
                                                     <span 
