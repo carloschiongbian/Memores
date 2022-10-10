@@ -1,8 +1,8 @@
-import UserNavigationMenu from '../components/userNavigationMenu';
 import '../public/css/pages/PatientRecord/patientRecord.css';
 import DataTable from '../components/dataTable';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import Layout from '../components/Layout';
 
 
 const UserRecord = () => {
@@ -53,17 +53,18 @@ const UserRecord = () => {
         { id: "18", name: "Joshua", email: "sample@gmail.com", phone: "099238" },
         { id: "19", name: "Joshua", email: "sample@gmail.com", phone: "099238" },
         { id: "20", name: "Joshua", email: "sample@gmail.com", phone: "099238" },
-        {id: "21", name: "Joshua", email: "sample@gmail.com", phone: "099238" },
+        { id: "21", name: "Joshua", email: "sample@gmail.com", phone: "099238" },
     ];
 
     return (
-        <div className="patient-records-container">
-            <UserNavigationMenu />
+        <Layout>
+            <div className="patient-records-container">
                 <Button component={Link} to="/createUser" variant="contained" color="success">
-                   Create a New User
+                    Create a New User
                 </Button>
-            <DataTable data={ randomData } header={ sampleHeader } />
-        </div>
+                <DataTable data={randomData} header={sampleHeader} />
+            </div>
+        </Layout>
     );
 }
 

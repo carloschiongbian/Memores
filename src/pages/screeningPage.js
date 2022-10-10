@@ -3,6 +3,7 @@ import ScreeningWizard from '../components/screening/screeningWizard';
 import '../public/css/pages/ScreeningPage/index.css'
 import { useState } from 'react';
 import { AnswerContext } from '../components/screening/AnswerContext';
+import Layout from '../components/Layout';
 
 
 const ScreeningPage = () => {
@@ -21,9 +22,8 @@ const ScreeningPage = () => {
 
 
     return (
-        <>
-            <UserNavigationMenu></UserNavigationMenu>
-            <AnswerContext.Provider value={{answers, setAnswers}}>
+        <Layout>
+            <AnswerContext.Provider value={{ answers, setAnswers }}>
                 <div className='d-flex flex-column h-100 '>
                     <div className="container mt-2">
                         <div className="vh-75 d-flex flex-column align-items-center justify-content-center">
@@ -99,7 +99,7 @@ const ScreeningPage = () => {
                     </div>
                 </div>
             </AnswerContext.Provider>
-        </>
+        </Layout>
     )
 }
 

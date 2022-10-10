@@ -1,0 +1,20 @@
+.sidemenu {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: var(--bs-primary);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 2rem;
+}
+
+.sm-wrapper {
+    margin-top: 100px;
+}
+
+.left-navigation > .active {
+background-color: red;
+}

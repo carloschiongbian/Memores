@@ -1,10 +1,9 @@
-import UserNavigationMenu from '../components/userNavigationMenu';
 import '../public/css/pages/UserPage/index.css'
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useRef } from 'react';
-import Footer from '../components/footer';
+import Layout from '../components/Layout';
 
 const UserPage = () => {
 
@@ -96,8 +95,7 @@ const UserPage = () => {
     }
 
     return (
-        <>
-            <UserNavigationMenu></UserNavigationMenu>
+        <Layout>
             <div className="container">
 
                 {/* Breadcrumbs */}
@@ -257,11 +255,8 @@ const UserPage = () => {
 
                     </div>
                 </section>
-
-
             </div>
-            
-        </>
+        </Layout>
 
     );
 }
