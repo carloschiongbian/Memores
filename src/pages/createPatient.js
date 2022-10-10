@@ -417,7 +417,7 @@ const schema = yup
                 </div>
                 <hr />
                 <button type="submit" className="btn btn-primary form-control">
-                  Create User
+                  Create Patient
                 </button>
                 <hr />
               </div>
