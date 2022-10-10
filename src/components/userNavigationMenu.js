@@ -3,11 +3,16 @@ import closeNavMenu from '../public/images/icons/close-nav-menu.svg';
 import samplePhoto from '../public/images/icons/hamburger-open-menu.png';
 import '../public/css/components/userNavigationMenu/userNavigationMenu.css';
 import hamburgerMenuIcon from '../public/images/icons/hamburger-open-menu.png';
+import { useContext } from 'react';
+import AuthContext from '../auth/AuthContext';
 
 const UserNavigationMenu = () => {
+    const authUser = useContext(AuthContext)
 
     const openNav = () => {
-        document.getElementById("user-navigation-menu").style.width = "400px";
+        document.getElementById("user-navigation-menu").style.width = "320px";
+        console.log(authUser)
+
     }
 
     const closeNav = () => {
@@ -18,7 +23,11 @@ const UserNavigationMenu = () => {
         { link: "/dashboard", linkName: "Dashboard" }, 
         { link: "/screening", linkName: "Screening" },
         { link: "/patientRecord", linkName: "Patients" },
-        { link: "/userRecord", linkName: "Manage Users"}
+    ]
+
+    const adminMenu = [ 
+        {link: "/", linkName: "User Record"}, 
+        {link: "/createUser", linkName: "Create User"},
     ]
 
     var navigationLinkStyles = {
@@ -49,7 +58,18 @@ const UserNavigationMenu = () => {
 
                 <div className="navigation-middle-section">
                     <nav>
-                        {navMenu.map((navigation, index) => (
+                        { authUser.user.role === 'user' && navMenu.map((navigation, index) => (
+                            <div className="navigation-menu-link-container" key={ index }>
+                                <Link 
+                                    to={ navigation.link } 
+                                    id="navigation-link" 
+                                    style={ navigationLinkStyles } 
+                                >
+                                    <h3 id="navigation-link-name"> { navigation.linkName } </h3>
+                                </Link>
+                            </div>
+                        ))}
+                        { authUser.user.role === 'admin' && adminMenu.map((navigation, index) => (
                             <div className="navigation-menu-link-container" key={ index }>
                                 <Link 
                                     to={ navigation.link } 
@@ -62,6 +82,27 @@ const UserNavigationMenu = () => {
                         ))}
                     </nav>                    
                 </div>
+                <div className="d-flex align-items-center justify-content-center">
+                {
+                    Object.keys(authUser).length !== 0 && 
+                    (
+                    <button type="button" className="btn btn-link" onClick={ async ()=>{
+                        try {
+                            const response = await fetch("/api/logout", {method: "POST",})
+                            if(response.status === 200 && response.ok){
+                                authUser.setUser(null)
+                                localStorage.removeItem("user")
+                                console.log(response)
+                            }
+                        } catch(error){
+                            alert(error)
+                        }
+                    }}>
+                    Sign Out
+                  </button>
+                  )
+                }
+                </div>
             </div>
 
             <div className="open-menu-button-container">
@@ -70,7 +111,6 @@ const UserNavigationMenu = () => {
                 </button>
             </div>
         </div>
-
     );
 }
  

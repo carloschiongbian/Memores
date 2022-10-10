@@ -1,10 +1,12 @@
 # input "python server.py" to run the flask server
 import os
-from flask import Flask, request, abort, flash
+from flask import Flask, request
 from flask.json import jsonify
 import pymysql
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
+import uuid
+
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -45,47 +47,54 @@ def register():
     city = request.form['city']
     country = request.form['country']
     zipcode = request.form['zipcode']
-
     # Check if username and email exist in the Database, if exist returns 1, if not 0
     cursor = connection.cursor()
     cursor.execute(
         f"SELECT COUNT(*) FROM users WHERE uname ='{uname}' OR email ='{email}'")
     user_exist = cursor.fetchone()
     cursor.close()
-    if user_exist['COUNT(*)']:
-        abort(409)
+    if user_exist['COUNT(*)'] > 0:
+        return jsonify({"error": "Username or email already exist!"}), 409
 
     # Hash passwords then check if password and confirm password is equal
     hashed_password = bcrypt.generate_password_hash(
         pwd).decode('utf-8')
     if bcrypt.check_password_hash(hashed_password, confirm) is False:
-        abort(409)
+        return jsonify({"error": "Please match the password and confirmed password"}), 400
 
-    # Save profile picture and license within the web application's folder, and encrypt the path.
+    file = request.files['profile']
+    # check if image is empty
+    if 'profile' not in request.files or file.filename == '':
+        return jsonify({"error": "Please upload an image"}), 400
+
+    # check if the post request has the file part
     if request.method == 'POST':
-        # check if the post request has the file part
-        if 'img' not in request.files:
-            flash('No file part')
-            return {"error": "Please upload a file"}
-        file = request.files['img']
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            flash('No selected file')
-            return {"error": "Please submit a file"}
-        if file and allowed_file(file.filename):
+        license_file = request.files['img']
+        if file and allowed_file(file.filename) and license_file and allowed_file(license_file.filename):
+            # rename file to a unique uuid
+            file.filename = uuid.uuid4().hex+'.'+file.filename.split(".")[-1]
             filename = secure_filename(file.filename)
-            file.save(os.path.join(os.path.abspath(os.path.dirname(
-                __file__)), app.config['UPLOAD_FOLDER'], filename))
-            if filename:
+            filepath = os.path.join(os.path.abspath(os.path.dirname(
+                __file__)), app.config['UPLOAD_FOLDER'], filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            # save file to the uploads folder and insert the directory path to mysql db.
+            file.save(filepath)
+            try:
+                binaryLicense = license_file.read()
+                sql_insert_query = """ INSERT INTO users (uname,pwd,fname,lname,email,phone,bday,gender,photo,license,license_id,street,city,country,zip) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+                insert_values = (uname, hashed_password, fname, lname, email, contact, bday,
+                                 gender, filepath, binaryLicense, license, addr, city, country, zipcode)
                 # Finally, Insert data to user table in mysql
                 cursor = connection.cursor()
-                cursor.execute(
-                    f"INSERT INTO users (uname,pwd,fname,lname,email,phone,bday,gender,license,license_id,street,city,country,zip) VALUES ('{uname}', '{hashed_password}', '{fname}', '{lname}', '{email}', '{contact}', '{bday}', '{gender}', '{filename}', '{license}', '{addr}', '{city}', '{country}', '{zipcode}'  )")
+                cursor.execute(sql_insert_query, insert_values)
                 connection.commit()
                 cursor.close()
+                connection.close()
+            except pymysql.Error as e:
+                print("could not close connection error pymysql %d: %s" %
+                      (e.args[0], e.args[1]))
 
-    return 'Done', 201
+    return jsonify({"success": "Registered Successfully"}), 200
 
 
 if __name__ == "__main__":
