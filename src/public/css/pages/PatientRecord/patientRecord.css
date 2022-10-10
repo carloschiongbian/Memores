@@ -1,11 +1,4 @@
-html {
-  background-image: -webkit-gradient(linear, left top, right top, from(#8860D0), to(#A79BFF));
-  background-image: linear-gradient(to right, #8860D0, #A79BFF);
-}
-
 .patient-records-container .patient-records-navbar {
-  background-image: -webkit-gradient(linear, left top, right top, from(#8860D0), to(#A79BFF));
-  background-image: linear-gradient(to right, #8860D0, #A79BFF);
   padding-block: 30px;
   display: -webkit-box;
   display: -ms-flexbox;

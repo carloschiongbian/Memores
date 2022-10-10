@@ -3,12 +3,6 @@
   font-family: 'Inter', sans-serif;
 }
 
-html {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#8860D0), color-stop(#A79BFF), to(#C1C8E4));
-  background-image: linear-gradient(to bottom, #8860D0, #A79BFF, #C1C8E4);
-  height: 100vh;
-}
-
 .App .homepage-content > * {
   width: 100%;
   height: 100vh;
