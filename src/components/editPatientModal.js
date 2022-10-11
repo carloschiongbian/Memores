@@ -13,45 +13,43 @@ import countriesSelect from './countriesSelect';
 import '../public/css/components/editPatientModal/editPatientModal.scss'
 import { height } from '@mui/system';
 
-const editValues = {
-    fname: "",
-    lname: "",
-    gender: "",
-    bday: "",
-    city: "",
-    country: "",
-    zip: "",
-    phone: "",
-    street: "",
-    patient_notes: "",
-    screened_time: "",
-    screened_date: "",
-    screened_by: "",
-    screened_on: "",
-    results: ""
+let editValues = {
+    fname: " ",
+    lname: " ",
+    gender: " ",
+    bday: " ",
+    city: " ",
+    country: " ",
+    zip: " ",
+    phone: " ",
+    street: " ",
+    patient_notes: " ",
+    screened_time: " ",
+    screened_date: " ",
+    screened_by: " ",
+    screened_on: " ",
+    results: " "
 }
 
 const EditPatientModal = ({patientDetails, openModal, setOpen}) => {
 
     const [editForm, setEditForm] = useState(editValues)
 
-    const handleClose = () => setOpen(false);
-
-    const handleFormSubmit = () => {
-    };
+    const handleClose = () => setOpen(false); 
     
     const handleUpdateEvent = async () => {
-    
-        await fetch("/patientDetails/id="+patientDetails.id, {
+
+        await fetch("/patient-details/id="+patientDetails.id, {
             method: 'PUT',
             headers: {
                 "Content-Type" : "application/json"
             }, 
             body: JSON.stringify(editForm)
-        });
-        
-        console.log(editForm)
-        // handleClose()
+        }).then((response) => 
+            response.json()
+        )
+     
+        // window.location.reload()
     }
     
     return (
@@ -69,11 +67,12 @@ const EditPatientModal = ({patientDetails, openModal, setOpen}) => {
                     </div>
 
                     <div className="modal-content">
-                        <form method="PUT" action="#" onSubmit={() => handleFormSubmit()} form="edit-form">
+                        <form method="PUT" action="#" form="edit-form">
                             <div className="patient-profile">
                                 <TextField 
                                     id="fname"
-                                    value={editForm.fname} 
+                                    defaultValue={patientDetails.fname}
+                                    // value={patientDetails.fname} 
                                     onChange={(e) => setEditForm({...editForm, 'fname': e.target.value})} 
                                     label="First Name" 
                                     placeholder={patientDetails.fname} 
@@ -109,6 +108,8 @@ const EditPatientModal = ({patientDetails, openModal, setOpen}) => {
 
                                 <Select 
                                     options={countriesSelect}
+                                    onChange={(choice) => setEditForm({...editForm, 'country': choice.label})}
+                                    // onChange={(choice) => console.log(choice.label)}
                                 />
 
                                 {/* <TextField 

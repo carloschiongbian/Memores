@@ -78,8 +78,11 @@ app.add_url_rule(CURRENT_USER, 'get_current_user', get_current_user.get_current_
 app.add_url_rule(LOGOUT, 'logout', logout.logout_user, methods = ['POST'])
 #Get Patient Records
 app.add_url_rule(PATIENT_RECORDS, 'patient_records', clinician_server.retrieveData, methods = ['GET'])
-#Get Patient Screening Details
+#Get Patient Details
 app.add_url_rule(PATIENT_DETAILS, 'patient_details', clinician_server.retrievePatientScreeningDetails, methods = ['GET'])
+#Update Patient Details
+app.add_url_rule(PATIENT_DETAILS, 'patient_details', clinician_server.retrievePatientScreeningDetails, methods = ['PUT'])
+
 
 
 # To create database tables inside the database,
