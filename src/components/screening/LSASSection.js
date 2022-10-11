@@ -35,8 +35,8 @@ const LSASSection = ({ section, handleOptionChange }) => {
             {
                 section.map((question, questionIndex) => (
                     <div className="my-4 py-2 border-bottom border-primary" key={question.id}>
-                        <p className="card-text w-100 text-center" style={{ "maxWidth": "100%" }}>
-                            Situation: {question.text_option}
+                        <p className="card-text w-100 text-start" style={{ "maxWidth": "100%" }}>
+                            <span className="fw-bold me-2">Situation #{questionIndex+1}:</span> {question.text_option}
                         </p>
 
                         {/* First Question */}

@@ -20,9 +20,10 @@ const PhysicalSection = ({ section, handleOptionChange }) => {
     return (
         <div>
             {
-                section.map(question => (
-                    <div className="my-4 py-2" key={question.id}>
-                        <p className="card-text w-100 text-center" style={{ "maxWidth": "100%" }}>
+                section.map((question, index) => (
+                    <div className="my-0 py-2" key={question.id}>
+                        <p className="card-text w-100 text-start" style={{ "maxWidth": "100%" }}>
+                            <span className="me-4">{index + 1}.</span>
                             {question.text_option}
                         </p>
 
