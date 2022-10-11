@@ -118,28 +118,35 @@
 //                 }
 //             }
 
+            .data-table-search-bar{
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 10px 20px;
+                background-color: #A79BFF;
 
-//             .patient-search-bar{
-//                 display: flex;
-//                 flex-direction: row;
-//                 justify-content: space-between;
-//                 gap: 7px;
-
-//                 input[id="search-patient"]{
-//                     border: 1px solid #CCC;
-//                     outline: none;
-//                     border-radius: 3px;
-//                     padding-inline: 7px;
-//                     width: 50%;
-
-//                     &:focus{    
-//                         border: 1px solid grey;
-//                         background-color: white;
-//                     }
-//                 }
-//             }
-//         }
-//     }
+                .patient-search-bar{
+                    gap: 7px;
+                    
+    
+                    input[id="search-patient"]{
+                        border: 1px solid #CCC;
+                        height: 100%;
+                        outline: none;
+                        border-radius: 3px;
+                        padding-inline: 7px;
+                        width: 200px;
+                        margin-left: 20px;
+    
+                        &:focus{    
+                            border: 1px solid grey;
+                            background-color: white;
+                        }
+                    }
+                }
+            }
+            
 
 //     .patient-records-modal{
 //         background-color: #EFE5E1;

@@ -7,15 +7,15 @@ connection = pymysql.connect(
     host='localhost',
     user='root',
     password='',
-    database='memores',
+    database='memores_v2',
     charset="utf8mb4",
     cursorclass=pymysql.cursors.DictCursor
 )
-    
-@app.route('/patientRecord', methods=['GET'])
+
 def retrieveData():
     cursor = connection.cursor()
     query = ("SELECT p.id, p.fname, p.lname, p.age, sd.screened_by FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id")
+    # query = ("SELECT * FROM patients")
     cursor.execute(query)
     records = cursor.fetchall()
     cursor.close()
@@ -40,14 +40,14 @@ def retrieveDashboardContent():
 #     print('got record')
 #     return jsonify(record)
 
-@app.route('/patientRecord/delete/<int:id>')
-def deletePatientRecord(id):
-    cursor = connection.cursor()
-    query = ("DELETE FROM `patients` WHERE id =" + id)
-    cursor.execute(query)
-    cursor.close()
-    print('poop')
-    return redirect('/patientRecord')
+# @app.route('/patientRecord/delete/<int:id>')
+# def deletePatientRecord(id):
+#     cursor = connection.cursor()
+#     query = ("DELETE FROM `patients` WHERE id =" + id)
+#     cursor.execute(query)
+#     cursor.close()
+#     print('poop')
+#     return redirect('/patientRecord')
 
 @app.route('/patientDetails/id=<id>', methods=['GET', 'PUT'])
 def manipulatePatientDetails(id):

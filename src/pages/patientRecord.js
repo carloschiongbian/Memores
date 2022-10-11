@@ -90,7 +90,7 @@ const PatientRecord = () => {
     }
 
     const retrieveRecords = () => {
-        fetch('/patientRecord', {
+        fetch('/patient-records', {
             methods: 'GET',
             headers: {
                 'Access-Control-Allow-Origin':'*',
@@ -142,7 +142,7 @@ const PatientRecord = () => {
     }
 
     useEffect(() => {
-        fetch('/patientRecord', {
+        fetch('/patient-records', {
             methods: 'GET',
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -159,43 +159,24 @@ const PatientRecord = () => {
 
     return (
         <Layout>
-            <div className="patient-records-container">
-                <Button component={Link} to="/createPatient" variant="contained" color="success">
-                    Create New Patient
-                </Button>
-                {/* <h1>LOGO</h1> */}
-                {/* </div> */}
 
-                {/* <Box sx={{ height: 400, width: '100%' }}> */}
-                <div className="data-table-container" style={{ paddingInline: '5%', backgroundImage: 'linear-gradient(to right,#8860D0, #A79BFF)' }}>
+            <div className="patient-records-container" style={{ paddingTop: '120px'}}>
+                <div className="data-table-search-bar">
+                    <Button component={Link} to="/createPatient" variant="contained" color="success">
+                        Create New Patient
+                    </Button>
+
+                    <div className="patient-search-bar">
+                        <input type="text" id='search-patient' onChange={() => handlePatientFilter()} />
+                    </div>
+                </div>
+                
+                <div className="data-table-container">
                     <div className="data-table">
                         <PatientDataTable
                             data={patientRecords}
                             header={columns}
                         />
-                    </div>
-                </div>
-
-                <div id="modal-container">
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="delete-record-modal">
-                            <div className="modal-header">
-                                <h4>Delete Record</h4>
-                            </div>
-
-                            <div className="modal-content">
-                                <h4>
-                                    Are you sure that you want to delete this record? Once deleted,
-                                    it can't be recovered.
-                                </h4>
-                            </div>
-
-                            <div className="modal-actions">
-                                <button id="delete">Delete</button>
-                                {/* <a href={"/patientRecord/delete=" + getRecord.id}  id="delete">Delete</a> */}
-                                <button id="cancel" onClick={() => handleModalEvent()}>Cancel</button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
