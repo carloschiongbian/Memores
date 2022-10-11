@@ -1,10 +1,10 @@
-.edit-patient-modal{
+.modal-container-delete-modal,
+.modal-container{
     top: 50%;
     left: 50%;
     width: 60%;
     row-gap: 15px;
     display: flex;
-    padding: 30px;
     position: absolute;
     border-radius: 7px;
     flex-direction: column;
@@ -12,11 +12,31 @@
     border: 1px solid #A79BFF;
     transform: translate(-50%, -50%);
 
+    .modal-header-delete-modal{
+        background-color: red;
+        color: white;
+        padding: 20px 20px;
+        border-radius: 7px 7px 0 0;
+        height: 100%;
+    }
+
+    .modal-header-delete-modal,
     .modal-header{
         grid-column: 1/4;
         border-bottom: none;
+
+        h3{
+            margin: 0;
+        }
     }
 
+    .modal-content-delete-modal{
+        margin-inline: 100px;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    .modal-content-delete-modal,
     .modal-content{
         border: none;
         
@@ -69,4 +89,9 @@
         flex-direction: row;
         justify-content: center;
     }
+}
+
+.modal-container-delete-modal{
+    border: none;
+    padding-bottom: 30px;
 }

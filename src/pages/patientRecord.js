@@ -2,10 +2,15 @@ import '../public/css/pages/PatientRecord/patientRecord.scss';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+// import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+
 import PatientDataTable from '../components/patientDataTable';
+import '../public/css/components/PatientManagementModal/Modal.scss'
 import Layout from '../components/Layout';
 
 const recordActions = {
@@ -16,6 +21,7 @@ const recordActions = {
 const PatientRecord = () => {
 
     const navigate = useNavigate()
+    const [openModal, setOpenModal] = useState(false)
     const [getRecord, setGetRecord] = useState({});
     const [patientRecords, setPatientRecords] = useState([]);
 
@@ -124,13 +130,25 @@ const PatientRecord = () => {
                 break;
 
             case recordActions.DELETE:
-                handleModalEvent()
+                setOpenModal(true)
                 setGetRecord(data)
                 break;
 
             default:
                 break;
         }
+    }
+
+    const handleDelete = () => {
+        console.log(getRecord.id)
+
+        fetch('/patient-records/delete/id='+getRecord.id, {
+            method: 'DELETE'
+        })
+
+        const newArr = patientRecords.filter(record => record.id !== getRecord.id)
+        setPatientRecords(newArr)
+        setOpenModal(false)
     }
 
     useEffect(() => {
@@ -169,6 +187,48 @@ const PatientRecord = () => {
                             data={patientRecords}
                             header={columns}
                         />
+
+                        <Modal
+                            open={openModal}                            
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box className='modal-container-delete-modal'>
+                                <div className="modal-header-delete-modal">
+                                    <h3>Delete Record</h3>
+                                </div>
+
+                                <div className="modal-content-delete-modal">
+                                    <h4>
+                                        Once you delete this record, it cannot be recovered. Would
+                                        you like to proceed?
+                                    </h4>
+                                </div>
+
+                                <div className="modal-actions">
+                                    <Button 
+                                        variant='contained' 
+                                        size='large' 
+                                        onClick={() => {
+                                            setOpenModal(false)
+                                        }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button 
+                                        type="submit"
+                                        size='large'
+                                        color='warning'
+                                        variant='contained' 
+                                        onClick={() => {
+                                            handleDelete()
+                                        }}
+                                        >
+                                        Delete
+                                    </Button>
+                                </div>
+                            </Box>
+                        </Modal>
                     </div>
                 </div>
             </div>

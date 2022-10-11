@@ -10,7 +10,7 @@ import Select from "react-select";
 
 import countriesSelect from './countriesSelect';
 
-import '../public/css/components/editPatientModal/editPatientModal.scss'
+import '../public/css/components/PatientManagementModal/Modal.scss'
 import { height } from '@mui/system';
 
 let editValues = {

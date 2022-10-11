@@ -18,5 +18,6 @@ LOGIN = "/api/login"
 CURRENT_USER = "/api/@me"
 LOGOUT = "/api/logout"
 PATIENT_RECORDS = "/patient-records"
+DELETE_PATIENT_RECORD = "/patient-records/delete/id=<id>"
 PATIENT_DETAILS = "/patient-details/id=<id>"
-# UPDATE_PATIENT_DETAILS = "/patient-details/id=<id>"
+
