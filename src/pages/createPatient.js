@@ -1,4 +1,3 @@
-import UserNavigationMenu from "../components/userNavigationMenu";
 import "../public/css/pages/PatientRecord/patientRecord.css";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -109,7 +108,6 @@ const schema = yup
   
     return (
       <div className="patient-records-container">
-        <UserNavigationMenu />
         <form
           method="post"
           onSubmit={handleSubmit(onSubmit)}
