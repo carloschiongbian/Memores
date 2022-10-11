@@ -8,14 +8,6 @@ import { Link } from 'react-router-dom';
 import PatientDataTable from '../components/patientDataTable';
 import Layout from '../components/Layout';
 
-//sql query for inserting data
-//INSERT INTO `patients`(`id`, `fname`, `lname`, `age`, `email`, `phone`, `bday`, `gender`, `street`, `city`, `country`, `zip`, `created_at`, `updated_at`) VALUES ('','Robin','Hood','25','robinhood@mail.com','09170910917','May 23, 1994','Male','Cameolot','Camelot','Camelot','0000','','')
-//INSERT INTO `patients`(`id`, `fname`, `lname`, `age`, `email`, `phone`, `bday`, `gender`, `street`, `city`, `country`, `zip`, `created_at`, `updated_at`) VALUES ('','Tony','Stark','40','tonystark@mail.com','09170912567','April 14, 1994','Male','8th Street','Avenger's Tower','USA','0000','','')
-//INSERT INTO `patients`(`id`, `fname`, `lname`, `age`, `email`, `phone`, `bday`, `gender`, `street`, `city`, `country`, `zip`, `created_at`, `updated_at`) VALUES ('','Peter','Parker','18','peterparker@mail.com','09172910917','March 13, 1994','Male','34th and 50th','Queens','USA','0000','','')
-//INSERT INTO `patients`(`id`, `fname`, `lname`, `age`, `email`, `phone`, `bday`, `gender`, `street`, `city`, `country`, `zip`, `created_at`, `updated_at`) VALUES ('','Sara','Simsom','29','sarasimsom@mail.com','09170918927','January 17, 1994','Female','Loal's','New Jersey','USA','0000','','')
-//INSERT INTO `patients`(`id`, `fname`, `lname`, `age`, `email`, `phone`, `bday`, `gender`, `street`, `city`, `country`, `zip`, `created_at`, `updated_at`) VALUES ('','Jim','Carrey','52','jimcarrey@mail.com','09170910999','June 01, 1994','Male','Highway','Los Angeles','USA','0000','','')
-//INSERT INTO `patients`(`id`, `fname`, `lname`, `age`, `email`, `phone`, `bday`, `gender`, `street`, `city`, `country`, `zip`, `created_at`, `updated_at`) VALUES ('','Ethan','Hunt','39','ethanhunt@mail.com','09170938265','July 03, 1994','Male','Banilad','Cebu City','Philippines','0000','','')
-
 const recordActions = {
     EDIT: 'EDIT',
     DELETE: 'DELETE'
@@ -29,7 +21,7 @@ const PatientRecord = () => {
 
 
     const columns = [
-        { field: 'id', headerName: 'Patient ID', width: 250, headerAlign: 'center' },
+        { field: 'id', headerName: 'Patient ID', width: 150, headerAlign: 'center' },
         {
             field: 'firstName',
             headerName: 'First name',
@@ -40,7 +32,7 @@ const PatientRecord = () => {
         {
             field: 'lastName',
             headerName: 'Last name',
-            width: 250,
+            width: 240,
             editable: true,
             headerAlign: 'center',
         },
@@ -48,13 +40,13 @@ const PatientRecord = () => {
             field: 'age',
             headerName: 'Age',
             type: 'number',
-            width: 200,
+            width: 150,
             headerAlign: 'center',
         },
         {
             field: 'screened_by',
             headerName: 'Screened By',            
-            width: 200,
+            width: 250,
             editable: true,
             headerAlign: 'center',
         },
@@ -62,7 +54,7 @@ const PatientRecord = () => {
             field: 'actions',
             headerName: 'Actions',
             sortable: false,
-            width: 304,
+            width: 250,
             headerAlign: 'center',
             renderCell: (cellData) => {
                 return (
@@ -128,7 +120,7 @@ const PatientRecord = () => {
     const handleRecordAction = (data, action) => {
         switch (action) {
             case recordActions.EDIT:
-                navigate('/patientDetails/id=' + data.id)
+                navigate('/patient-details/id=' + data.id)
                 break;
 
             case recordActions.DELETE:
@@ -160,14 +152,14 @@ const PatientRecord = () => {
     return (
         <Layout>
 
-            <div className="patient-records-container" style={{ paddingTop: '120px'}}>
+            <div className="patient-records-container">
                 <div className="data-table-search-bar">
                     <Button component={Link} to="/createPatient" variant="contained" color="success">
                         Create New Patient
                     </Button>
 
                     <div className="patient-search-bar">
-                        <input type="text" id='search-patient' onChange={() => handlePatientFilter()} />
+                        <input type="text" id='search-patient' placeholder='Search for a Patient' onChange={() => handlePatientFilter()} />
                     </div>
                 </div>
                 

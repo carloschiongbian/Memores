@@ -14,7 +14,7 @@ class PatientsScreeningDetails(db.Model):
     screened_by = db.Column(db.String(255), nullable = False)
     last_edited_by = db.Column(db.String(255), nullable = False)
     screened_date = db.Column(db.DateTime, nullable = False)
-    screened_time = db.Column(db.Time, nullable = False)
+    screened_time = db.Column(db.DateTime, nullable = False)
     last_edited_on = db.Column(db.DateTime, nullable = False)
     created_at = db.Column(db.DateTime, nullable = False, server_default=func.now())
     updated_at = db.Column(db.DateTime, nullable = False, onupdate=func.now())

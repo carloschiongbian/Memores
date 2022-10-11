@@ -1,4 +1,5 @@
 import pymysql.cursors
+import json
 from flask import Flask, redirect, jsonify, request
 
 app = Flask(__name__);
@@ -21,39 +22,11 @@ def retrieveData():
     cursor.close()
     return jsonify(records)
 
-@app.route('/dashboard', methods=['GET'])
-def retrieveDashboardContent():
-    cursor = connection.cursor()
-    query = ("SELECT p.id, p.fname, p.lname, sd.screened_on FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id ORDER BY sd.screened_on")
-    cursor.execute(query)
-    records = cursor.fetchall()
-    cursor.close()
-    return jsonify(records)
-
-# @app.route('/patientDetails/id=<id>', methods=['GET'])
-# def retrievePatientScreeningDetails(id):
-#     cursor = connection.cursor()
-#     query = ("SELECT * FROM `patients_screening_details` WHERE id =" + id)
-#     cursor.execute(query)
-#     record = cursor.fetchall()
-#     cursor.close()
-#     print('got record')
-#     return jsonify(record)
-
-# @app.route('/patientRecord/delete/<int:id>')
-# def deletePatientRecord(id):
-#     cursor = connection.cursor()
-#     query = ("DELETE FROM `patients` WHERE id =" + id)
-#     cursor.execute(query)
-#     cursor.close()
-#     print('poop')
-#     return redirect('/patientRecord')
-
-@app.route('/patientDetails/id=<id>', methods=['GET', 'PUT'])
-def manipulatePatientDetails(id):
+# @app.route('/patientDetails/id=<id>', methods=['GET', 'PUT'])
+def retrievePatientScreeningDetails(id):
     if request.method == 'GET':
         cursor = connection.cursor()
-        query = ("SELECT p.id, p.fname, p.lname, p.bday, p.gender, p.street, p.city, p.country, p.zip, p.email, p.phone, p.registered_date, sd.patient_notes, sd.results, sd.screened_by, sd.last_Edited_by, sd.screened_date, sd.screened_on, sd.screened_time, sd.last_edited_on FROM patients p LEFT JOIN patients_screening_details sd ON p.id = "+id)
+        query = ("SELECT p.id, p.fname, p.lname, p.bday, p.gender, p.street, p.city, p.country, p.zip, p.email, p.phone, p.registered_date, sd.patient_notes, sd.results, sd.screened_by, sd.last_Edited_by, sd.screened_date, sd.screened_date, sd.screened_time, sd.last_edited_on FROM patients p LEFT JOIN patients_screening_details sd ON p.id = "+id)
         cursor.execute(query)
         record = cursor.fetchall()
         cursor.close()
@@ -83,6 +56,36 @@ def manipulatePatientDetails(id):
         cursor.close()
         connection.commit()
         return jsonify(request.get_json())
+
+
+
+@app.route('/dashboard', methods=['GET'])
+def retrieveDashboardContent():
+    cursor = connection.cursor()
+    query = ("SELECT p.id, p.fname, p.lname, sd.screened_on FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id ORDER BY sd.screened_on")
+    cursor.execute(query)
+    records = cursor.fetchall()
+    cursor.close()
+    return jsonify(records)
+
+# @app.route('/patientDetails/<id>', methods=['GET'])
+# def retrievePatientScreeningDetails(id):
+#     cursor = connection.cursor()
+#     query = ("SELECT * FROM `patients_screening_details` WHERE id = 1")
+#     cursor.execute(query)
+#     record = cursor.fetchall()
+#     cursor.close()
+#     print('got record')
+#     return jsonify(record)
+
+# @app.route('/patientRecord/delete/<int:id>')
+# def deletePatientRecord(id):
+#     cursor = connection.cursor()
+#     query = ("DELETE FROM `patients` WHERE id =" + id)
+#     cursor.execute(query)
+#     cursor.close()
+#     print('poop')
+#     return redirect('/patientRecord')
     
 if __name__ == "__main__":
     app.run(debug=True)

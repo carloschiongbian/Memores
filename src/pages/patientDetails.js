@@ -21,7 +21,7 @@ const PatientDetails = () => {
     const [patientDetails, setPatientDetails] = useState({})
 
     useEffect(() => {
-        fetch('/patientDetails/id=' + id, {
+        fetch('/patient-details/id=' + id, {
             methods: 'GET',
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -94,7 +94,7 @@ const PatientDetails = () => {
 
                             <div className="patient-screened-date">
                                 <label htmlFor="screened-date">Screened Date</label>
-                                <span>{patientDetails.screened_on}</span>
+                                <span>{patientDetails.screened_date}</span>
                             </div>
                         </div>
 

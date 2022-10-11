@@ -1,18 +1,22 @@
 import Link from '@mui/material/Link';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
+import {useNavigate} from 'react-router-dom'
+
 
 const BreadCrumbs = () => {
+  const navigate = useNavigate()
+
   return (
     <div>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" href="/patientRecord">
+      <Breadcrumbs aria-label="breadcrumb" style={{color: 'white'}}>
+        <Link underline="hover" color="white" style={{cursor: 'pointer'}} onClick={() => navigate('/patient-records')}>
           Patient Records
         </Link>
         <Link
           underline="hover"
-          color="text.primary"
+          color="white"
           aria-current="page"
-          href="#"
+          href="#"          
         >
           View Patient
         </Link>
