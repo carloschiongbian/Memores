@@ -1,17 +1,12 @@
 import {useState} from 'react'
+import Select from "react-select";
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-
-import { Controller } from "react-hook-form";
-import Select from "react-select";
 
 import countriesSelect from './countriesSelect';
-
 import '../public/css/components/PatientManagementModal/Modal.scss'
-import { height } from '@mui/system';
 
 let editValues = {
     fname: " ",

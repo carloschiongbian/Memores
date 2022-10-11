@@ -66,7 +66,7 @@ from controllers import get_users, login, register_user, get_current_user, logou
 from controllers.screening import get_questions
 # Get Users
 app.add_url_rule(GET_USERS, 'get_users', get_users.get_users, methods = ['GET'])
-# Assessment Quesions
+# Assessment Questions
 app.add_url_rule(QUESTIONS, 'questions', get_questions.get_questions, methods = ['GET'])
 #add_user
 app.add_url_rule(ADD_USER, 'register_user', register_user.register_user, methods = ['POST'])

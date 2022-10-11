@@ -118,11 +118,6 @@ const PatientRecord = () => {
         
     }
 
-    const handleModalEvent = () => {
-        let display = document.getElementById('modal-container').style.display;
-        document.getElementById('modal-container').style.display = (display === "none") ? "block" : "none";
-    }
-
     const handleRecordAction = (data, action) => {
         switch (action) {
             case recordActions.EDIT:
@@ -139,8 +134,7 @@ const PatientRecord = () => {
         }
     }
 
-    const handleDelete = () => {
-        console.log(getRecord.id)
+    const handleDelete = () => {       
 
         fetch('/patient-records/delete/id='+getRecord.id, {
             method: 'DELETE'
