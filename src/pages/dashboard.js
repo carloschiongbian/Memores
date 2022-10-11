@@ -38,31 +38,17 @@ const Dashboard = () => {
     //GRAPH SHOWS NUMBER OF PATIENTS AND NUMBER OF PATIENTS SCREENED
 
     return (
-<<<<<<< HEAD
-        <>
-        <UserNavigationMenu />
-        {/* <div className="container"> */}
-        <div className="dashboard-container" style={{backgroundImage: 'linear-gradient(to right, #8860D0, #A79BFF)'}}>
-=======
         <Layout>
             <div className="dashboard-container">
->>>>>>> origin/main
 
                 <div className="dashboard">
 
                     <div className="dashboard-menu">
 
-<<<<<<< HEAD
                     <div className="number-of-patients-container">
                         <h3>Patients</h3>
                         <h1>{ dashboardContent.length }</h1>
                     </div>
-=======
-                        <div className="number-of-patients-container">
-                            <h3>Patients</h3>
-                            <h1>302</h1>
-                        </div>
->>>>>>> origin/main
 
                         <div className="number-of-patients-screened-container">
                             <h3>Screened</h3>
@@ -96,7 +82,6 @@ const Dashboard = () => {
                                     <h3>Seconds</h3>
                                 </div>
                             </div>
-<<<<<<< HEAD
                         </div> 
                     </div>
 
@@ -107,47 +92,32 @@ const Dashboard = () => {
                         </div>
                         {
                             dashboardContent.map((patient, index) => (
-                                <div className="recently-screened-patient-data" key={ index }>
-                                    <div className="patient-profile">
-                                        <div className="patient-name">
-                                            { patient.fname + " " + patient.lname }
-                                        </div>
-                                    </div>
-
-                                    <div className="screening-information-summary">
-                                        <div className="screening-information-summary-date">
-                                            { patient.screened_on }
-=======
-                        </div>
-
-                        <div className="recently-screened-patients-container">
-                            <div className="recently-screened-patients-header">
-                                <label htmlFor="recently-screened-label">Recently Screened Patients</label>
-                                <label htmlFor="view-all-hyperlink">View All</label>
-                            </div>
-                            {
-                                samplePatients.map((patient, index) => (
-                                    <div className="recently-screened-patient-data" key={index}>
+                                    <div className="recently-screened-patient-data" key={ index }>
                                         <div className="patient-profile">
                                             <div className="patient-name">
-                                                {patient.patientName}
+                                                { patient.fname + " " + patient.lname }
                                             </div>
->>>>>>> origin/main
                                         </div>
 
                                         <div className="screening-information-summary">
                                             <div className="screening-information-summary-date">
-                                                {patient.screeningDate}
+                                                { patient.screened_on }
                                             </div>
 
-                                            <div className="screening-information-summary-time">
-                                                {patient.screeningTime}
+                                            <div className="screening-information-summary">
+                                                <div className="screening-information-summary-date">
+                                                    {patient.screeningDate}
+                                                </div>
+
+                                                <div className="screening-information-summary-time">
+                                                    {patient.screeningTime}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 ))
                             }
-                        </div>
+                        {/* </div> */}
 
                         <div className="graphical-representation-of-data-container">
                             <p>graphical-representation-of-data</p>
@@ -155,13 +125,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-<<<<<<< HEAD
-        </div>
-        {/* </div> */}
-        </>
-=======
         </Layout>
->>>>>>> origin/main
     );
 }
 
