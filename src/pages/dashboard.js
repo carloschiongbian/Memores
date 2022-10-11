@@ -1,4 +1,3 @@
-import UserNavigationMenu from "../components/userNavigationMenu";
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
@@ -7,14 +6,6 @@ import '../public/css/pages/Dashboard/Dashboard.css';
 const Dashboard = () => {
 
     const [dashboardContent, setDashboardContent] = useState([])
-
-    var dateObj = new Date();
-    var day = dateObj.getUTCDay();
-    var month = dateObj.getUTCMonth();
-    var year = dateObj.getUTCFullYear();
-
-    var date = day + '/' + month + '/' + year;
-    var time = dateObj.getHours() + ':' + dateObj.getMinutes();
 
     useEffect(() => {
         fetch('/dashboard', {
@@ -26,7 +17,6 @@ const Dashboard = () => {
         }).then((response) =>
             response.json()
         ).then((response) =>
-            // console.log(response[0])
             setDashboardContent(response)
         ).catch((error) => 
             console.log(error)
@@ -88,7 +78,7 @@ const Dashboard = () => {
                     <div className="recently-screened-patients-container">
                         <div className="recently-screened-patients-header">
                             <label htmlFor="recently-screened-label">Recently Screened Patients</label>
-                            <label htmlFor="view-all-hyperlink"><Link to="/patientRecord">View All</Link></label>
+                            <label htmlFor="view-all-hyperlink"><Link to="/patient-records">View All</Link></label>
                         </div>
                         {
                             dashboardContent.map((patient, index) => (
