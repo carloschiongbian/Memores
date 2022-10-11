@@ -12,10 +12,13 @@ import {
 } from 'react'
 import Error404 from './pages/error404';
 import AuthContext from './auth/AuthContext';
+
+//I commented out these imports for now to clear the error messages in terminal
 // import ProtectedRoute from './auth/ProtectedRoute';
 // import UserRoute from './auth/UserRoute';
 // import LandingRoute from './auth/LandingRoute';
 // import { Api } from './services/api';
+
 import Dashboard from './pages/dashboard';
 
 import routes from './routes/routes';
