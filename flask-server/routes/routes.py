@@ -12,8 +12,9 @@ ROUTE FORMAT SAMPLE:
 """
 
 GET_USERS = "/api/get-users"
-QUESTIONS = '/api/get-assessment-questions'
+QUESTIONS = "/api/get-assessment-questions"
 ADD_USER = "/api/add-user"
 LOGIN = "/api/login"
 CURRENT_USER = "/api/@me"
 LOGOUT = "/api/logout"
+SUBMIT_ANSWERS = "/api/submit-answers"

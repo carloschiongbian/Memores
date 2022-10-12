@@ -114,8 +114,8 @@ const parseLSASOptions = (questionObject) => {
      */
 
     // None (0), Mild (1), Moderate (2), Severe (3) / Never (0), Occasionally (1), Often (2), Usually (3)
-    const firstQuestion = "How anxious are you about this situation?"
-    const secondQuestion = "How often do you avoid getting into this situation?"
+    const firstQuestion = "How anxious is the patient about this situation?"
+    const secondQuestion = "How often does the patient avoid getting into this situation?"
     const firstQuestionOptions = {
         None: 0,
         Mild: 1,
