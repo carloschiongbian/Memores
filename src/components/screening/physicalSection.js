@@ -29,9 +29,11 @@ const PhysicalSection = ({ section, handleOptionChange }) => {
 
                         {
                             Object.keys(question.options).map((key, index) => (
-                                <div className="form-check form-check-inline" key={index}>
-                                    <input id={`question${question.id}-option${index}`} type="radio" className="form-check-input" value={question.options[key]} name={question.acronym} onChange={handleOptionChange} required />
-                                    <label htmlFor={`question${question.id}-option${index}`} className="form-check-label">{key}</label>
+                                <div className="ms-4" key={index}>
+                                    <div className="form-check text-start ms-4">
+                                        <input id={`question${question.id}-option${index}`} type="radio" className="form-check-input" value={question.options[key]} name={question.acronym} onChange={handleOptionChange} required />
+                                        <label htmlFor={`question${question.id}-option${index}`} className="form-check-label">{key}</label>
+                                    </div>
                                 </div>
                             ))
                         }

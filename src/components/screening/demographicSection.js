@@ -23,12 +23,12 @@ const DemographicSection = ({ section, handleOptionChange }) => {
                             // if null, it is about age input
                             question.options === null ?
 
-                                <div class="row mb-3">
-                                    <label htmlFor="age" class="col-sm-4 col-form-label text-start">
+                                <div className="row mb-3">
+                                    <label htmlFor="age" className="col-sm-4 col-form-label text-start">
                                         <span className="me-4">{index + 1}.</span>
                                         {question.text_option}
                                     </label>
-                                    <div class="col-sm-8">
+                                    <div className="col-sm-8">
                                         <input id="age" type="text" name="AGE" className="form-control" onInput={handleAgeInput} onChange={handleOptionChange} required />
                                     </div>
                                 </div> :
@@ -40,9 +40,11 @@ const DemographicSection = ({ section, handleOptionChange }) => {
                                     </p>
 
                                     {Object.keys(question.options).map((key, index) => (
-                                        <div className="form-check form-check-inline" key={index}>
-                                            <input id={`question${question.id}-option${index}`} type="radio" className="form-check-input" value={question.options[key]} name={question.acronym} onChange={handleOptionChange} required />
-                                            <label htmlFor={`question${question.id}-option${index}`} className="form-check-label">{key}</label>
+                                        <div className="ms-4" key={index}>
+                                            <div className="form-check text-start ms-4" >
+                                                <input id={`question${question.id}-option${index}`} type="radio" className="form-check-input" value={question.options[key]} name={question.acronym} onChange={handleOptionChange} required />
+                                                <label htmlFor={`question${question.id}-option${index}`} className="form-check-label">{key}</label>
+                                            </div>
                                         </div>
                                     ))}
                                 </>
