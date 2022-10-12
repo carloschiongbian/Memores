@@ -67,6 +67,14 @@ const ScreeningWizard = () => {
         console.log(answers)
         setHasSubmitted(true)
 
+        // Post the answers for the screening assessment
+        Api().post("/submit-answers", { data: JSON.stringify(answers) }, {
+            headers: { 'Content-Type': 'application/json' } })
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+
+
+
         setTimeout(() => {
             setHasSubmitted(false)
             setMustShowResult(true)
