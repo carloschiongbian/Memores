@@ -1,5 +1,3 @@
-import "../public/css/components/Header.css"
-
 const Header = ({ handleLeftNavigation }) => {
 
     return (

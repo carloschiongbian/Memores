@@ -63,11 +63,14 @@ app.add_url_rule('<URL>', '<NICKNAME>', <FUNCTION_NAME>, methods = ["GET", "POST
             <URL> - URL of the API Route -> can be found inside /routes/routes.py
 """
 from controllers import get_users, login, register_user, get_current_user, logout, clinician_server
-from controllers.screening import get_questions
+from controllers.screening import get_questions, submit_answers
+
 # Get Users
 app.add_url_rule(GET_USERS, 'get_users', get_users.get_users, methods = ['GET'])
 # Assessment Questions
 app.add_url_rule(QUESTIONS, 'questions', get_questions.get_questions, methods = ['GET'])
+# Submit answers
+app.add_url_rule(SUBMIT_ANSWERS, 'submit_answers', submit_answers.submit_answers, methods = ['POST'])
 #add_user
 app.add_url_rule(ADD_USER, 'register_user', register_user.register_user, methods = ['POST'])
 #login
