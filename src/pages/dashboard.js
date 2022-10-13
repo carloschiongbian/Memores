@@ -1,5 +1,8 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import GroupIcon from '@mui/icons-material/Group';
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+
 import Layout from '../components/Layout';
 import '../public/css/pages/Dashboard/Dashboard.scss';
 
@@ -36,28 +39,28 @@ const Dashboard = () => {
                     <div className="dashboard-menu">
 
                     <div className="number-of-patients-container">
-                        <h3>Patients</h3>
+                        <h4><GroupIcon />  Patients</h4>
                         <h1>{ dashboardContent.length }</h1>
                     </div>
 
                         <div className="number-of-patients-screened-container">
-                            <h3>Screened</h3>
+                            <h4><MedicalServicesIcon /> Screened</h4>
                             <h1>100</h1>
                         </div>
 
                         <div className="average-time-duration-of-screening-container">
-                            <h3>Average Time Duration of Screening</h3>
+                            <h4>Average Time Duration of Screening</h4>
                             <div className="average-time">
                                 <div className="hours-number-format">
-                                    <h1>0</h1>
+                                    <h2>0</h2>
                                 </div>
 
                                 <div className="minutes-number-format">
-                                    <h1>46</h1>
+                                    <h2>46</h2>
                                 </div>
 
                                 <div className="seconds-number-format">
-                                    <h1>21</h1>
+                                    <h2>21</h2>
                                 </div>
 
                                 <div className="hours-string-format">
@@ -65,11 +68,11 @@ const Dashboard = () => {
                                 </div>
 
                                 <div className="minutes-string-format">
-                                    <h3>Minutes</h3>
+                                    <h3>Minute(s)</h3>
                                 </div>
 
                                 <div className="seconds-string-format">
-                                    <h3>Seconds</h3>
+                                    <h3>Second(s)</h3>
                                 </div>
                             </div>
                         </div> 
@@ -105,7 +108,7 @@ const Dashboard = () => {
                                 }}
                             >
                                 <label htmlFor="recently-screened-label">Recently Screened Patients</label>
-                                <label htmlFor="view-all-hyperlink"><Link to="/patient-records">View All</Link></label>
+                                <label htmlFor="view-all-hyperlink"><Link to="/patient-records" style={{textDecoration: 'none'}}>View All</Link></label>
                             </div>
 
                             {
@@ -128,20 +131,21 @@ const Dashboard = () => {
                                             </div>
                                         </div>
 
-                                        <div className="screening-information-summary">
+                                        <div 
+                                            className="screening-information-summary"
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'row'
+                                            }}
+                                        >
                                             <div className="screening-information-summary-date">
-                                                { patient.screened_on }
+                                                { patient.screened_date }
                                             </div>
 
-                                            <div className="screening-information-summary">
-                                                <div className="screening-information-summary-date">
-                                                    {patient.screeningDate}
-                                                </div>
-
-                                                <div className="screening-information-summary-time">
-                                                    {patient.screeningTime}
-                                                </div>
+                                            <div className="screening-information-summary-time">
+                                                { patient.screened_time }
                                             </div>
+                                            
                                         </div>
                                     </div>
                                 ))

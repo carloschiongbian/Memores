@@ -14,39 +14,44 @@
 
             .number-of-patients-container{
                 background-color: white;
-                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
             }
             
             .number-of-patients-screened-container{
                 background-color: white;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
             }
     
             .average-time-duration-of-screening-container{
                 background-color: white;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
                 grid-column: 3/5;
 
                 .average-time{
                     display: grid;
                     grid-template-columns: auto auto auto;
 
-                    h1, h3{
+                    h2, h3{
                         margin: 0;
-                        padding: 5px;
+                        padding: 7px;
                     }
 
                     .hours-number-format,
-                    .hours-string-format{
-                        text-align: right;
-                    }
-
+                    .hours-string-format,
                     .minutes-number-format,
-                    .minutes-string-format{
-                        text-align: center;
-                    }
-
+                    .minutes-string-format,
                     .seconds-number-format,
                     .seconds-string-format{
-                        text-align: left;
+                        text-align: center;
                     }
                 }
             }
