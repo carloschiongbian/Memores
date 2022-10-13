@@ -1,17 +1,17 @@
-import '../public/css/pages/PatientRecord/patientRecord.scss';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FindInPageIcon from '@mui/icons-material/FindInPage';
 
+import Layout from '../components/Layout';
+import '../public/css/pages/PatientRecord/patientRecord.scss';
 import PatientDataTable from '../components/patientDataTable';
 import '../public/css/components/PatientManagementModal/Modal.scss'
-import Layout from '../components/Layout';
 
 const recordActions = {
     EDIT: 'EDIT',
@@ -21,10 +21,9 @@ const recordActions = {
 const PatientRecord = () => {
 
     const navigate = useNavigate()
-    const [openModal, setOpenModal] = useState(false)
     const [getRecord, setGetRecord] = useState({});
+    const [openModal, setOpenModal] = useState(false)
     const [patientRecords, setPatientRecords] = useState([]);
-
 
     const columns = [
         { field: 'id', headerName: 'Patient ID', width: 150, headerAlign: 'center' },
@@ -65,8 +64,8 @@ const PatientRecord = () => {
             renderCell: (cellData) => {
                 return (
                     <>
-                        <button style={{ width: '100%' }} onClick={() => handleRecordAction(cellData.row, recordActions.EDIT)}>View</button>
-                        <button style={{ width: '100%' }} onClick={() => handleRecordAction(cellData.row, recordActions.DELETE)}>Delete</button>
+                        <FindInPageIcon style={{width: '50%', color: '#8860D0'}} onClick={() => handleRecordAction(cellData.row, recordActions.EDIT)} />
+                        <DeleteIcon style={{width: '50%', color: 'red'}} onClick={() => handleRecordAction(cellData.row, recordActions.DELETE)} />
                     </>
                 );
             }

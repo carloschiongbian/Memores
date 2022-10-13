@@ -2,7 +2,7 @@
 .modal-container{
     top: 50%;
     left: 50%;
-    width: 60%;
+    width: 40%;
     row-gap: 15px;
     display: flex;
     position: absolute;
@@ -31,7 +31,7 @@
     }
 
     .modal-content-delete-modal{
-        margin-inline: 100px;
+        margin-inline: 10%;
         padding: 20px 0;
         text-align: center;
     }

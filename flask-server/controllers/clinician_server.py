@@ -67,33 +67,13 @@ def deletePatientRecord(id):
     cursor.close()
     return jsonify(request.get_json())
 
-@app.route('/dashboard', methods=['GET'])
 def retrieveDashboardContent():
     cursor = connection.cursor()
-    query = ("SELECT p.id, p.fname, p.lname, sd.screened_on FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id ORDER BY sd.screened_on")
+    query = ("SELECT p.id, p.fname, p.lname, sd.screened_date FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id ORDER BY sd.screened_date")
     cursor.execute(query)
     records = cursor.fetchall()
     cursor.close()
     return jsonify(records)
-
-# @app.route('/patientDetails/<id>', methods=['GET'])
-# def retrievePatientScreeningDetails(id):
-#     cursor = connection.cursor()
-#     query = ("SELECT * FROM `patients_screening_details` WHERE id = 1")
-#     cursor.execute(query)
-#     record = cursor.fetchall()
-#     cursor.close()
-#     print('got record')
-#     return jsonify(record)
-
-# @app.route('/patientRecord/delete/<int:id>')
-# def deletePatientRecord(id):
-#     cursor = connection.cursor()
-#     query = ("DELETE FROM `patients` WHERE id =" + id)
-#     cursor.execute(query)
-#     cursor.close()
-#     print('poop')
-#     return redirect('/patientRecord')
-    
+        
 if __name__ == "__main__":
     app.run(debug=True)

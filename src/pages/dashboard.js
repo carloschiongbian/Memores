@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
-import '../public/css/pages/Dashboard/Dashboard.css';
+import '../public/css/pages/Dashboard/Dashboard.scss';
 
 const Dashboard = () => {
 
@@ -75,14 +75,53 @@ const Dashboard = () => {
                         </div> 
                     </div>
 
-                    <div className="recently-screened-patients-container">
-                        <div className="recently-screened-patients-header">
-                            <label htmlFor="recently-screened-label">Recently Screened Patients</label>
-                            <label htmlFor="view-all-hyperlink"><Link to="/patient-records">View All</Link></label>
-                        </div>
-                        {
-                            dashboardContent.map((patient, index) => (
-                                    <div className="recently-screened-patient-data" key={ index }>
+                    <div 
+                        className="recently-screened-patients-container" 
+                        style={{
+                            display: 'grid',
+                            borderRadius: '10px',
+                            margin: '0 20px 90px 20px', 
+                            columnGap: '10px',
+                            gridTemplateColumns: '1fr 1fr',
+                            paddingBottom: '20px'
+                        }}
+                    >
+                        
+                        <div 
+                            className="recently-screened-patients-body" 
+                            style={{
+                                borderRadius: '10px', 
+                                backgroundColor: 'white',
+                            }}
+                        >
+
+                            <div 
+                                className="recently-screened-patients-header"
+                                style={{
+                                    padding: '20px',
+                                    display: 'flex',
+                                    borderBottom: '1px solid grey',
+                                    justifyContent: 'space-between',
+                                }}
+                            >
+                                <label htmlFor="recently-screened-label">Recently Screened Patients</label>
+                                <label htmlFor="view-all-hyperlink"><Link to="/patient-records">View All</Link></label>
+                            </div>
+
+                            {
+                                dashboardContent.map((patient, index) => (
+                                    <div 
+                                        className="recently-screened-patient-data" 
+                                        key={ index }
+                                        style={{
+                                            display: 'flex',                    
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            padding: '15px 35px 15px 35px',
+                                            borderBottom: '1px solid rgb(167, 165, 165)'
+                                        }}
+                                    >
                                         <div className="patient-profile">
                                             <div className="patient-name">
                                                 { patient.fname + " " + patient.lname }
@@ -106,13 +145,20 @@ const Dashboard = () => {
                                         </div>
                                     </div>
                                 ))
-                            }
-                        {/* </div> */}
-
-                        <div className="graphical-representation-of-data-container">
+                            }                            
+                        </div>
+                        
+                        <div 
+                            className="graphical-representation-of-data-container" 
+                            style={{
+                                backgroundColor: 'white',
+                                borderRadius: '10px'
+                            }}
+                        >
                             <p>graphical-representation-of-data</p>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </Layout>

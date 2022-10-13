@@ -87,6 +87,8 @@ app.add_url_rule(DELETE_PATIENT_RECORD, 'delete_patient_record', clinician_serve
 app.add_url_rule(PATIENT_DETAILS, 'patient_details', clinician_server.retrievePatientScreeningDetails, methods = ['GET'])
 #Update Patient Details
 app.add_url_rule(PATIENT_DETAILS, 'patient_details', clinician_server.retrievePatientScreeningDetails, methods = ['PUT'])
+#Get Dashboard Data
+app.add_url_rule(DASHBOARD, 'dashboard', clinician_server.retrieveDashboardContent, methods = ['GET'])
 
 
 

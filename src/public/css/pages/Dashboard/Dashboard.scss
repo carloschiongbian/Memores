@@ -1,18 +1,16 @@
-
-
 .dashboard-container{
-    background-image: linear-gradient(to right, #8860D0, #A79BFF);
-    padding-inline: 5%;
-    height: 90%;
-
+    padding-top: 90px;
+    
     .dashboard{
+        background-image: linear-gradient(to right, #8860D0, #A79BFF);
+        border-radius: 7px;
 
         .dashboard-menu{
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr;            
             column-gap: 10px;          
             row-gap: 10px;  
-            padding: 20px;
+            padding: 20px 20px 10px 20px;
 
             .number-of-patients-container{
                 background-color: white;
@@ -54,46 +52,51 @@
             }
 
             .recently-screened-patients-container{
-                background-color: white;
-                grid-column: 1/3;
-                text-align: left;
-
-                .recently-screened-patients-header{
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-                    padding-inline: 35px;
-
-                    label[for="recently-screened-label"]{
-                        font-weight: bolder;
-                    }
-
-                    label[for="view-all-hyperlink"]{
-                        font-weight: bolder;
-                        color: #8860D0;
-                    }
-                }
-
-                .recently-screened-patient-data{
-                    display: flex;                    
-                    flex-direction: row;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 15px 35px 15px 35px;
-                    border-bottom: 1px solid rgb(167, 165, 165);
-
-                    .patient-name{
-                        font-weight: bold;
-                        font-size: 20px;
-                    }
-
-                    .screening-information-summary{
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                    }
-                }
+                display: grid;
+                grid-template-columns: 1fr 1fr;
             }
+
+            // .recently-screened-patients-container{
+            //     grid-column: 1/3;
+            //     text-align: left;
+
+            //     .recently-screened-patients-header{
+            //         display: flex;
+            //         flex-direction: row;
+            //         justify-content: space-between;
+            //         padding-inline: 35px;
+
+            //         label[for="recently-screened-label"]{
+            //             font-weight: bolder;
+            //         }
+
+            //         label[for="view-all-hyperlink"]{
+            //             font-weight: bolder;
+            //             color: #8860D0;
+            //         }
+            //     }
+
+            //     .recently-screened-patient-data{
+            //         display: flex;                    
+            //         flex-direction: row;
+            //         justify-content: space-between;
+            //         background-color: red;
+            //         align-items: center;
+            //         padding: 15px 35px 15px 35px;
+            //         border-bottom: 1px solid rgb(167, 165, 165);
+
+            //         .patient-name{
+            //             font-weight: bold;
+            //             font-size: 20px;
+            //         }
+
+            //         .screening-information-summary{
+            //             display: flex;
+            //             flex-direction: column;
+            //             align-items: center;
+            //         }
+            //     }
+            // }
 
             .graphical-representation-of-data-container{
                 background-color: white;
