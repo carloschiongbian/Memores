@@ -1,21 +1,34 @@
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import GroupIcon from '@mui/icons-material/Group';
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+
 import Layout from '../components/Layout';
-import '../public/css/pages/Dashboard/Dashboard.css';
+import '../public/css/pages/Dashboard/Dashboard.scss';
 
 const Dashboard = () => {
 
-    var dateObj = new Date();
-    var day = dateObj.getUTCDay();
-    var month = dateObj.getUTCMonth();
-    var year = dateObj.getUTCFullYear();
+    const [dashboardContent, setDashboardContent] = useState([])
 
-    var date = day + '/' + month + '/' + year;
-    var time = dateObj.getHours() + ':' + dateObj.getMinutes();
+    useEffect(() => {
+        fetch('/dashboard', {
+            methods: 'GET',
+            headers: {
+                'Access-Control-Allow-Origin':'*',
+                'Content-Type': 'application/json'
+            }
+        }).then((response) =>
+            response.json()
+        ).then((response) =>
+            setDashboardContent(response)
+        ).catch((error) => 
+            console.log(error)
+        )
+        console.log(dashboardContent)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
-    const samplePatients = [
-        { patientName: "Bart Allen", screeningDate: date, screeningTime: time },
-        { patientName: "Barry Allen", screeningDate: date, screeningTime: time },
-        { patientName: "Jay Garrick", screeningDate: date, screeningTime: time },
-    ];
+    //GRAPH SHOWS NUMBER OF PATIENTS AND NUMBER OF PATIENTS SCREENED
 
     return (
         <Layout>
@@ -25,29 +38,29 @@ const Dashboard = () => {
 
                     <div className="dashboard-menu">
 
-                        <div className="number-of-patients-container">
-                            <h3>Patients</h3>
-                            <h1>302</h1>
-                        </div>
+                    <div className="number-of-patients-container">
+                        <h4><GroupIcon />  Patients</h4>
+                        <h1>{ dashboardContent.length }</h1>
+                    </div>
 
                         <div className="number-of-patients-screened-container">
-                            <h3>Screened</h3>
+                            <h4><MedicalServicesIcon /> Screened</h4>
                             <h1>100</h1>
                         </div>
 
                         <div className="average-time-duration-of-screening-container">
-                            <h3>Average Time Duration of Screening</h3>
+                            <h4>Average Time Duration of Screening</h4>
                             <div className="average-time">
                                 <div className="hours-number-format">
-                                    <h1>0</h1>
+                                    <h2>0</h2>
                                 </div>
 
                                 <div className="minutes-number-format">
-                                    <h1>46</h1>
+                                    <h2>46</h2>
                                 </div>
 
                                 <div className="seconds-number-format">
-                                    <h1>21</h1>
+                                    <h2>21</h2>
                                 </div>
 
                                 <div className="hours-string-format">
@@ -55,47 +68,101 @@ const Dashboard = () => {
                                 </div>
 
                                 <div className="minutes-string-format">
-                                    <h3>Minutes</h3>
+                                    <h3>Minute(s)</h3>
                                 </div>
 
                                 <div className="seconds-string-format">
-                                    <h3>Seconds</h3>
+                                    <h3>Second(s)</h3>
                                 </div>
                             </div>
-                        </div>
+                        </div> 
+                    </div>
 
-                        <div className="recently-screened-patients-container">
-                            <div className="recently-screened-patients-header">
+                    <div 
+                        className="recently-screened-patients-container" 
+                        style={{
+                            display: 'grid',
+                            borderRadius: '10px',
+                            margin: '0 20px 90px 20px', 
+                            columnGap: '10px',
+                            gridTemplateColumns: '1fr 1fr',
+                            paddingBottom: '20px'
+                        }}
+                    >
+                        
+                        <div 
+                            className="recently-screened-patients-body" 
+                            style={{
+                                borderRadius: '10px', 
+                                backgroundColor: 'white',
+                            }}
+                        >
+
+                            <div 
+                                className="recently-screened-patients-header"
+                                style={{
+                                    padding: '20px',
+                                    display: 'flex',
+                                    borderBottom: '1px solid grey',
+                                    justifyContent: 'space-between',
+                                }}
+                            >
                                 <label htmlFor="recently-screened-label">Recently Screened Patients</label>
-                                <label htmlFor="view-all-hyperlink">View All</label>
+                                <label htmlFor="view-all-hyperlink"><Link to="/patient-records" style={{textDecoration: 'none'}}>View All</Link></label>
                             </div>
+
                             {
-                                samplePatients.map((patient, index) => (
-                                    <div className="recently-screened-patient-data" key={index}>
+                                dashboardContent.map((patient, index) => (
+                                    <div 
+                                        className="recently-screened-patient-data" 
+                                        key={ index }
+                                        style={{
+                                            display: 'flex',                    
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            padding: '15px 35px 15px 35px',
+                                            borderBottom: '1px solid rgb(167, 165, 165)'
+                                        }}
+                                    >
                                         <div className="patient-profile">
                                             <div className="patient-name">
-                                                {patient.patientName}
+                                                { patient.fname + " " + patient.lname }
                                             </div>
                                         </div>
 
-                                        <div className="screening-information-summary">
+                                        <div 
+                                            className="screening-information-summary"
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'row'
+                                            }}
+                                        >
                                             <div className="screening-information-summary-date">
-                                                {patient.screeningDate}
+                                                { patient.screened_date }
                                             </div>
 
                                             <div className="screening-information-summary-time">
-                                                {patient.screeningTime}
+                                                { patient.screened_time }
                                             </div>
+                                            
                                         </div>
                                     </div>
                                 ))
-                            }
+                            }                            
                         </div>
-
-                        <div className="graphical-representation-of-data-container">
+                        
+                        <div 
+                            className="graphical-representation-of-data-container" 
+                            style={{
+                                backgroundColor: 'white',
+                                borderRadius: '10px'
+                            }}
+                        >
                             <p>graphical-representation-of-data</p>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </Layout>
