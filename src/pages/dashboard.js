@@ -111,7 +111,7 @@ const Dashboard = () => {
                                 <label htmlFor="view-all-hyperlink"><Link to="/patient-records" style={{textDecoration: 'none'}}>View All</Link></label>
                             </div>
 
-                            {
+                            {dashboardContent &&
                                 dashboardContent.map((patient, index) => (
                                     <div 
                                         className="recently-screened-patient-data" 
