@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { List, ListItem } from '@mui/material';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import GroupIcon from '@mui/icons-material/Group';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 
@@ -8,7 +11,10 @@ import '../public/css/pages/Dashboard/Dashboard.scss';
 
 const Dashboard = () => {
 
+    const navigate = useNavigate()
     const [dashboardContent, setDashboardContent] = useState([])
+    
+    let path = '../patient-details/id='
 
     useEffect(() => {
         fetch('/dashboard', {
@@ -98,7 +104,7 @@ const Dashboard = () => {
                             }}
                         >
 
-                            <div 
+                            {/* <div 
                                 className="recently-screened-patients-header"
                                 style={{
                                     padding: '20px',
@@ -106,50 +112,65 @@ const Dashboard = () => {
                                     borderBottom: '1px solid grey',
                                     justifyContent: 'space-between',
                                 }}
-                            >
-                                <label htmlFor="recently-screened-label">Recently Screened Patients</label>
-                                <label htmlFor="view-all-hyperlink"><Link to="/patient-records" style={{textDecoration: 'none'}}>View All</Link></label>
-                            </div>
-
-                            {dashboardContent &&
-                                dashboardContent.map((patient, index) => (
-                                    <div 
-                                        className="recently-screened-patient-data" 
-                                        key={ index }
-                                        style={{
-                                            display: 'flex',                    
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
-                                            padding: '15px 35px 15px 35px',
-                                            borderBottom: '1px solid rgb(167, 165, 165)'
-                                        }}
-                                    >
-                                        <div className="patient-profile">
-                                            <div className="patient-name">
-                                                { patient.fname + " " + patient.lname }
-                                            </div>
-                                        </div>
-
-                                        <div 
-                                            className="screening-information-summary"
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'row'
+                            > */}
+                            <List style={{padding: '0'}}>
+                                <ListItem
+                                    divider={true}
+                                    style={{display: 'flex', justifyContent: 'space-between', padding: '20px'}}
+                                > 
+                                    <h5 style={{margin: '0'}}>Recently Screened Patients</h5>
+                                    <h5 style={{margin: '0'}}><Link to="/patient-records" style={{textDecoration: 'none'}}>View All</Link></h5>
+                                </ListItem>
+                            {/* </div> */}
+                                {dashboardContent &&
+                                    dashboardContent.map((patient) => (
+                                        <ListItem 
+                                            style={{display: 'flex', justifyContent: 'space-between', padding: '15px 10px'}}
+                                            divider={true}
+                                            button={true}
+                                            onClick={() => {
+                                                navigate(path + patient.id)
                                             }}
                                         >
-                                            <div className="screening-information-summary-date">
-                                                { patient.screened_date }
-                                            </div>
+                                            <div className="patient-name" style={{display: 'flex', columnGap: '5px', justifyContent: 'center'}}>                                                
+                                                <NavigateNextIcon />
+                                                <h5 style={{margin: '0'}}>{ patient.fname + " " + patient.lname }</h5>
+                                            </div>   
+                                            <div 
+                                                className="screening-information-summary"
+                                                style={{display: 'flex', flexDirection: 'row'}}
+                                            >
+                                                <div className="screening-information-summary-date">
+                                                    <h6 style={{margin: '0'}}> { patient.screened_date } </h6>
+                                                </div>
 
-                                            <div className="screening-information-summary-time">
-                                                { patient.screened_time }
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                ))
-                            }                            
+                                                <div className="screening-information-summary-time">
+                                                    { patient.screened_time }
+                                                </div>
+                                                
+                                            </div> 
+                                        </ListItem>
+                                        // <div 
+                                        //     className="recently-screened-patient-data" 
+                                        //     key={ index }
+                                        //     style={{
+                                        //         display: 'flex',                    
+                                        //         flexDirection: 'row',
+                                        //         justifyContent: 'space-between',
+                                        //         alignItems: 'center',
+                                        //         padding: '15px 35px 15px 35px',
+                                        //         borderBottom: '1px solid rgb(167, 165, 165)'
+                                        //     }}
+                                        // >
+                                        //     <div className="patient-profile">
+                                        //         <div className="patient-name">
+                                        //             { patient.fname + " " + patient.lname }
+                                        //         </div>
+                                        //     </div>
+                                        // </div>
+                                    ))
+                                }     
+                            </List>                       
                         </div>
                         
                         <div 

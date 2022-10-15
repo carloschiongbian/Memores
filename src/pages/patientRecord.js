@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, Modal, Button  } from '@mui/material';
 
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MaterialReactTable from 'material-react-table';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
@@ -27,34 +25,22 @@ const PatientRecord = () => {
     const [patientRecords, setPatientRecords] = useState([]);
 
     const columns = [
-        { accessorKey: 'id', header: 'Patient ID', width: 150, headerAlign: 'center' },
+        { accessorKey: 'id', header: 'Patient ID'},
         {
             accessorKey: 'firstName',
             header: 'First name',
-            // width: 250,
-            // fontSize: 93,
-            // headerAlign: 'center',
         },
         {
             accessorKey: 'lastName',
             header: 'Last name',
-            // width: 240,
-            // editable: true,
-            // headerAlign: 'center',
         },
         {
             accessorKey: 'age',
             header: 'Age',
-            // type: 'number',
-            // width: 150,
-            // headerAlign: 'center',
         },
         {
             accessorKey: 'screened_by',
             header: 'Screened By',            
-            // width: 250,
-            // editable: true,
-            // headerAlign: 'center',
         },
         {
             accessorKey: 'actions',
@@ -62,13 +48,18 @@ const PatientRecord = () => {
             enableSorting: false,
             enableColumnFilter: false,
             enableColumnActions: false,
-            align: 'center',
-            Cell: (cellData) => {
+            Cell: (cell) => {
                 return (
-                    <>
-                        <FindInPageIcon style={{width: '50%', color: '#8860D0'}} onClick={() => handleRecordAction(cellData.row, recordActions.EDIT)} />
-                        <DeleteIcon style={{width: '50%', color: 'red'}} onClick={() => handleRecordAction(cellData.row, recordActions.DELETE)} />
-                    </>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4rem',
+                        }}
+                    >
+                        <FindInPageIcon style={{color: '#8860D0'}} onClick={() => handleRecordAction(cell.row, recordActions.EDIT)} />
+                        <DeleteIcon style={{color: 'red'}} onClick={() => handleRecordAction(cell.row, recordActions.DELETE)} />
+                    </Box>
                 );
             }
         }
@@ -166,21 +157,22 @@ const PatientRecord = () => {
         <Layout>
 
             <div className="patient-records-container">
-                <div className="data-table-search-bar">
-                    <Button component={Link} to="/createPatient" variant="contained" color="success">
-                        Create New Patient
-                    </Button>
-
-
-                </div>
-                
                 <div className="data-table-container">
                     <div className="data-table">
                         <MaterialReactTable
                             columns={columns}
                             data={patientRecords}
                             enableDensityToggle={false}
-                            pageCount={5}
+                            renderTopToolbarCustomActions={() => (
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  size="large"
+                                  onClick={() => navigate('/createPatient')}
+                                >
+                                  Create New Patient
+                                </Button>
+                            )}
                         />
 
                         <Modal
