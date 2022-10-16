@@ -1,128 +1,82 @@
 .user-navigation-menu-container {
   width: 100%;
   padding-block: 50px;
-  background-image: -webkit-gradient(linear, left top, right top, from(#8860D0), to(#A79BFF));
   background-image: linear-gradient(to right, #8860D0, #A79BFF);
 }
-
 .user-navigation-menu-container #user-navigation-menu {
-  height: 100%;
-  /* 100% Full-height */
-  width: 0;
-  /* 0 width - change this with JavaScript */
-  position: fixed;
-  /* Stay in place */
-  z-index: 1;
-  /* Stay on top */
-  top: 0;
-  /* Stay at the top */
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
   left: 0;
-  background-color: white;
-  /* Black*/
-  overflow-x: hidden;
-  /* Disable horizontal scroll */
-  -webkit-transition: 0.5s;
+  background-color: white; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
   transition: 0.5s;
 }
-
 .user-navigation-menu-container #user-navigation-menu .navigation-top-section {
-  background-image: -webkit-gradient(linear, right top, left top, from(#8860D0), to(#A79BFF));
   background-image: linear-gradient(to left, #8860D0, #A79BFF);
   height: 250px;
-  display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr 1fr;
-      grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
 }
-
 .user-navigation-menu-container #user-navigation-menu .navigation-top-section .user-profile {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-
 .user-navigation-menu-container #user-navigation-menu .navigation-top-section .user-profile .user-profile-photo {
   text-align: center;
 }
-
 .user-navigation-menu-container #user-navigation-menu .navigation-top-section .user-profile .user-profile-photo img {
   height: 110px;
   width: 110px;
   border-radius: 50%;
 }
-
 .user-navigation-menu-container #user-navigation-menu .navigation-top-section .user-profile .user-name-display {
   font-weight: bold;
   color: white;
   width: 60%;
   text-align: center;
 }
-
 .user-navigation-menu-container #user-navigation-menu .navigation-top-section .close-menu-button {
   text-align: right;
 }
-
 .user-navigation-menu-container #user-navigation-menu .navigation-top-section .close-menu-button button {
   margin: 10px;
   font-size: 20px;
 }
-
 .user-navigation-menu-container #user-navigation-menu .navigation-middle-section nav {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex-direction: column;
+  align-items: center;
 }
-
 .user-navigation-menu-container #user-navigation-menu .navigation-middle-section nav .navigation-menu-link-container {
   text-align: center;
   width: 100%;
-  -webkit-transition: 0.3s;
   transition: 0.3s;
 }
-
 .user-navigation-menu-container #user-navigation-menu .navigation-middle-section nav .navigation-menu-link-container:hover {
   background-color: #A79BFF;
   color: white;
 }
-
 .user-navigation-menu-container #user-navigation-menu .navigation-middle-section nav .navigation-menu-link-container h3 {
   color: #9C9C9C;
-  -webkit-transition: 0.3s;
   transition: 0.3s;
   text-decoration: none;
   margin-block: 0;
   height: 100%;
   padding-block: 20px;
 }
-
 .user-navigation-menu-container #user-navigation-menu .navigation-middle-section nav .navigation-menu-link-container h3:hover {
   color: white;
 }
-
 .user-navigation-menu-container .open-menu-button-container {
   margin-left: 20px;
 }
-
 .user-navigation-menu-container .open-menu-button-container .open-menu-button img {
   background-image: transparent;
   height: 30px;
   width: 30px;
-}
-/*# sourceMappingURL=userNavigationMenu.css.map */
+}/*# sourceMappingURL=userNavigationMenu.css.map */
