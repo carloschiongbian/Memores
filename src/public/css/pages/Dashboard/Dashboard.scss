@@ -72,8 +72,7 @@
         height: 100%;
         background-color: white;
 
-        .patient-list-header,
-        .patient-information-item {
+        .patient-list-header{
           background-color: white;
           display: flex;
           padding: 30px 20px;
@@ -92,8 +91,8 @@
 
         .patient-information-item {
           display: flex;
-          justify-content: space-between;
           padding: 20px 10px;
+          justify-content: space-between;
 
           .patient-name {
             display: flex;
@@ -132,18 +131,17 @@
       .graph-container {
         display: flex;
         padding: 20px 0;
+        align-items: center;
         border-radius: 10px;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
         background-color: white;
 
         .graph-container-header{
-            padding: 20px 20px;
-            font-size: 18px;
             width: 100%;
-            // background-color: red;
             height: 100%;
+            font-size: 18px;
+            padding: 20px 20px;
         }
       }
     }
