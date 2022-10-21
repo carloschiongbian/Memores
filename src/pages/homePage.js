@@ -2,7 +2,11 @@ import '../public/css/pages/App/App.scss';
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { BaseApi } from '../services/api';
+import { useNavigate } from 'react-router-dom';
+import routes from '../routes/routes';
+import { useContext } from 'react';
+import AuthContext from '../auth/AuthContext';
+import Api from '../services/api';
 
 const schema = yup.object({
     user: yup
@@ -13,7 +17,8 @@ const schema = yup.object({
     .required(),
 })
 
-const HomePage = ({setUser}) => {
+const HomePage = () => {
+    const user = useContext(AuthContext)
     const {
         register,
         handleSubmit,
@@ -21,13 +26,14 @@ const HomePage = ({setUser}) => {
       } = useForm({
         resolver: yupResolver(schema),
       });
-   
+    const navigate = useNavigate()
 
     const onSubmit = async ( data ) => {
         try {
-            const response = await BaseApi.post("/login", data)
+            const response = await Api().post("/login", data)
             if(response.status === 200){
-                setUser(response.data)
+                response.data.role === 'admin' ? navigate(routes.admin.USER_RECORDS) : navigate(routes.user.DASHBOARD)
+                user.setUser(response.data)
             }
         } catch (error){
             console.log(error)

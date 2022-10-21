@@ -6,167 +6,121 @@ import Select from "react-select";
 import SelectCountries from "../components/countriesSelect";
 import dayjs from 'dayjs';
 import Layout from "../components/Layout";
-
+import { TextField, Grid } from "@mui/material";
 // .test("required", "You need to provide a file", (file) => file ? true : false)
 //     .test("fileSize", "The file is too large", (file) => file && file.size <= 5 * 1024 * 1024)
 //     .test("fileFormat","Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value[0].type)),
 
-const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
 
 const options = [
   { value: "male", label: "Male" },
   { value: "female", label: "Female" },
   { value: "other", label: "other" },
 ];
-const schema = yup
-  .object({
-    profile: yup.mixed()
-      .test("required", "Profile photo is required", (file) => file.length ? true : false)
-      .test("fileSize", "The file is too large", (file) => {
-        if (file.length) {
-          return file[0].size > 2000000 ? false : true
-        }
-      })
-      .test("fileFormat", "Unsupported Format",
-        (file) => {
-          if (file.length) {
-            return SUPPORTED_FORMATS.includes(file[0].type)
-          }
-        }),
-    img: yup.mixed()
-      .test("required", "License photo is required", (file) => file.length ? true : false)
-      .test("fileSize", "The file is too large", (file) => {
-        if (file.length) {
-          return file[0].size > 2000000 ? false : true
-        }
-      })
-      .test("fileFormat", "Unsupported Format",
-        (file) => {
-          if (file.length) {
-            return SUPPORTED_FORMATS.includes(file[0].type)
-          }
-        }),
-    license: yup.string().required(),
-    firstname: yup
-      .string()
-      .min(2)
-      .max(25)
-      .matches("^[A-Za-z ]*$", {
-        message: "Special characters is not allowed",
-        excludeEmptyString: true,
-      })
-      .required(),
-    lastname: yup
-      .string()
-      .min(2)
-      .max(25)
-      .matches("^[A-Za-z ]*$", {
-        message: "Special characters is not allowed",
-        excludeEmptyString: true,
-      })
-      .required(),
-    email: yup.string().email().required(),
-    contact: yup
-      .string()
-      .matches("^[0-9 -]*$", {
-        message: "number, dash and spaces only",
-        excludeEmptyString: true,
-      })
-      .required(),
-    birthday: yup.date().required(),
-    gender: yup
-      .object()
-      .shape({
-        label: yup.string().required("gender is required"),
-        value: yup.string().required("gender is required"),
-      })
-      .nullable()
-      .required("gender is required"),
-    username: yup.string().required(),
-    password: yup.string().min(4).max(12).required(),
-    confirm: yup
-      .string()
-      .min(4)
-      .max(12)
-      .oneOf([yup.ref("password")], "Passwords do not match")
-      .required(),
-    address: yup.string().required(),
-    city: yup.string().required(),
-    country: yup
-      .object()
-      .shape({
-        label: yup.string().required("country is required"),
-        value: yup.string().required("country is required"),
-      })
-      .nullable()
-      .required("country is required"),
-    zipcode: yup.string().required(),
-  })
-  .required();
-
-const CreateUser = () => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
-
-  const onSubmit = async (data) => {
-    let formData = new FormData();
-    formData.append("img", data.img[0]);
-    formData.append("profile", data.profile[0]);
-
-    for (let key in data) {
-      if (key === "gender") {
-        formData.append(key, data[key].label);
-      } else if (key === "country") {
-        formData.append(key, data[key].label);
-      } else if (key === "birthday") {
-        const formatted_date = dayjs(data[key]).format("YYYY-MM-DD")
-        formData.append(key, formatted_date);
-      } else {
-        formData.append(key, data[key]);
-      }
-
-    }
-
-    try {
-      const response = await fetch("/api/add-user", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json()
-
-      if (response.ok) {
-        alert(`Success: ${response.status}, ${data.success}`);
-      }
-
-      if (response.status === 409 || response.status === 400) {
-        alert(`Error: ${response.status}, ${data.error}`)
-      }
-
-    } catch (error) {
-      alert(error)
-    }
-  };
-
+  
+const CreateUser = ({register, handleSubmit, reset, errors, control}) => {
   return (
-    <Layout>
-      <div className="patient-records-container">
         <form
-          method="post"
-          onSubmit={handleSubmit(onSubmit)}
+          // method="post"
+          // // onSubmit={handleSubmit(onSubmit)}
           encType="multipart/form-data"
         >
           <div className="container">
             <div className="row">
               <div className="col">
                 <h3>Setup Personal Information</h3>
-                <hr />
-                <div className="form-group">
+                <Grid container direction={"column"} spacing={1}>
+                  <Grid item>
+                    <Controller
+                        name={"profile"}
+                        control={control}
+                          render={({ field}) => (
+                              <TextField 
+                                  // inputRef={inputRefForId} 
+                                  // {...inputPropsForId}
+                                  {...field}
+                                  autoFocus
+                                  margin="dense"
+                                  label={"Profile Photo"} 
+                                  type="file"
+                                  fullWidth
+                                  variant="standard"
+                                  autoComplete="off"
+                                  error={!!errors.profile}
+                                  helperText={errors?.profile?.message}
+                                />
+                          )}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Controller
+                        name={"img"}
+                        control={control}
+                          render={({ field}) => (
+                              <TextField 
+                                  // inputRef={inputRefForId} 
+                                  // {...inputPropsForId}
+                                  {...field}
+                                  autoFocus
+                                  margin="dense"
+                                  label={"License Photo"}
+                                  type="file"
+                                  fullWidth
+                                  variant="standard"
+                                  autoComplete="off"
+                                  error={!!errors.img}
+                                  helperText={errors?.img?.message}
+                                />
+                          )}
+                    />  
+                  </Grid>
+                  <Grid item>
+                    <Controller
+                          name={"license"}
+                          control={control}
+                            render={({ field}) => (
+                                <TextField 
+                                    // inputRef={inputRefForId} 
+                                    // {...inputPropsForId}
+                                    {...field}
+                                    autoFocus
+                                    margin="dense"
+                                    label={"License Number/ID Number"}
+                                    type="input"
+                                    fullWidth
+                                    variant="standard"
+                                    autoComplete="off"
+                                    error={!!errors.license}
+                                    helperText={errors?.license?.message}
+                                  />
+                            )}
+                      />  
+                  </Grid>
+                  <Grid item>
+                    <Controller
+                          name={"firstname"}
+                          control={control}
+                            render={({ field}) => (
+                                <TextField 
+                                    // inputRef={inputRefForId} 
+                                    // {...inputPropsForId}
+                                    {...field}
+                                    autoFocus
+                                    margin="dense"
+                                    label={"First name"}
+                                    type="input"
+                                    fullWidth
+                                    variant="standard"
+                                    autoComplete="off"
+                                    error={!!errors.firstname}
+                                    helperText={errors?.firstname?.message}
+                                  />
+                            )}
+                      />  
+                  </Grid>
+                </Grid>
+                 
+                {/* <div className="form-group">
                   <label htmlFor="profile" className="form-label">
                     Profile Photo
                   </label>
@@ -184,8 +138,8 @@ const CreateUser = () => {
                       {errors.profile.message}
                     </span>
                   )}
-                </div>
-                <div className="form-group">
+                </div> */}
+                {/* <div className="form-group">
                   <label htmlFor="img" className="form-label">
                     Please upload a clear image of the person's professional
                     license
@@ -205,8 +159,8 @@ const CreateUser = () => {
                       {errors.img.message}
                     </span>
                   )}
-                </div>
-                <div className="form-group">
+                </div> */}
+                {/* <div className="form-group">
                   <label htmlFor="license" className="form-label">
                     License Number/ID Number
                   </label>
@@ -225,8 +179,8 @@ const CreateUser = () => {
                       {errors.license.message}
                     </span>
                   )}
-                </div>
-                <div className="form-group">
+                </div> */}
+                {/* <div className="form-group">
                   <label htmlFor="firstname" className="form-label">
                     Firstname
                   </label>
@@ -246,7 +200,7 @@ const CreateUser = () => {
                       {errors.firstname.message}
                     </span>
                   )}
-                </div>
+                </div> */}
                 <div className="form-group">
                   <label htmlFor="lastname" className="form-label">
                     Lastname
@@ -500,17 +454,10 @@ const CreateUser = () => {
                     </span>
                   )}
                 </div>
-                <hr />
-                <button type="submit" className="btn btn-primary form-control">
-                  Create User
-                </button>
-                <hr />
               </div>
             </div>
           </div>
         </form>
-      </div>
-    </Layout>
   );
 };
 

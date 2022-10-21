@@ -2,11 +2,11 @@ import { useContext } from 'react';
 import AuthContext from './AuthContext';
 import { Navigate } from 'react-router-dom';
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, isLoading }) => {
     const authUser = useContext(AuthContext)
     
-    if (authUser.user.role !== 'admin') {
-      return <Navigate to="/error404" replace />;
+    if (authUser.user.role !== 'admin' && isLoading === true) {
+      return <Navigate to="/error-404" replace />;
     }
   
     return children;
