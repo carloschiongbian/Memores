@@ -1,10 +1,7 @@
 .patient-data-row {
-  display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr 1fr 1fr 1fr 1fr;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   text-align: center;
   background-color: white;
   border-bottom: 1px solid #D2B6B6;
-}
-/*# sourceMappingURL=patientInformation.css.map */
+}/*# sourceMappingURL=patientInformation.css.map */

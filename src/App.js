@@ -6,7 +6,10 @@ import UserRecord from './pages/userRecord';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import ScreeningPage from './pages/screeningPage';
 import UserPage from './pages/userPage';
-import { useState, useEffect } from 'react'
+import { 
+  useState, 
+  useEffect 
+} from 'react'
 import Error404 from './pages/error404';
 import AuthContext from './auth/AuthContext';
 import ProtectedRoute from './auth/ProtectedRoute';

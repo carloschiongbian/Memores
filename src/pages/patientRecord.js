@@ -1,20 +1,16 @@
-import '../public/css/pages/PatientRecord/patientRecord.scss';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Box, Modal, Button  } from '@mui/material';
 
-import PatientDataTable from '../components/patientDataTable';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MaterialReactTable from 'material-react-table';
+import FindInPageIcon from '@mui/icons-material/FindInPage';
+
 import Layout from '../components/Layout';
-
-//sql query for inserting data
-//INSERT INTO `patients`(`id`, `fname`, `lname`, `age`, `email`, `phone`, `bday`, `gender`, `street`, `city`, `country`, `zip`, `created_at`, `updated_at`) VALUES ('','Robin','Hood','25','robinhood@mail.com','09170910917','May 23, 1994','Male','Cameolot','Camelot','Camelot','0000','','')
-//INSERT INTO `patients`(`id`, `fname`, `lname`, `age`, `email`, `phone`, `bday`, `gender`, `street`, `city`, `country`, `zip`, `created_at`, `updated_at`) VALUES ('','Tony','Stark','40','tonystark@mail.com','09170912567','April 14, 1994','Male','8th Street','Avenger's Tower','USA','0000','','')
-//INSERT INTO `patients`(`id`, `fname`, `lname`, `age`, `email`, `phone`, `bday`, `gender`, `street`, `city`, `country`, `zip`, `created_at`, `updated_at`) VALUES ('','Peter','Parker','18','peterparker@mail.com','09172910917','March 13, 1994','Male','34th and 50th','Queens','USA','0000','','')
-//INSERT INTO `patients`(`id`, `fname`, `lname`, `age`, `email`, `phone`, `bday`, `gender`, `street`, `city`, `country`, `zip`, `created_at`, `updated_at`) VALUES ('','Sara','Simsom','29','sarasimsom@mail.com','09170918927','January 17, 1994','Female','Loal's','New Jersey','USA','0000','','')
-//INSERT INTO `patients`(`id`, `fname`, `lname`, `age`, `email`, `phone`, `bday`, `gender`, `street`, `city`, `country`, `zip`, `created_at`, `updated_at`) VALUES ('','Jim','Carrey','52','jimcarrey@mail.com','09170910999','June 01, 1994','Male','Highway','Los Angeles','USA','0000','','')
-//INSERT INTO `patients`(`id`, `fname`, `lname`, `age`, `email`, `phone`, `bday`, `gender`, `street`, `city`, `country`, `zip`, `created_at`, `updated_at`) VALUES ('','Ethan','Hunt','39','ethanhunt@mail.com','09170938265','July 03, 1994','Male','Banilad','Cebu City','Philippines','0000','','')
+import '../public/css/pages/PatientRecord/patientRecord.scss';
+// import PatientDataTable from '../components/patientDataTable';
+import '../public/css/components/PatientManagementModal/Modal.scss'
 
 const recordActions = {
     EDIT: 'EDIT',
@@ -25,44 +21,45 @@ const PatientRecord = () => {
 
     const navigate = useNavigate()
     const [getRecord, setGetRecord] = useState({});
+    const [openModal, setOpenModal] = useState(false)
     const [patientRecords, setPatientRecords] = useState([]);
 
-
     const columns = [
-        { field: 'id', headerName: 'Patient ID', width: 250, headerAlign: 'center' },
+        { accessorKey: 'id', header: 'Patient ID'},
         {
-            field: 'firstName',
-            headerName: 'First name',
-            width: 250,
-            fontSize: 93,
-            headerAlign: 'center',
+            accessorKey: 'firstName',
+            header: 'First name',
         },
         {
-            field: 'lastName',
-            headerName: 'Last name',
-            width: 250,
-            editable: true,
-            headerAlign: 'center',
+            accessorKey: 'lastName',
+            header: 'Last name',
         },
         {
-            field: 'age',
-            headerName: 'Age',
-            type: 'number',
-            width: 200,
-            headerAlign: 'center',
+            accessorKey: 'age',
+            header: 'Age',
         },
         {
-            field: 'actions',
-            headerName: 'Actions',
-            sortable: false,
-            width: 304,
-            headerAlign: 'center',
-            renderCell: (cellData) => {
+            accessorKey: 'screened_by',
+            header: 'Screened By',            
+        },
+        {
+            accessorKey: 'actions',
+            header: 'Actions',
+            enableSorting: false,
+            enableColumnFilter: false,
+            enableColumnActions: false,
+            Cell: (cell) => {
                 return (
-                    <>
-                        <button style={{ width: '100%' }} onClick={() => handleRecordAction(cellData.row, recordActions.EDIT)}>View</button>
-                        <button style={{ width: '100%' }} onClick={() => handleRecordAction(cellData.row, recordActions.DELETE)}>Delete</button>
-                    </>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4rem',
+                        }}
+                    >
+                        <FindInPageIcon style={{color: '#8860D0'}} onClick={() => handleRecordAction(cell.row, recordActions.EDIT)} />
+                        <DeleteIcon style={{color: 'red'}} onClick={() => handleRecordAction(cell.row, recordActions.DELETE)} />
+                    </Box>
                 );
             }
         }
@@ -75,25 +72,52 @@ const PatientRecord = () => {
                 firstName: data.fname,
                 lastName: data.lname,
                 age: data.age,
+                screened_by: data.screened_by,
                 action: DeleteIcon
             }
             setPatientRecords(patientRecords => [...patientRecords, patientRecord])
         });
     }
 
-    const handleModalEvent = () => {
-        let display = document.getElementById('modal-container').style.display;
-        document.getElementById('modal-container').style.display = (display === "none") ? "block" : "none";
-    }
+    // const retrieveRecords = () => {
+    //     fetch('/patient-records', {
+    //         methods: 'GET',
+    //         headers: {
+    //             'Access-Control-Allow-Origin':'*',
+    //             'Content-Type': 'application/json'
+    //         }
+    //     }).then((response) =>
+    //         response.json()
+    //     ).then((response) =>
+    //         updatePatientRecords(response)
+    //     ).catch((error) => 
+    //         console.log(error)
+    //     )
+    // }
+
+    // const handlePatientFilter = () => {
+
+    //     let value = document.getElementById('search-patient').value
+        
+    //     if(value.trim().length !== 0){
+    //         let newArr = patientRecords.filter((record) => record.firstName.includes(value) || record.lastName.includes(value))
+    //         console.log(newArr)
+    //         setPatientRecords(newArr)
+    //     } else {
+    //         retrieveRecords()
+    //     }
+        
+        
+    // }
 
     const handleRecordAction = (data, action) => {
         switch (action) {
             case recordActions.EDIT:
-                navigate('/patientDetails/id=' + data.id)
+                navigate('/patient-details/id=' + data.id)
                 break;
 
             case recordActions.DELETE:
-                handleModalEvent()
+                setOpenModal(true)
                 setGetRecord(data)
                 break;
 
@@ -102,8 +126,19 @@ const PatientRecord = () => {
         }
     }
 
+    const handleDelete = () => {       
+
+        fetch('/patient-records/delete/id='+getRecord.id, {
+            method: 'DELETE'
+        })
+
+        const newArr = patientRecords.filter(record => record.id !== getRecord.id)
+        setPatientRecords(newArr)
+        setOpenModal(false)
+    }
+
     useEffect(() => {
-        fetch('/patientRecord', {
+        fetch('/patient-records', {
             methods: 'GET',
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -120,43 +155,67 @@ const PatientRecord = () => {
 
     return (
         <Layout>
+
             <div className="patient-records-container">
-                <Button component={Link} to="/createPatient" variant="contained" color="success">
-                    Create New Patient
-                </Button>
-                {/* <h1>LOGO</h1> */}
-                {/* </div> */}
-
-                {/* <Box sx={{ height: 400, width: '100%' }}> */}
-                <div className="data-table-container" style={{ paddingInline: '5%', backgroundImage: 'linear-gradient(to right,#8860D0, #A79BFF)' }}>
+                <div className="data-table-container">
                     <div className="data-table">
-                        <PatientDataTable
+                        <MaterialReactTable
+                            columns={columns}
                             data={patientRecords}
-                            header={columns}
+                            enableDensityToggle={false}
+                            renderTopToolbarCustomActions={() => (
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  size="large"
+                                  onClick={() => navigate('/createPatient')}
+                                >
+                                  Create New Patient
+                                </Button>
+                            )}
                         />
-                    </div>
-                </div>
 
-                <div id="modal-container">
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="delete-record-modal">
-                            <div className="modal-header">
-                                <h4>Delete Record</h4>
-                            </div>
+                        <Modal
+                            open={openModal}                            
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box className='modal-container-delete-modal'>
+                                <div className="modal-header-delete-modal">
+                                    <h3>Delete Record</h3>
+                                </div>
 
-                            <div className="modal-content">
-                                <h4>
-                                    Are you sure that you want to delete this record? Once deleted,
-                                    it can't be recovered.
-                                </h4>
-                            </div>
+                                <div className="modal-content-delete-modal">
+                                    <h4>
+                                        Once you delete this record, it cannot be recovered. Would
+                                        you like to proceed?
+                                    </h4>
+                                </div>
 
-                            <div className="modal-actions">
-                                <button id="delete">Delete</button>
-                                {/* <a href={"/patientRecord/delete=" + getRecord.id}  id="delete">Delete</a> */}
-                                <button id="cancel" onClick={() => handleModalEvent()}>Cancel</button>
-                            </div>
-                        </div>
+                                <div className="modal-actions">
+                                    <Button 
+                                        variant='contained' 
+                                        size='large' 
+                                        onClick={() => {
+                                            setOpenModal(false)
+                                        }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button 
+                                        type="submit"
+                                        size='large'
+                                        color='warning'
+                                        variant='contained' 
+                                        onClick={() => {
+                                            handleDelete()
+                                        }}
+                                        >
+                                        Delete
+                                    </Button>
+                                </div>
+                            </Box>
+                        </Modal>
                     </div>
                 </div>
             </div>

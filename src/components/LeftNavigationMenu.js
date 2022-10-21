@@ -46,7 +46,7 @@ const LeftNavigationMenu = () => {
         <div id="side-menu" className="sidemenu" style={{ "width": "0px" }}>
             <div className='row mb-4'>
                 <div className="col px-0 d-flex justify-content-center">
-                    <img src={"/images/MKStash.svg"} className='bg-light rounded-circle' width={90} height={90} alt="" />
+                    <img src="/logo192.png" className='bg-light rounded-circle' width={90} height={90} alt="" />
                 </div>
             </div>
             <div className="row mt-4">

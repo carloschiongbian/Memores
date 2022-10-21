@@ -21,8 +21,8 @@ const UserNavigationMenu = () => {
     }
 
     const navMenu = [ 
-        {link: "/", linkName: "Dashboard"}, 
-        {link: "/screening", linkName: "Screening"},
+        { link: "/dashboard", linkName: "Dashboard" }, 
+        { link: "/screening", linkName: "Screening" },
         { link: "/patientRecord", linkName: "Patients" },
     ]
 
@@ -33,16 +33,8 @@ const UserNavigationMenu = () => {
 
     var navigationLinkStyles = {
         textDecoration: 'none',
-        width: '100%',
-        // textAlign: 'center',
-        // paddingBlock: '20px',
-        // color: 'blue'
+        width: '100%', 
     };
-
-    const changeStyle = () => {
-        console.log("this is working");
-        document.getElementByID("navigation-link-name").style.color = "white";
-    }
 
     return (
         <div className="user-navigation-menu-container">
