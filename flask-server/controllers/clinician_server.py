@@ -1,6 +1,15 @@
-import pymysql.cursors
 import json
-from flask import Flask, redirect, jsonify, request
+from json import JSONEncoder
+import pymysql.cursors
+from sqlalchemy import select
+
+from models.patients import Patients
+from models.patient_screening_details import PatientsScreeningDetails
+
+from flask import Flask, session, jsonify, request
+from connection.connection import db
+
+from marshmallow import Schema, fields
 
 app = Flask(__name__);
 
@@ -14,13 +23,37 @@ connection = pymysql.connect(
 )
 
 def retrieveData():
-    cursor = connection.cursor()
-    query = ("SELECT p.id, p.fname, p.lname, p.age, sd.screened_by FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id")
+    # cursor = connection.cursor()
+    # query = ("SELECT p.id, p.fname, p.lname, p.age, sd.screened_by FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id")
     # query = ("SELECT * FROM patients")
-    cursor.execute(query)
-    records = cursor.fetchall()
-    cursor.close()
-    return jsonify(records)
+    # cursor.execute(query)
+    # records = cursor.fetchall()
+    # cursor.close()
+    # records = session.query(Patients, PatientsScreeningDetails).join(PatientsScreeningDetails)
+    # records = Patients.query.all()
+    statement = select(Patients).join(PatientsScreeningDetails, Patients.id == PatientsScreeningDetails.patient_id)
+    # records = db.session.query(Patients).join(PatientsScreeningDetails.patient_id).join(Patients.id)
+    # records = db.session.query(Patients).join(PatientsScreeningDetails, Patients.id == PatientsScreeningDetails.patient_id, isouter=True).all()
+
+    records = session.execute(statement).all()
+    print(records)
+    # print(records[0].screened_by)
+
+    # for record in records:
+    #     dataObj = {
+    #         'id': record.id,
+    #         'fname': record.fname,
+    #         'lname': record.lname,
+    #         'age': record.age,
+    #         'screened_by': record.screened_by
+    #     }
+
+
+    # jsonized = json.dumps(records, indent=4, cls=CustomEncoder)
+    # json_string = json.dumps([ob.__dict__ for ob in records])
+
+    # print(json_string)
+    return None
 
 # @app.route('/patientDetails/id=<id>', methods=['GET', 'PUT'])
 def retrievePatientScreeningDetails(id):

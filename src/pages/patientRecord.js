@@ -147,7 +147,8 @@ const PatientRecord = () => {
         }).then((response) =>
             response.json()
         ).then((response) =>
-            updatePatientRecords(response)
+            console.log(response)
+            // updatePatientRecords(response)
         ).catch((error) =>
             console.log(error)
         )
