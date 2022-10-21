@@ -5,6 +5,14 @@
 
 /* I added another custom utilities */
 /* Custom Utilities */
+html{
+  height: 100%;
+}
+
+body {
+    height: 97%;
+    background-color: #F2F5F9 !important;
+}
 
 .bg-outline-primary {
   border-color: #8866E9 !important;

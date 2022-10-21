@@ -1,6 +1,6 @@
 from sqlalchemy.sql import func
 from connection.connection import db, ma
-
+from sqlalchemy.sql import expression
 # User Class/Model
 class Users(db.Model):
     """
@@ -24,6 +24,7 @@ class Users(db.Model):
     city = db.Column(db.String(255), nullable = False)
     country = db.Column(db.String(255), nullable = False)
     zip = db.Column(db.String(255), nullable = False)
+    is_deleted = db.Column(db.Boolean, server_default=expression.false(), nullable=False)
     created_at = db.Column(db.DateTime, nullable = False, server_default=func.now())
     updated_at = db.Column(db.DateTime, nullable = True, onupdate=func.now())
 

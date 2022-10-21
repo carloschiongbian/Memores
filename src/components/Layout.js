@@ -23,7 +23,7 @@ const Layout = ({ children }) => {
     return (
         <div>
             <LeftNavigationMenu></LeftNavigationMenu>
-            <div id="pg-content" className="pg-content relative">
+            <div id="pg-content" className="pg-content relative" >
                 <Header handleLeftNavigation={handleLeftNavigation}></Header>
                 <div className="mt-4 py-4 container">
                     {children}

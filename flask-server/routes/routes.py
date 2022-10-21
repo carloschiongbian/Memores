@@ -17,3 +17,6 @@ ADD_USER = "/api/add-user"
 LOGIN = "/api/login"
 CURRENT_USER = "/api/@me"
 LOGOUT = "/api/logout"
+UPDATE_USER_ACCOUNT = "/api/update-user"
+GET_USER_ACCOUNT_DETAILS = "/api/get-user-account"
+DELETE_USER = '/api/delete-user'

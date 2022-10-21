@@ -1,11 +1,12 @@
 from flask.json import jsonify
 from models.users import Users
 from flask import session
+from auth.auth import is_authenticated
 
 def get_current_user():
     user_id = session.get("user_id")
     
-    if not user_id:
+    if not is_authenticated(user_id):
        return jsonify({"error": "Unauthorized"}), 401
 
     
