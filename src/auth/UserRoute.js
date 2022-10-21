@@ -6,7 +6,7 @@ const UserRoute = ({ children }) => {
     const authUser = useContext(AuthContext)
     
     if (authUser.user.role !== 'user') {
-      return <Navigate to="/error404" replace />;
+      return <Navigate to="/error-404" replace />;
     }
   
     return children;

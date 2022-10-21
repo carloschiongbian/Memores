@@ -1,16 +1,11 @@
 // import { DataGrid } from '@material-ui/data-grid'
 // import { TableContainer, Paper } from '@mui/material';
-// const DataTable = ({data, header}) => {
-//     return (
-//         <div style={{ display: 'flex', height: 500 }}>
-//             <TableContainer component={Paper}>
-//                 <DataGrid
-//                 rows={data}
-//                 columns={header}
-//                 />
-//             </TableContainer>
-//         </div>
-//     );
-// }
+import MaterialReactTable from 'material-react-table'
 
-// export default DataTable;
+const DataTable = ({data, columns, loading}) => {
+    return (
+       <MaterialReactTable columns={columns} data={data} isLoading={loading}/>    
+    );
+}
+
+export default DataTable;

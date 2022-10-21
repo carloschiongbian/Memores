@@ -8,6 +8,7 @@ import AuthContext from '../auth/AuthContext';
 
 const UserNavigationMenu = () => {
     const authUser = useContext(AuthContext)
+    console.log(authUser)
 
     const openNav = () => {
         document.getElementById("user-navigation-menu").style.width = "320px";

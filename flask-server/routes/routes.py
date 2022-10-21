@@ -23,3 +23,6 @@ PATIENT_DETAILS = "/patient-details/id=<id>"
 DASHBOARD = "/dashboard"
 
 SUBMIT_ANSWERS = "/api/submit-answers"
+UPDATE_USER_ACCOUNT = "/api/update-user"
+GET_USER_ACCOUNT_DETAILS = "/api/get-user-account"
+DELETE_USER = '/api/delete-user'
