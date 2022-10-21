@@ -8,4 +8,4 @@ const DataTable = ({data, columns, loading}) => {
     );
 }
 
-// export default DataTable;
+export default DataTable;

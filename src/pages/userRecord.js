@@ -1,5 +1,5 @@
 import '../public/css/pages/PatientRecord/patientRecord.css';
-import DataTable from '../components/dataTable';
+import DataTable from '../components/DataTable';
 import Layout from '../components/Layout';
 import { useState, useEffect, useMemo } from 'react';
 import Api from '../services/api';
