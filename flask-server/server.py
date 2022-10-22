@@ -90,7 +90,6 @@ app.add_url_rule(PATIENT_DETAILS, 'patient_details', clinician_server.retrievePa
 #Get Dashboard Data
 app.add_url_rule(DASHBOARD, 'dashboard', clinician_server.retrieveDashboardContent, methods = ['GET'])
 
-
 #update user
 app.add_url_rule(UPDATE_USER_ACCOUNT, 'update_user', update_user_account.update_user_by_admin, methods = ['PUT'])
 #get user account by id

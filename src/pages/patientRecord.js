@@ -99,20 +99,6 @@ const PatientRecord = () => {
       )
   }
 
-  // const handlePatientFilter = () => {
-
-  //     let value = document.getElementById('search-patient').value
-
-  //     if(value.trim().length !== 0){
-  //         let newArr = patientRecords.filter((record) => record.firstName.includes(value) || record.lastName.includes(value))
-  //         console.log(newArr)
-  //         setPatientRecords(newArr)
-  //     } else {
-  //         retrieveRecords()
-  //     }
-
-  // }
-
   const handleRecordAction = (data, action) => {
     switch (action) {
       case recordActions.EDIT:

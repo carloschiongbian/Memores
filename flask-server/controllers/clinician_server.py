@@ -103,7 +103,7 @@ def deletePatientRecord(id):
 
 def retrieveDashboardContent():
     cursor = connection.cursor()
-    query = ("SELECT p.id, p.fname, p.lname, sd.screened_date FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id ORDER BY sd.screened_date LIMIT 3")
+    query = ("SELECT p.id, p.fname, p.lname, sd.screened_date, sd.sad_category, p.is_screened FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id ORDER BY sd.screened_date")
     cursor.execute(query)
     records = cursor.fetchall()
     cursor.close()

@@ -10,13 +10,26 @@ import Layout from "../components/Layout";
 import DashboardChart from "../components/dashboard/DashboardChart.js";
 import "../public/css/pages/Dashboard/Dashboard.scss";
 
+const SAD_CATEGORIES = {
+  NORMAL: "Normal",
+  MILD: "Mild",
+  MODERATE: "Moderate",
+  SEVERE: "Severe",
+};
+
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [sadCategories, setSADCategories] = useState({
+    normal: 1,
+    mild: 1,
+    moderate: 1,
+    severe: 1,
+  });
   const [dashboardContent, setDashboardContent] = useState([]);
 
   let path = "../patient-details/id=";
 
-  useEffect(() => {
+  const getDashboardData = () => {
     fetch("/dashboard", {
       methods: "GET",
       headers: {
@@ -27,11 +40,40 @@ const Dashboard = () => {
       .then((response) => response.json())
       .then((response) => setDashboardContent(response))
       .catch((error) => console.log(error));
-    console.log(dashboardContent);
+
+    getCategoryCount(dashboardContent);
+  };
+
+  const getCategoryCount = (data) => {
+    const countCategory = (patients, sadCategory) => {
+      const categories = patients.filter((data) => {
+        return data.sad_category === sadCategory;
+      });
+      return categories.length;
+    };
+
+    setSADCategories({
+      ...sadCategories,
+      normal: countCategory(data, SAD_CATEGORIES.NORMAL),
+      mild: countCategory(data, SAD_CATEGORIES.MILD),
+      moderate: countCategory(data, SAD_CATEGORIES.MODERATE),
+      severe: countCategory(data, SAD_CATEGORIES.SEVERE),
+    });
+  };
+
+  const countScreenedPatients = (data) => {
+    let True = 1;
+    const is_screened = data.map((data) => 
+      data.is_screened === True
+    );
+    
+    return is_screened.filter(data => data === true)
+  };
+
+  useEffect(() => {
+    getDashboardData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  //GRAPH SHOWS NUMBER OF PATIENTS AND NUMBER OF PATIENTS SCREENED
 
   return (
     <Layout>
@@ -49,12 +91,12 @@ const Dashboard = () => {
               <h4>
                 <MedicalServicesIcon /> Screened
               </h4>
-              <h1>100</h1>
+              <h1>{countScreenedPatients(dashboardContent).length}</h1>
             </div>
 
             <div className="average-time-duration-of-screening-container">
               <h4>Average Time Duration of Screening</h4>
-              
+
               <div className="average-time">
                 <div className="hours-number-format">
                   <h2>0</h2>
@@ -84,34 +126,45 @@ const Dashboard = () => {
           </div>
 
           <div className="bottom-section">
-            <div
-              className="recently-screened-patients-body">
+            <div className="recently-screened-patients-body">
               <List className="patients-list-container">
                 <ListItem divider={true} className="patient-list-header">
                   <h5>Recently Screened Patients</h5>
 
                   <h6>
-                    <Link to="/patient-records" style={{ textDecoration: "none" }}>
+                    <Link
+                      to="/patient-records"
+                      style={{ textDecoration: "none" }}
+                    >
                       View All
                     </Link>
                   </h6>
                 </ListItem>
 
                 {dashboardContent.length === 0 && (
-                  <ListItem style={{ margin: 0 }}>
-                    <Skeleton height={150} width={"100%"} />
+                  <ListItem
+                    style={{
+                      margin: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Skeleton height={100} width={"100%"} />
+                    <Skeleton height={100} width={"100%"} />
+                    <Skeleton height={100} width={"100%"} />
                   </ListItem>
                 )}
 
                 {dashboardContent &&
-                  dashboardContent.map((patient) => (
+                  dashboardContent.slice(0, 3).map((patient, index) => (
                     <ListItem
-                    divider={true}
-                    button={true}
-                    onClick={() => {
+                      key={index}
+                      divider={true}
+                      button={true}
+                      onClick={() => {
                         navigate(path + patient.id);
-                    }}
-                    className="patient-information-item"
+                      }}
+                      className="patient-information-item"
                     >
                       <div className="patient-name">
                         <NavigateNextIcon />
@@ -134,10 +187,7 @@ const Dashboard = () => {
             </div>
 
             <div className="graph-container">
-                {/* <div className="graph-container-header">
-                    Header
-                </div> */}
-              <DashboardChart />
+              <DashboardChart sadCategories={sadCategories} />
             </div>
           </div>
         </div>

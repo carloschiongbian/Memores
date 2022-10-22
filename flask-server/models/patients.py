@@ -19,6 +19,7 @@ class Patients(db.Model):
     city = db.Column(db.String(255), nullable = False)
     country = db.Column(db.String(255), nullable = False)
     zip = db.Column(db.String(255), nullable = False)
+    is_screened = db.Column(db.Boolean(False), nullable = False)
     registered_date = db.Column(db.DateTime, nullable = False)
     created_at = db.Column(db.DateTime, nullable = False, server_default=func.now())
     updated_at = db.Column(db.DateTime, nullable = False, onupdate=func.now())
@@ -29,7 +30,7 @@ class PatientSchema(ma.Schema):
     """This is a database schema."""
     class Meta:
         """Specify which fields you want to see in RESTful API"""
-        fields = ('id', 'fname', 'lname', 'email', 'phone', 'age', 'bday', 'gender', 'street', 'city', 'country', 'registered_date', 'zip', 'created_at', 'updated_at')
+        fields = ('id', 'fname', 'lname', 'email', 'phone', 'age', 'bday', 'gender', 'street', 'city', 'country', 'registered_date', 'zip', 'is_screened', 'created_at', 'updated_at')
 
 
 """

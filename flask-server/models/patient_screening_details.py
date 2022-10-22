@@ -8,9 +8,10 @@ class PatientsScreeningDetails(db.Model):
     """
     # __tablename__ = 'patients_screening_details'
     id = db.Column(db.Integer, primary_key = True)
-    patient_id = db.Column(db.Integer, foreign_key = True)
+    patient_id = db.Column(db.Integer, nullable = False)
     patient_notes = db.Column(db.Text, nullable = False)
     results = db.Column(db.Text, nullable = False)
+    sad_category = db.Column(db.String(255), nullable = False)
     screened_by = db.Column(db.String(255), nullable = False)
     last_edited_by = db.Column(db.String(255), nullable = False)
     screened_date = db.Column(db.DateTime, nullable = False)
@@ -25,7 +26,7 @@ class PatientScreeningDetailsSchema(ma.Schema):
     """This is a database schema."""
     class Meta:
         """Specify which fields you want to see in RESTful API"""
-        fields = ('id', 'patient_id', 'patient_notes', 'results', 'screened_by', 'last_edited_by', 'screened_date', 'screened_time', 'last_edited_on', 'created_at', 'updated_at')
+        fields = ('id', 'patient_id', 'patient_notes', 'results', 'sad_category', 'screened_by', 'last_edited_by', 'screened_date', 'screened_time', 'last_edited_on', 'created_at', 'updated_at')
 
 
 """
