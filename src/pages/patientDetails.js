@@ -7,20 +7,13 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from "../components/Layout";
 
-//for dummy data, make sure that patient_id corresponds to 
-//already-existing id numbers from the patients table in order to link data
-
-//INSERT INTO `patients_screening_details`(`id`, `patient_id`, `patient_notes`, `results`, `screened_by`, `last_edited_by`, `screened_on`, `last_edited_on`, `created_at`, `updated_at`) VALUES ('','','This patient shows signs of SAD','has SAD','Dr. Strange','Dr. Murphy','April 3, 2022','May 3, 2022','','')
-//INSERT INTO `patients_screening_details`(`id`, `patient_id`, `patient_notes`, `results`, `screened_by`, `last_edited_by`, `screened_on`, `last_edited_on`, `created_at`, `updated_at`) VALUES ('','','This patient shows symptoms but does not have SAD','has no SAD','Dr. Holmes','Dr. Poller','April 3, 2022','June 3, 2022','','')
-//INSERT INTO `patients_screening_details`(`id`, `patient_id`, `patient_notes`, `results`, `screened_by`, `last_edited_by`, `screened_on`, `last_edited_on`, `created_at`, `updated_at`) VALUES ('','','This patient has SAD','has SAD','Dr. Scrubs','Dr. Logan','April 3, 2022','July 3, 2022','','')
-
 const PatientDetails = () => {
 
     const { id } = useParams()
     const [open, setOpen] = useState(false);
     const [patientDetails, setPatientDetails] = useState({})
 
-    useEffect(() => {
+    const getPatientDetails = () => {
         fetch('/patient-details/id=' + id, {
             methods: 'GET',
             headers: {
@@ -34,6 +27,10 @@ const PatientDetails = () => {
         ).catch((error) =>
             console.log(error)
         )
+    }
+
+    useEffect(() => {
+        getPatientDetails()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -136,7 +133,7 @@ const PatientDetails = () => {
 
                             <div className="patient-notes-actions">
                                 <button name="patient-notes-edit-button" onClick={() => setOpen(true)}>Edit</button>
-                                <EditPatientModal patientDetails={patientDetails} openModal={open} setOpen={setOpen} />
+                                <EditPatientModal patientDetails={patientDetails} getPatientDetails={getPatientDetails} openModal={open} setOpen={setOpen} />
                             </div>
 
                             <div className="patient-notes-status">

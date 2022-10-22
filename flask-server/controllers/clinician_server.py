@@ -23,20 +23,22 @@ connection = pymysql.connect(
 )
 
 def retrieveData():
-    # cursor = connection.cursor()
-    # query = ("SELECT p.id, p.fname, p.lname, p.age, sd.screened_by FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id")
+    cursor = connection.cursor()
+    query = ("SELECT p.id, p.fname, p.lname, p.age, sd.screened_by FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id")
     # query = ("SELECT * FROM patients")
-    # cursor.execute(query)
-    # records = cursor.fetchall()
-    # cursor.close()
+    cursor.execute(query)
+    records = cursor.fetchall()
+    cursor.close()
+    return records
+    
     # records = session.query(Patients, PatientsScreeningDetails).join(PatientsScreeningDetails)
     # records = Patients.query.all()
-    statement = select(Patients).join(PatientsScreeningDetails, Patients.id == PatientsScreeningDetails.patient_id)
+    # statement = select(Patients).join(PatientsScreeningDetails, Patients.id == PatientsScreeningDetails.patient_id)
     # records = db.session.query(Patients).join(PatientsScreeningDetails.patient_id).join(Patients.id)
     # records = db.session.query(Patients).join(PatientsScreeningDetails, Patients.id == PatientsScreeningDetails.patient_id, isouter=True).all()
 
-    records = session.execute(statement).all()
-    print(records)
+    # records = session.execute(statement).all()
+    # print(records)
     # print(records[0].screened_by)
 
     # for record in records:
@@ -53,7 +55,6 @@ def retrieveData():
     # json_string = json.dumps([ob.__dict__ for ob in records])
 
     # print(json_string)
-    return None
 
 # @app.route('/patientDetails/id=<id>', methods=['GET', 'PUT'])
 def retrievePatientScreeningDetails(id):

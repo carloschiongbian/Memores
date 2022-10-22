@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import '../public/css/pages/PatientRecord/patientRecord.css';
 import DataTable from '../components/DataTable';
 import Layout from '../components/Layout';
