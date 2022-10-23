@@ -1,17 +1,43 @@
 import json
-from json import JSONEncoder
 import pymysql.cursors
-from sqlalchemy import select
+from flask import Flask, jsonify, request, session
 
 from models.patients import Patients
 from models.patient_screening_details import PatientsScreeningDetails
 
-from flask import Flask, jsonify, request, render_template
 from connection.connection import db
-
+from sqlalchemy.ext.declarative import DeclarativeMeta
 from marshmallow import Schema, fields
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+from sqlalchemy.orm import sessionmaker
+
+
+engine = create_engine("mysql+pymysql://root:@memores_v2?charset=utf8mb4")
+Session = sessionmaker(bind = engine)
+session = Session()
+
+
 app = Flask(__name__);
+
+class AlchemyEncoder(json.JSONEncoder):
+
+    def default(self, obj):
+        if isinstance(obj.__class__, DeclarativeMeta):
+            # an SQLAlchemy class
+            fields = {}
+            for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
+                data = obj.__getattribute__(field)
+                try:
+                    json.dumps(data) # this will fail on non-encodable values, like other classes
+                    fields[field] = data
+                except TypeError:
+                    fields[field] = None
+            # a json-encodable dict
+            return fields
+
+        return json.JSONEncoder.default(self, obj)
 
 connection = pymysql.connect(
     host='localhost',
@@ -23,34 +49,15 @@ connection = pymysql.connect(
 )
 
 def retrieveData():
-    # cursor = connection.cursor()
-    # query = ("SELECT p.id, p.fname, p.lname, p.age, sd.screened_by FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id")
-    # # query = ("SELECT * FROM patients")
-    # cursor.execute(query)
-    # records = cursor.fetchall()
-    # cursor.close()
-    # return records
+    # join data from PatientsScreeningDetails
 
-    response = Patients.query.all()
-    records = []
-    # for patient in Patients:
-    #     records.append({
-    #         'fname': patient.fname,
-    #         'lname': patient.lname,
-    #         'age': patient.age,
-    #         'screened_by': patient.screened_by
-    #     })
-    # print(response[0].fname)
-    # print(records[0])
-    return jsonify(response[0].fname)
-    
-    # records = session.query(Patients, PatientsScreeningDetails).join(PatientsScreeningDetails)
-    # records = Patients.query.all()
-    # statement = select(Patients).join(PatientsScreeningDetails, Patients.id == PatientsScreeningDetails.patient_id)
-    # records = db.session.query(Patients).join(PatientsScreeningDetails.patient_id).join(Patients.id)
-    # records = db.session.query(Patients).join(PatientsScreeningDetails, Patients.id == PatientsScreeningDetails.patient_id, isouter=True).all()
+    records = db.session.query(Patients).join(PatientsScreeningDetails, Patients.id == PatientsScreeningDetails.patient_id, isouter=True).all()
+    # print(json.dumps(records, cls=AlchemyEncoder))
+    return json.dumps(records, cls=AlchemyEncoder)
     
 def retrievePatientScreeningDetails(id):
+    # switch to SQLAlchemy
+
     if request.method == 'GET':
         cursor = connection.cursor()
         query = ("SELECT p.id, p.fname, p.lname, p.bday, p.gender, p.street, p.city, p.country, p.zip, p.email, p.phone, p.registered_date, sd.patient_notes, sd.results, sd.screened_by, sd.last_Edited_by, sd.screened_date, sd.screened_date, sd.screened_time, sd.last_edited_on FROM patients p LEFT JOIN patients_screening_details sd ON p.id = "+id)
@@ -95,6 +102,8 @@ def deletePatientRecord(id):
     return jsonify(request.get_json())
 
 def retrieveDashboardContent():
+    # switch to SQLAlchemy
+
     cursor = connection.cursor()
     query = ("SELECT p.id, p.fname, p.lname, sd.screened_date, sd.sad_category, p.is_screened FROM patients AS p JOIN patients_screening_details AS sd ON sd.patient_id = p.id ORDER BY sd.screened_date")
     cursor.execute(query)
