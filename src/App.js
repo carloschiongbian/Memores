@@ -14,7 +14,7 @@ import Error404 from './pages/error404';
 import AuthContext from './auth/AuthContext';
 import ProtectedRoute from './auth/ProtectedRoute';
 import UserRoute from './auth/UserRoute';
-import LoginRedirect from './auth/LoginRedirect';
+import LoginRedirect from './auth/LoginRedirect'
 import Api, { BaseApi }  from './services/api';
 import Dashboard from './pages/dashboard';
 import routes from './routes/routes';
