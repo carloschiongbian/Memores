@@ -59,6 +59,7 @@ const Dashboard = () => {
       moderate: countCategory(data, SAD_CATEGORIES.MODERATE),
       severe: countCategory(data, SAD_CATEGORIES.SEVERE),
     });
+    
   };
 
   const countScreenedPatients = (data) => {

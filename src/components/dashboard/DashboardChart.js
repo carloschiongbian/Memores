@@ -34,7 +34,7 @@ const DashboardChart = ({ sadCategories }) => {
   return (
     <div
       className="chart-container"
-      style={{ height: "300px", width: "300px" }}
+      style={{ height: "400px", width: "400px" }}
     >
       <Doughnut data={data} />
     </div>
