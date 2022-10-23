@@ -1,9 +1,8 @@
-import UserNavigationMenu from '../components/userNavigationMenu'
-import ScreeningWizard from '../components/screening/screeningWizard';
+import ScreeningWizard from '../components/screening/screeningWizard'
 import '../public/css/pages/ScreeningPage/index.css'
-import { useState } from 'react';
-import { AnswerContext } from '../components/screening/AnswerContext';
-import Layout from '../components/Layout';
+import { useState } from 'react'
+import { AnswerContext } from '../components/screening/AnswerContext'
+import Layout from '../components/Layout'
 
 
 const ScreeningPage = () => {
@@ -19,6 +18,84 @@ const ScreeningPage = () => {
     const handleStartScreening = () => {
         setRowSelected(null)
     }
+
+    const patients = [
+        {
+            id: 1,
+            firstName: "Shionne",
+            lastName: "Imerys"
+        },
+        {
+            id: 2,
+            firstName: "Velvet",
+            lastName: "Crowe"
+        },
+        {
+            id: 3,
+            firstName: "Shionne",
+            lastName: "Imerys"
+        },
+        {
+            id: 4,
+            firstName: "Edna",
+            lastName: "Hershel"
+        },
+        {
+            id: 5,
+            firstName: "Eleanor",
+            lastName: "Hume"
+        },
+        {
+            id: 6,
+            firstName: "Celica",
+            lastName: "Crowe"
+        },
+        {
+            id: 7,
+            firstName: "Artorius",
+            lastName: "Collbrande"
+        },
+        {
+            id: 8,
+            firstName: "Melchior",
+            lastName: "Mayvin"
+        },
+        {
+            id: 9,
+            firstName: "Oscar",
+            lastName: "Dragonia"
+        },
+        {
+            id: 10,
+            firstName: "Teresa",
+            lastName: "Linares"
+        },
+        {
+            id: 11,
+            firstName: "Van",
+            lastName: "Aifread"
+        },
+        {
+            id: 12,
+            firstName: "Laphicet",
+            lastName: "Crowe"
+        },
+        {
+            id: 13,
+            firstName: "Vholran",
+            lastName: "Igniseri"
+        },
+        {
+            id: 14,
+            firstName: "Rinwell",
+            lastName: "Maxwell"
+        },
+        {
+            id: 15,
+            firstName: "Farah",
+            lastName: "Oersted"
+        },
+    ]
 
 
     return (
@@ -77,13 +154,13 @@ const ScreeningPage = () => {
                                             </tr>
                                         </thead>
                                         <tbody role="button">
-                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((item) => {
-                                                return <tr id={`row${item}`} key={item} onClick={() => handleSelection(item)}>
-                                                    <th scope="row">1</th>
-                                                    <td>Mark</td>
-                                                    <td>Mark</td>
+                                            {patients.map((patient, index) => {
+                                                return <tr id={`row${index}`} key={patient.id} onClick={() => handleSelection(index)}>
+                                                    <th scope="row">{patient.id}</th>
+                                                    <td>{patient.lastName}</td>
+                                                    <td>{patient.firstName}</td>
                                                     <td>
-                                                        <span className={`badge rounded-pill bg-success ${rowSelected === item ? '' : 'd-none'}`} style={{ "fontSize": "9px" }}>Selected</span>
+                                                        <span className={`badge rounded-pill bg-success ${rowSelected === index ? '' : 'd-none'}`} style={{ "fontSize": "9px" }}>Selected</span>
                                                     </td>
                                                 </tr>;
                                             })}
@@ -93,7 +170,7 @@ const ScreeningPage = () => {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                <button type="button" className={`btn btn-secondary ${rowSelected ? '' : 'disabled'}`} data-bs-target="#screening-wizard-modal" data-bs-toggle="modal" data-bs-dismiss="modal">Proceed</button>
+                                <button type="button" className={`btn btn-secondary ${rowSelected !== null ? '' : 'disabled'}`} data-bs-target="#screening-wizard-modal" data-bs-toggle="modal" data-bs-dismiss="modal">Proceed</button>
                             </div>
                         </div>
                     </div>

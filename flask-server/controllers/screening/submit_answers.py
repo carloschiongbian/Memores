@@ -10,14 +10,14 @@ def submit_answers():
     if not user_id:
         return jsonify({"error": "Unauthorized"}), 401    
 
-    request_obj = request.json
-    # print(request.json)
+    request_obj = request.get_json()
+    # print(request_obj['data'])
 
-    model = SVM_Model(request_obj)
+    model = SVM_Model(request_obj['data'])
     model.parse_request_object()
     model.standardize()
     model.parse_answers()
     classification, prob = model.predict()
 
     # print(classification, prob)
-    return jsonify({"classification": classification, "probability": prob})
+    return jsonify({"classification": str(classification), "probability": str(prob)})

@@ -1,4 +1,16 @@
-const ScreeningResult = () => {
+const calc = (number) => {
+    let with2Decimals = number.toString().match(/^-?\d+(?:\.\d{0,2})?/)[0]
+    return with2Decimals
+}
+
+const ScreeningResult = ({classification, classProbability}) => {
+
+    const _class = classification === '0' ? "Negative" : "Positive"
+    const _probability = calc(parseFloat(classProbability) * 100)
+    const positiveIndicative = <span className="text-danger fw-bold">DOES</span>
+    const negativeIndicative = <span className="text-success fw-bold">DOES NOT</span>
+
+
     return (
         <div className="container py-4">
             <h4 className="fw-bold">Screening Result</h4>
@@ -12,16 +24,16 @@ const ScreeningResult = () => {
                         </tr>
                     </thead>
                     <tbody className="text-center fw-bold">
-                        <tr>
-                            <td className="text-danger">Positive</td>
-                            <td className="text-danger">80%</td>
+                        <tr className={_class === 'Negative' ? 'text-success' : 'text-danger'}>
+                            <td>{ _class }</td>
+                            <td>{ _probability }%</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
 
-            <p className="text-center">Based on the screening test, the result for <span className="text-primary fw-bold">Schmoe Joe</span> shows a <span className="text-danger fw-bold">manifestation of social anxiety disorder</span> with a prediction probability of <span className="text-danger fw-bold">88%</span>.</p>
+            <p className="text-center">Based on the screening test, the result for <span className="text-primary fw-bold">Schmoe Joe</span>  {_class === 'Negative' ? negativeIndicative : positiveIndicative} show a <span className={`fw-bold ${_class === 'Negative' ? 'text-success' : 'text-danger'}`}>manifestation of social anxiety disorder</span> with a prediction probability of <span className={`fw-bold ${_class === 'Negative' ? 'text-success' : 'text-danger'}`}>{_probability}%</span>.</p>
         </div>
     );
 }

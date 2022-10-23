@@ -16,6 +16,8 @@ const ScreeningWizard = () => {
     const [shouldEnableSubmit, setShouldEnableSubmit] = useState(false)
     const [sections, setSections] = useState({})
     const {answers, setAnswers} = useContext(AnswerContext)
+    const [classification, setClassification] = useState(null)
+    const [classProbability, setClassProbability] = useState(null)
 
     useEffect(() => {
 
@@ -68,9 +70,12 @@ const ScreeningWizard = () => {
         setHasSubmitted(true)
 
         // Post the answers for the screening assessment
-        Api().post("/submit-answers", { data: JSON.stringify(answers) }, {
+        Api().post("/submit-answers", { data: answers }, {
             headers: { 'Content-Type': 'application/json' } })
-            .then(res => console.log(res))
+            .then(res => {
+                setClassification(res.data.classification)
+                setClassProbability(res.data.probability)
+            })
             .catch(err => console.log(err))
 
 
@@ -108,7 +113,7 @@ const ScreeningWizard = () => {
                             {
                                 // Check first if data has been fetched
                                 Object.keys(sections).length !== 0 &&
-                                mustShowResult && <ScreeningResult></ScreeningResult>
+                                mustShowResult && <ScreeningResult classification={classification} classProbability={classProbability}></ScreeningResult>
                             }
                         </div>
                         <div className="modal-footer">
