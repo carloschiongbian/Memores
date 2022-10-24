@@ -18,7 +18,17 @@ const CommonModal = ({
   btnPrimaryTxt,
 }) => {
   return (
-    <Dialog open={openModal} onClose={handleClose} fullWidth maxWidth={width}>
+    <Dialog
+      open={openModal}
+      onClose={handleClose}
+      fullWidth
+      maxWidth={width}
+      PaperProps={{
+        style: {
+          backgroundColor: "#F2F5F9",
+        },
+      }}
+    >
       <DialogTitle textAlign={textAlign} aria-labelledby={ariaLabel}>
         {dialogTitle}
       </DialogTitle>

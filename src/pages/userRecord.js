@@ -20,7 +20,7 @@ const schema = yup.object({
   cnpwd: yup.string().oneOf([yup.ref("npwd")], "Passwords do not match"),
 });
 
-const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
+// const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
 const createUserSchemaValidation = yup
   .object({
     profile: yup
@@ -33,11 +33,6 @@ const createUserSchemaValidation = yup
           return file[0].size > 2000000 ? false : true;
         }
       })
-      .test("fileFormat", "Unsupported Format", (file) => {
-        if (file.length) {
-          return SUPPORTED_FORMATS.includes(file[0].type);
-        }
-      })
       .nullable(),
     img: yup
       .mixed()
@@ -47,11 +42,6 @@ const createUserSchemaValidation = yup
       .test("fileSize", "The file is too large", (file) => {
         if (file.length) {
           return file[0].size > 2000000 ? false : true;
-        }
-      })
-      .test("fileFormat", "Unsupported Format", (file) => {
-        if (file.length) {
-          return SUPPORTED_FORMATS.includes(file[0].type);
         }
       })
       .nullable(),
@@ -83,14 +73,7 @@ const createUserSchemaValidation = yup
       })
       .required(),
     birthday: yup.date().required(),
-    gender: yup
-      .object()
-      .shape({
-        label: yup.string().required("gender is required"),
-        value: yup.string().required("gender is required"),
-      })
-      .nullable()
-      .required("gender is required"),
+    gender: yup.string().required(),
     username: yup.string().required(),
     password: yup.string().min(4).max(12).required(),
     confirm: yup
@@ -101,14 +84,7 @@ const createUserSchemaValidation = yup
       .required(),
     address: yup.string().required(),
     city: yup.string().required(),
-    country: yup
-      .object()
-      .shape({
-        label: yup.string().required("country is required"),
-        value: yup.string().required("country is required"),
-      })
-      .nullable()
-      .required("country is required"),
+    country: yup.string().required(),
     zipcode: yup.string().required(),
   })
   .required();
@@ -142,6 +118,7 @@ const UserRecord = () => {
     handleSubmit: handleSubmitForm1,
     control: controlForm1,
     reset: resetForm1,
+    setValue: setValueForm1,
     formState: { errors: errorsForm1 },
   } = useForm({
     resolver: yupResolver(createUserSchemaValidation),
@@ -167,42 +144,45 @@ const UserRecord = () => {
 
   const onSubmitCreateUser = async (data) => {
     console.log(data);
-    // let formData = new FormData();
-    // formData.append("img", data.img[0]);
-    // formData.append("profile", data.profile[0]);
+    let formData = new FormData();
+    formData.append("img", data.img[0]);
+    formData.append("profile", data.profile[0]);
 
-    // for (let key in data) {
-    //   if (key === "gender") {
-    //     formData.append(key, data[key].label);
-    //   } else if (key === "country") {
-    //     formData.append(key, data[key].label);
-    //   } else if (key === "birthday") {
-    //     const formatted_date = dayjs(data[key]).format("YYYY-MM-DD")
-    //     formData.append(key, formatted_date);
-    //   } else {
-    //     formData.append(key, data[key]);
-    //   }
+    for (let key in data) {
+      if (key === "birthday") {
+        const formatted_date = dayjs(data[key]).format("YYYY-MM-DD");
+        formData.append(key, formatted_date);
+      } else {
+        formData.append(key, data[key]);
+      }
+    }
 
-    // }
+    try {
+      const response = await fetch("/api/add-user", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      console.log(response);
+      if (response.ok || response.status === 200) {
+        setIsCreateModalOpen(false);
+        setResponseMessage({
+          status: "success",
+          message: "Create Successfully",
+        });
+        setOpenSnackbar({ open: true });
+      }
 
-    // try {
-    //   const response = await fetch("/api/add-user", {
-    //     method: "POST",
-    //     body: formData,
-    //   });
-    //   const data = await response.json()
-
-    //   if (response.ok) {
-    //     alert(`Success: ${response.status}, ${data.success}`);
-    //   }
-
-    //   if (response.status === 409 || response.status === 400) {
-    //     alert(`Error: ${response.status}, ${data.error}`)
-    //   }
-
-    // } catch (error) {
-    //   alert(error)
-    // }
+      if (response.status === 409 || response.status === 400) {
+        alert(`Error: ${response.status}, ${data.error}`);
+      }
+    } catch (error) {
+      setResponseMessage({
+        status: "error",
+        message: "Something went wrong, try again!",
+      });
+      setOpenSnackbar({ open: true });
+    }
   };
 
   const {
@@ -380,6 +360,7 @@ const UserRecord = () => {
           dialogTitle={"Update Account"}
           handleClose={() => setIsEditModalOpen(false)}
           handleSubmit={handleSubmit(onSubmitEditUser)}
+          btnPrimaryTxt={"Update"}
         >
           <form>
             <Controller
@@ -477,13 +458,17 @@ const UserRecord = () => {
           openModal={isDeleteModalOpen}
           handleSubmit={() => deleteUserById(userToDelete)}
           handleClose={() => setIsDeleteModalOpen(false)}
+          btnPrimaryTxt={"Confirm"}
         />
         <CommonModal
           width={"lg"}
           dialogTitle={"Create New User"}
           openModal={isCreateModalOpen}
           textAlign={"center"}
-          handleClose={() => setIsCreateModalOpen(false)}
+          handleClose={() => {
+            setIsCreateModalOpen(false);
+            resetForm1();
+          }}
           handleSubmit={handleSubmitForm1(onSubmitCreateUser)}
           btnPrimaryTxt={"Create"}
         >
@@ -491,6 +476,7 @@ const UserRecord = () => {
             register={registerForm1}
             errors={errorsForm1}
             control={controlForm1}
+            setValueForm1={setValueForm1}
           />
         </CommonModal>
         <Snackbar
