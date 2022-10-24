@@ -15,7 +15,7 @@ const ScreeningWizard = () => {
     const [totalAnswered, setTotalAnswered] = useState(0)
     const [shouldEnableSubmit, setShouldEnableSubmit] = useState(false)
     const [sections, setSections] = useState({})
-    const {answers, setAnswers} = useContext(AnswerContext)
+    const {answers, setAnswers, patientSelected} = useContext(AnswerContext)
     const [classification, setClassification] = useState(null)
     const [classProbability, setClassProbability] = useState(null)
 
@@ -67,6 +67,7 @@ const ScreeningWizard = () => {
 
     const handleSubmit = () => {
         console.log(answers)
+        console.log(patientSelected)
         setHasSubmitted(true)
 
         // Post the answers for the screening assessment
@@ -113,7 +114,7 @@ const ScreeningWizard = () => {
                             {
                                 // Check first if data has been fetched
                                 Object.keys(sections).length !== 0 &&
-                                mustShowResult && <ScreeningResult classification={classification} classProbability={classProbability}></ScreeningResult>
+                                mustShowResult && <ScreeningResult classification={classification} classProbability={classProbability} patientSelected={patientSelected}></ScreeningResult>
                             }
                         </div>
                         <div className="modal-footer">

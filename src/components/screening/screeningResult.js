@@ -3,7 +3,7 @@ const calc = (number) => {
     return with2Decimals
 }
 
-const ScreeningResult = ({classification, classProbability}) => {
+const ScreeningResult = ({classification, classProbability, patientSelected}) => {
 
     const _class = classification === '0' ? "Negative" : "Positive"
     const _probability = calc(parseFloat(classProbability) * 100)
@@ -33,7 +33,7 @@ const ScreeningResult = ({classification, classProbability}) => {
             </div>
 
 
-            <p className="text-center">Based on the screening test, the result for <span className="text-primary fw-bold">Schmoe Joe</span>  {_class === 'Negative' ? negativeIndicative : positiveIndicative} show a <span className={`fw-bold ${_class === 'Negative' ? 'text-success' : 'text-danger'}`}>manifestation of social anxiety disorder</span> with a prediction probability of <span className={`fw-bold ${_class === 'Negative' ? 'text-success' : 'text-danger'}`}>{_probability}%</span>.</p>
+            <p className="text-center">Based on the screening test, the result for <span className="text-primary fw-bold">{patientSelected.fullname}</span>  {_class === 'Negative' ? negativeIndicative : positiveIndicative} show a <span className={`fw-bold ${_class === 'Negative' ? 'text-success' : 'text-danger'}`}>manifestation of social anxiety disorder</span> with a prediction probability of <span className={`fw-bold ${_class === 'Negative' ? 'text-success' : 'text-danger'}`}>{_probability}%</span>.</p>
         </div>
     );
 }
