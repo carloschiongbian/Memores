@@ -125,7 +125,7 @@ class SVM_Model():
         final = []
         for attr, value in parsed_answers.items():
             final.append(value)
-        print(final)
+        # print(final)
 
         self.final = final
         return final

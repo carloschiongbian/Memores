@@ -108,7 +108,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "--create-db":
     We need to import the models so that db.create_all() knows which 
     database model we are trying to create.
     """
-    from models import assessment_questions, assessment_responses, assessments, options, patient_screening_details, patients, questions, responses, users
+    from models import assessments, patient_screening_details, patients, questions, users
     with app.app_context():
         db.create_all()
 
