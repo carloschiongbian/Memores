@@ -32,8 +32,7 @@ connection = pymysql.connect(
 )
 
 def retrieveData():
-    # join data from PatientsScreeningDetails
-
+    
     query = select([Patients, PatientsScreeningDetails]).where(Patients.id == PatientsScreeningDetails.patient_id)
     results = conn.execute(query)
     records = []
