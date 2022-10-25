@@ -38,20 +38,14 @@ INSERT INTO `patients` (`id`, `fname`, `lname`, `fullname`, `email`, `phone`, `a
 """)
 
 my_cursor.execute("""
-INSERT INTO `patients_screening_details`(`id`, `patient_id`, `patient_notes`, `results`, `sad_category`, `screened_by`, `last_edited_by`, `screened_date`, `screened_time`, `last_edited_on`, `created_at`, `updated_at`) VALUES 
-('1','1','Robin is normal','is normal no need for further diagnosis', 'Normal', 'Dr. Strange','Dr. Murphy','2022-04-03','','2022-06-03','',''),
-('2','2','Tony shows symptoms of severe SAD','has severe SAD and is to be diagnosed immediately', 'Severe', 'Dr. Holmes','Dr. Poller','2022-04-04','','2022-06-05','',''),
-('3','3','Peter has moderate SAD','has moderate SAD', 'Moderate', 'Dr. Scrubs','Dr. Logan','2022-04-05','','2022-06-03','',''),
-('4','4','Sara is screened with mild SAD','has mild SAD and diagnosis is to be 3 days from now', 'Mild', 'Dr. Serg','Dr. Krop','2022-07-01','','2022-07-04','',''),
-('5','5','Jim is normal and does not have SAD','is normal and does not need diagnosis', 'Normal', 'Dr. Tan','Dr. Poller','2022-07-10','','2022-07-18','',''),
-('6','6','Ethan displays symptoms of mild SAD','has mild SAD and is to be diagnosed', 'Mild', 'Dr. Law','Dr. Logan','2022-03-06','','2022-03-10','','')
+INSERT INTO `patients_screening_details`(`id`, `assessment_id`, `patient_notes`, `sad_category`, `last_edited_by`, `last_edited_on`, `created_at`, `updated_at`) VALUES 
+('1','1','Robin is normal', 'Normal', 'Dr. Murphy','2022-06-03','',''),
+('2','2','Tony shows symptoms of severe SAD', 'Severe', 'Dr. Poller','2022-06-05','',''),
+('3','3','Peter has moderate SAD', 'Moderate', 'Dr. Logan','2022-06-03','',''),
+('4','4','Sara is screened with mild SAD', 'Mild','Dr. Krop','2022-07-04','',''),
+('5','5','Jim is normal and does not have SAD', 'Normal', 'Dr. Poller','2022-07-18','',''),
+('6','6','Ethan displays symptoms of mild SAD', 'Mild', 'Dr. Logan','2022-03-10','','')
 """)
-
-# my_cursor.execute("""
-# ALTER TABLE patient_screening_details
-# ADD FOREIGN KEY (patient_id) REFERENCES patients(id);
-# """)
-
 
 my_db.commit()
 my_db.close()
