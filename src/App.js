@@ -51,10 +51,10 @@ const App = () => {
             <Route path={routes.shared.INDEX} element={<LoginRedirect><HomePage/></LoginRedirect>} />
             <Route path={routes.shared.ERROR_404} element={<Error404 />} />
 
-            <Route path={routes.user.SCREENING} element={<UserRoute><ScreeningPage /></UserRoute>} />
-            <Route path={routes.user.DASHBOARD} element={<UserRoute><Dashboard /></UserRoute>} />
-            <Route path={routes.user.PATIENT_RECORDS} element={<UserRoute><PatientRecord /></UserRoute>} />
-            <Route path={routes.user.PATIENT_DETAILS} element={<UserRoute><PatientDetails /></UserRoute>} />
+            <Route path={routes.user.SCREENING} element={<UserRoute isLoading={loading}><ScreeningPage /></UserRoute>} />
+            <Route path={routes.user.DASHBOARD} element={<UserRoute isLoading={loading}><Dashboard /></UserRoute>} />
+            <Route path={routes.user.PATIENT_RECORDS} element={<UserRoute isLoading={loading}><PatientRecord /></UserRoute>} />
+            <Route path={routes.user.PATIENT_DETAILS} element={<UserRoute isLoading={loading}><PatientDetails /></UserRoute>} />
 
             <Route path={routes.admin.USER_RECORDS} element={<ProtectedRoute isLoading={loading}><UserRecord /></ProtectedRoute>} />
             <Route path={routes.admin.USER_DETAILS} element={<ProtectedRoute><UserPage /></ProtectedRoute>} />

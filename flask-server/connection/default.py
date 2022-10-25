@@ -22,6 +22,11 @@ password = "$2b$12$zfYz/eR0OnEoOAsO2V2UJOcXSW4CMEqCPEXqS/af0CUrXbEDjXsv6"
 sql_insert_query = "INSERT INTO `users` (`uname`,`pwd`,`role`,`fname`,`lname`,`email`,`phone`,`bday`,`gender`,`photo`,`license`,`license_id`,`street`,`city`,`country`,`zip`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 insert_values = ("memores", password, "admin", "admin", "admin", "memores_admin@gmail.com", "000000", "2022-10-27", "male", "uploads\default-admin.png", testImage, "0000", "No Address", "No city", "No country", "0000")
 insert_cursor.execute(sql_insert_query, insert_values)
+
+sql_insert_query_2 = "INSERT INTO `users` (`uname`,`pwd`,`role`,`fname`,`lname`,`email`,`phone`,`bday`,`gender`,`photo`,`license`,`license_id`,`street`,`city`,`country`,`zip`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+insert_values_2 = ("user", password, "user", "admin", "admin", "user@gmail.com", "000000", "2022-10-27", "male", "uploads\default-admin.png", testImage, "0000", "No Address", "No city", "No country", "0000")
+insert_cursor.execute(sql_insert_query_2, insert_values_2)
+
 new_conn.commit()
 new_conn.close()
 
