@@ -3,41 +3,24 @@ import pymysql.cursors
 from flask import Flask, jsonify, request, session
 
 from models.patients import Patients
+from json_encoder import AlchemyEncoder
 from models.patient_screening_details import PatientsScreeningDetails
-
 from connection.connection import db
-from sqlalchemy.ext.declarative import DeclarativeMeta
-from marshmallow import Schema, fields
 
-from sqlalchemy import create_engine
+from sqlalchemy import join
+from sqlalchemy import select
 from sqlalchemy.orm import Session
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+# engine = create_engine("mysql+pymysql://root:@memores_v2?charset=utf8mb4")
+engine = create_engine("mysql+pymysql://root:@localhost/memores_v2")
+conn = engine.connect()
 
-engine = create_engine("mysql+pymysql://root:@memores_v2?charset=utf8mb4")
 Session = sessionmaker(bind = engine)
 session = Session()
 
-
 app = Flask(__name__);
-
-class AlchemyEncoder(json.JSONEncoder):
-
-    def default(self, obj):
-        if isinstance(obj.__class__, DeclarativeMeta):
-            # an SQLAlchemy class
-            fields = {}
-            for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
-                data = obj.__getattribute__(field)
-                try:
-                    json.dumps(data) # this will fail on non-encodable values, like other classes
-                    fields[field] = data
-                except TypeError:
-                    fields[field] = None
-            # a json-encodable dict
-            return fields
-
-        return json.JSONEncoder.default(self, obj)
 
 connection = pymysql.connect(
     host='localhost',
@@ -51,9 +34,23 @@ connection = pymysql.connect(
 def retrieveData():
     # join data from PatientsScreeningDetails
 
-    records = db.session.query(Patients).join(PatientsScreeningDetails, Patients.id == PatientsScreeningDetails.patient_id, isouter=True).all()
-    # print(json.dumps(records, cls=AlchemyEncoder))
-    return json.dumps(records, cls=AlchemyEncoder)
+    query = select([Patients, PatientsScreeningDetails]).where(Patients.id == PatientsScreeningDetails.patient_id)
+    results = conn.execute(query)
+    records = []
+
+    for data in results:
+        obj = {
+            'id': data['patient_id'],
+            'fname': data['fname'],
+            'lname': data['lname'],
+            'age': data['age'],
+            'patient_id': data['patient_id'],
+            'screened_by': data['screened_by'],
+        }
+        
+        records.append(obj)
+
+    return jsonify(records)
     
 def retrievePatientScreeningDetails(id):
     # switch to SQLAlchemy
@@ -78,7 +75,6 @@ def retrievePatientScreeningDetails(id):
         phone = request.get_json()['phone']
         street = request.get_json()['street']
         patient_notes = request.get_json()['patient_notes']
-        screened_time = request.get_json()['screened_time']
         screened_date = request.get_json()['screened_date']
         screened_by = request.get_json()['screened_by']
         screened_on = request.get_json()['screened_on']
