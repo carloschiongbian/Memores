@@ -108,7 +108,7 @@ class SVM_Model():
     # Feature Selection is skipped because we already have selected the features when we trained the model
     # Note: Order matters because this is what the model will use
     def parse_answers(self):
-        relevant_features = ["DAF", "TR", "ERF", "EAF", "ATF", "SW", "LSAS", "DEF", "SPIN", "SMF", "TKF", "CMT"]
+        relevant_features = ["DAF", "DEF", "TKF", "LSAS", "TR",	"EAF", "SPIN", "SMF", "ERF", "ATF", "CMT", "SW"]
 
         # WE HAVE TO PARSE THE ANSWERS FROM THE parsed_data object. HERE, 
         # WE WILL ONLY GET THE KEY/VALUE PAIRS INSIDE parsed_data object WHICH
@@ -125,7 +125,7 @@ class SVM_Model():
         final = []
         for attr, value in parsed_answers.items():
             final.append(value)
-        print(final)
+        # print(final)
 
         self.final = final
         return final

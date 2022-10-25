@@ -10,6 +10,7 @@ class Patients(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     fname = db.Column(db.String(255), nullable = False)
     lname = db.Column(db.String(255), nullable = False)
+    fullname = db.Column(db.String(255), nullable = False)
     email = db.Column(db.String(255), nullable = False, unique = True)
     phone = db.Column(db.String(255), nullable = False)
     age = db.Column(db.Integer, nullable = False)
@@ -30,7 +31,7 @@ class PatientSchema(ma.Schema):
     """This is a database schema."""
     class Meta:
         """Specify which fields you want to see in RESTful API"""
-        fields = ('id', 'fname', 'lname', 'email', 'phone', 'age', 'bday', 'gender', 'street', 'city', 'country', 'registered_date', 'zip', 'is_screened', 'created_at', 'updated_at')
+        fields = ('id', 'fname', 'lname', 'fullname', 'email', 'phone', 'age', 'bday', 'gender', 'street', 'city', 'country', 'registered_date', 'zip', 'created_at', 'updated_at')
 
 
 """
