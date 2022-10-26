@@ -3,6 +3,9 @@ from models.patients import Patients
 from models.assessments import Assessments
 from connection.connection import db, ma
 
+# ... has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+# can be misleading, it sometimes mean that there's a syntax or logic error in the backend.
+
 # https://stackoverflow.com/a/16664376/15440045
 # request.args: key/value pairs in the URL query string
 # if there is a need to perform an OR query, u can do
@@ -17,6 +20,9 @@ def get_patients():
     name = request.args.get('name')
     per_page = request.args.get('perPage')
     current_page = request.args.get('currentPage')
+    user = request.args.get('createdBy')
+    if user is None:
+        user = user_id
 
     query = db.session.query(*Patients.__table__.columns,
                             Assessments.id.label("assessment_id"),
@@ -28,7 +34,8 @@ def get_patients():
         query = query.filter(Patients.fullname.like(search))
 
     # We need to get their patient's assessment history, too
-    query = query.outerjoin(Assessments, Patients.id == Assessments.patient_id).order_by(Patients.id)
+    query = query.outerjoin(Assessments, Patients.id == Assessments.patient_id).\
+                filter(Patients.created_by == int(user)).order_by(Patients.id)
 
     # get the total instances before pagination
     ctr = query.count()
@@ -60,7 +67,7 @@ def get_patients():
 # It is necessary to do it this way because these fields need to be serialized
 class PatientAssessmentSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'fname', 'lname', 'fullname', 'assessment_id', 'prediction_result', 'classification_probability', 'result_description', 'date_taken',)
+        fields = ('id', 'fname', 'lname', 'fullname', 'assessment_id', 'prediction_result', 'classification_probability', 'result_description', 'date_taken', 'created_by')
 
 
 patient_assessments_schema = PatientAssessmentSchema(many = True)

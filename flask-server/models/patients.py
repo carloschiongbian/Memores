@@ -21,6 +21,7 @@ class Patients(db.Model):
     country = db.Column(db.String(255), nullable = False)
     zip = db.Column(db.String(255), nullable = False)
     registered_date = db.Column(db.DateTime, nullable = False)
+    created_by = db.Column(db.Integer, db.ForeignKey("users.id"))
     created_at = db.Column(db.DateTime, nullable = False, server_default=func.now())
     updated_at = db.Column(db.DateTime, nullable = False, onupdate=func.now())
 
