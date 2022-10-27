@@ -1,17 +1,19 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import ScreeningWizard from '../components/screening/screeningWizard'
 import '../public/css/pages/ScreeningPage/index.css'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { AnswerContext } from '../components/screening/AnswerContext'
 import Layout from '../components/Layout'
 import { useEffect } from 'react'
 import Api from '../services/api'
 import Pagination from '../components/customPagination/Pagination'
 import { useRef } from 'react'
+import AuthContext from '../auth/AuthContext'
 
 
 const ScreeningPage = () => {
 
+    const { user } = useContext(AuthContext)
     const searchQuery = useRef(null)
     const [answers, setAnswers] = useState({})
     const [patientSelected, setPatientSelected] = useState({})
@@ -31,11 +33,13 @@ const ScreeningPage = () => {
         setPatientSelected({})
         searchQuery.current.value = ''
         Api().get('/get-patients', {
-            params: { currentPage, perPage, name: searchQuery.current.value }
+            params: { currentPage, perPage, name: searchQuery.current.value,
+                        createdBy: user.id }
         })
             .then(res => {
                 setPatients(res.data.patients)
                 setTotal(parseInt(res.data.total))
+                setCurrentPage(1)
             })
     }
 
@@ -48,23 +52,26 @@ const ScreeningPage = () => {
 
     const handleSearch = () => {
         Api().get('/get-patients', {
-            params: { currentPage, perPage, name: searchQuery.current.value }
+            params: { currentPage, perPage, name: searchQuery.current.value,
+                        createdBy: user.id }
         })
             .then(res => {
                 setPatients(res.data.patients)
                 setTotal(parseInt(res.data.total))
+                setCurrentPage(1)
             })
     }
 
     useEffect(() => {
         Api().get('/get-patients', {
-            params: { currentPage, perPage, name: searchQuery.current.value }
+            params: { currentPage, perPage, name: searchQuery.current.value,
+                        createdBy: user.id }
         })
             .then(res => {
                 setPatients(res.data.patients)
                 setTotal(parseInt(res.data.total))
             })
-    }, [currentPage]);
+    }, [currentPage, user]);
 
     return (
         <Layout>
