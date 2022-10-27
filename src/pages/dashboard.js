@@ -20,12 +20,13 @@ const SAD_CATEGORIES = {
 const Dashboard = () => {
   const navigate = useNavigate();
   const [sadCategories, setSADCategories] = useState({
-    normal: 1,
-    mild: 1,
-    moderate: 1,
-    severe: 1,
+    normal: 0,
+    mild: 0,
+    moderate: 0,
+    severe: 0,
   });
-  const [dashboardContent, setDashboardContent] = useState([]);
+  const [patients, setPatients] = useState([]);
+  const [screeningDetails, setScreeningDetails] = useState([]);
 
   let path = "../patient-details/id=";
 
@@ -38,10 +39,15 @@ const Dashboard = () => {
       },
     })
       .then((response) => response.json())
-      .then((response) => setDashboardContent(response))
+      .then((response) => setData(response))
       .catch((error) => console.log(error));
+  };
 
-    getCategoryCount(dashboardContent);
+  const setData = (data) => {
+    setPatients(data[0]);
+    setScreeningDetails(data[1]);
+
+    getCategoryCount(screeningDetails);
   };
 
   const getCategoryCount = (data) => {
@@ -59,16 +65,13 @@ const Dashboard = () => {
       moderate: countCategory(data, SAD_CATEGORIES.MODERATE),
       severe: countCategory(data, SAD_CATEGORIES.SEVERE),
     });
-    
   };
 
   const countScreenedPatients = (data) => {
     let True = 1;
-    const is_screened = data.map((data) => 
-      data.is_screened === True
-    );
-    
-    return is_screened.filter(data => data === true)
+    const is_screened = data.map((data) => data.is_screened === True);
+
+    return is_screened.filter((data) => data === true);
   };
 
   useEffect(() => {
@@ -78,121 +81,123 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <div className="dashboard-container">
-        <div className="dashboard">
-          <div className="top-section">
-            <div className="number-of-patients-container">
-              <h4>
-                <GroupIcon /> Patients
-              </h4>
-              <h1>{dashboardContent.length}</h1>
-            </div>
+      {patients.length !== 0 && (
+        <div className="dashboard-container">
+          <div className="dashboard">
+            <div className="top-section">
+              <div className="number-of-patients-container">
+                <h4>
+                  <GroupIcon /> Patients
+                </h4>
+                <h1>{patients.length}</h1>
+              </div>
 
-            <div className="number-of-patients-screened-container">
-              <h4>
-                <MedicalServicesIcon /> Screened
-              </h4>
-              <h1>{countScreenedPatients(dashboardContent).length}</h1>
-            </div>
+              <div className="number-of-patients-screened-container">
+                <h4>
+                  <MedicalServicesIcon /> Screened
+                </h4>
+                <h1>{countScreenedPatients(screeningDetails).length}</h1>
+              </div>
 
-            <div className="average-time-duration-of-screening-container">
-              <h4>Average Time Duration of Screening</h4>
+              <div className="average-time-duration-of-screening-container">
+                <h4>Average Time Duration of Screening</h4>
 
-              <div className="average-time">
-                <div className="hours-number-format">
-                  <h2>0</h2>
-                </div>
+                <div className="average-time">
+                  <div className="hours-number-format">
+                    <h2>0</h2>
+                  </div>
 
-                <div className="minutes-number-format">
-                  <h2>46</h2>
-                </div>
+                  <div className="minutes-number-format">
+                    <h2>46</h2>
+                  </div>
 
-                <div className="seconds-number-format">
-                  <h2>21</h2>
-                </div>
+                  <div className="seconds-number-format">
+                    <h2>21</h2>
+                  </div>
 
-                <div className="hours-string-format">
-                  <h3>Hour(s)</h3>
-                </div>
+                  <div className="hours-string-format">
+                    <h3>Hour(s)</h3>
+                  </div>
 
-                <div className="minutes-string-format">
-                  <h3>Minute(s)</h3>
-                </div>
+                  <div className="minutes-string-format">
+                    <h3>Minute(s)</h3>
+                  </div>
 
-                <div className="seconds-string-format">
-                  <h3>Second(s)</h3>
+                  <div className="seconds-string-format">
+                    <h3>Second(s)</h3>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="bottom-section">
-            <div className="recently-screened-patients-body">
-              <List className="patients-list-container">
-                <ListItem divider={true} className="patient-list-header">
-                  <h5>Recently Screened Patients</h5>
+            <div className="bottom-section">
+              <div className="recently-screened-patients-body">
+                <List className="patients-list-container">
+                  <ListItem divider={true} className="patient-list-header">
+                    <h5>Recently Screened Patients</h5>
 
-                  <h6>
-                    <Link
-                      to="/patient-records"
-                      style={{ textDecoration: "none" }}
-                    >
-                      View All
-                    </Link>
-                  </h6>
-                </ListItem>
-
-                {dashboardContent.length === 0 && (
-                  <ListItem
-                    style={{
-                      margin: 0,
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Skeleton height={100} width={"100%"} />
-                    <Skeleton height={100} width={"100%"} />
-                    <Skeleton height={100} width={"100%"} />
+                    <h6>
+                      <Link
+                        to="/patient-records"
+                        style={{ textDecoration: "none" }}
+                      >
+                        View All
+                      </Link>
+                    </h6>
                   </ListItem>
-                )}
 
-                {dashboardContent &&
-                  dashboardContent.slice(0, 3).map((patient, index) => (
+                  {patients.length === 0 && (
                     <ListItem
-                      key={index}
-                      divider={true}
-                      button={true}
-                      onClick={() => {
-                        navigate(path + patient.id);
+                      style={{
+                        margin: 0,
+                        display: "flex",
+                        flexDirection: "column",
                       }}
-                      className="patient-information-item"
                     >
-                      <div className="patient-name">
-                        <NavigateNextIcon />
-
-                        <h5> {patient.fname + " " + patient.lname} </h5>
-                      </div>
-
-                      <div className="screening-information-summary">
-                        <div className="screening-information-summary-date">
-                          <h6> {patient.screened_date} </h6>
-                        </div>
-
-                        <div className="screening-information-summary-time">
-                          {patient.screened_time}
-                        </div>
-                      </div>
+                      <Skeleton height={100} width={"100%"} />
+                      <Skeleton height={100} width={"100%"} />
+                      <Skeleton height={100} width={"100%"} />
                     </ListItem>
-                  ))}
-              </List>
-            </div>
+                  )}
 
-            <div className="graph-container">
-              <DashboardChart sadCategories={sadCategories} />
+                  {patients &&
+                    patients.slice(0, 3).map((patient, index) => (
+                      <ListItem
+                        key={index}
+                        divider={true}
+                        button={true}
+                        onClick={() => {
+                          navigate(path + patient.id);
+                        }}
+                        className="patient-information-item"
+                      >
+                        <div className="patient-name">
+                          <NavigateNextIcon />
+
+                          <h5> {patient.fname + " " + patient.lname} </h5>
+                        </div>
+
+                        <div className="screening-information-summary">
+                          <div className="screening-information-summary-date">
+                            <h6> {patient.screened_date} </h6>
+                          </div>
+
+                          <div className="screening-information-summary-time">
+                            {patient.screened_time}
+                          </div>
+                        </div>
+                      </ListItem>
+                    ))}
+                </List>
+              </div>
+
+              <div className="graph-container">
+                <DashboardChart sadCategories={sadCategories} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </Layout>
   );
 };

@@ -31,6 +31,7 @@ const EditPatientModal = ({ patientDetails, getPatientDetails, openModal, setOpe
   const [editForm, setEditForm] = useState(editValues);
 
   const handleUpdateEvent = async () => {
+    console.log(patientDetails.id)
     await fetch("/patient-details/id=" + patientDetails.id, {
       method: "PUT",
       headers: {
@@ -47,7 +48,7 @@ const EditPatientModal = ({ patientDetails, getPatientDetails, openModal, setOpe
   return (
     <Modal
       open={openModal}
-      onClose={openModal}
+      onClose={setOpen}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >

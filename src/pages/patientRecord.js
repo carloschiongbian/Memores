@@ -37,7 +37,7 @@ const PatientRecord = () => {
       header: "Age",
     },
     {
-      accessorKey: "screened_by",
+      accessorKey: "assessor_name",
       header: "Screened By",
     },
     {
@@ -72,11 +72,11 @@ const PatientRecord = () => {
   const updatePatientRecords = (data) => {
     data.forEach((data) => {
       let patientRecord = {
-        id: data.id,
+        id: data.patient_id,
         firstName: data.fname,
         lastName: data.lname,
         age: data.age,
-        screened_by: data.screened_by,
+        assessor_name: data.assessor_name,
         action: DeleteIcon,
       };
       setPatientRecords((patientRecords) => [...patientRecords, patientRecord]);
@@ -84,25 +84,22 @@ const PatientRecord = () => {
   };
 
   const retrieveRecords = () => {
-      fetch('/patient-records', {
-          methods: 'GET',
-          headers: {
-              'Access-Control-Allow-Origin':'*',
-              'Content-Type': 'application/json'
-          }
-      }).then((response) =>
-          response.json()
-      ).then((response) =>
-          updatePatientRecords(response)
-      ).catch((error) =>
-          console.log(error)
-      )
-  }
+    fetch("/patient-records", {
+      methods: "GET",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => updatePatientRecords(response))
+      .catch((error) => console.log(error));
+  };
 
   const handleRecordAction = (data, action) => {
     switch (action) {
       case recordActions.EDIT:
-        navigate("/patient-details/id=" + (parseInt(data.id) + 1));
+        navigate("/patient-details/id=" + parseInt(data.original.id));
         break;
 
       case recordActions.DELETE:
@@ -116,19 +113,20 @@ const PatientRecord = () => {
   };
 
   const handleDelete = () => {
-    fetch("/patient-records/delete/id=" + getRecord.id, {
+    fetch("/patient-records/delete/id=" + (parseInt(getRecord.id) + 1), {
       method: "DELETE",
     });
 
     const newArr = patientRecords.filter(
       (record) => record.id !== getRecord.id
     );
+    
     setPatientRecords(newArr);
     setOpenModal(false);
   };
 
   useEffect(() => {
-    retrieveRecords()
+    retrieveRecords();
   }, []);
 
   return (
