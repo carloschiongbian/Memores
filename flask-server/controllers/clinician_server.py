@@ -1,13 +1,13 @@
-from asyncio.windows_events import NULL
 import json
 import pymysql.cursors
 from connection.connection import db
-from flask import Flask, jsonify, request
 from json_encoder import AlchemyEncoder
+from flask import Flask, jsonify, request
 
+from models.users import Users
 from models.patients import Patients
 from models.assessments import Assessments
-from models.users import Users
+from controllers.get_current_user import *
 from models.patient_screening_details import PatientsScreeningDetails
 
 from sqlalchemy import create_engine
@@ -27,18 +27,22 @@ connection = pymysql.connect(
     cursorclass=pymysql.cursors.DictCursor
 )
 
+patients_query = select(Patients)
+patients_query_response = connect.execute(patients_query)
+
+assessment_query = select(Assessments)
+assessment_query_response = connect.execute(assessment_query)
+
+screening_details_query = select(PatientsScreeningDetails)
+screening_details_query_response = connect.execute(screening_details_query)
+
+users_query = select(Users)
+users_query_response = connect.execute(users_query)
+
 def retrieveData():
-    
-    # need to link to assessments table to get data for screened_by etc.
-    # query = select([Patients, PatientsScreeningDetails]).where(Patients.id == PatientsScreeningDetails.id)
-    patients_query = select(Patients)
-    patients_query_response = connect.execute(patients_query)
 
-    assessment_query = select(Assessments)
-    assessment_query_response = connect.execute(assessment_query)
-
-    users_query = select(Users)
-    users_query_response = connect.execute(users_query)
+    user = get_current_user()
+    user_id = user.get_json()['id']
 
     users = []
     patients = []
@@ -51,7 +55,8 @@ def retrieveData():
             'fname': data['fname'],
             'lname': data['lname'],
             'age': data['age'],
-            'assessor': ''
+            'created_by': data['created_by'],
+            'is_screened': data['is_screened']
         }
         patients.append(obj)
     
@@ -69,73 +74,26 @@ def retrieveData():
         }
         users.append(obj)
 
-    test = {'assessor_id': '100'}
-
     for patient in patients:
-        for assessment in assessments:
-            if patient['patient_id'] == assessment['patient_id']:
-                for user in users:
-                    if user['id'] == assessment['assessor_id']:
-                        obj = {
-                            'patient_id': patient['patient_id'],
-                            'fname': patient['fname'],
-                            'lname': patient['lname'],
-                            'age': patient['age'],
-                            'assessor_name': user['username']
-                        }
-                        patient_record_details.append(obj)
-            else:
-                patient_record_details.append(patient)
+        if patient['created_by'] == user_id:
+            obj = {
+                'patient_id': patient['patient_id'],
+                'fname': patient['fname'],
+                'lname': patient['lname'],
+                'age': patient['age'],
+                'created_by': patient['created_by'],
+                'is_screened': patient['is_screened']
+            }
+            patient_record_details.append(obj)
 
-
-    # print(patients[0])
-
-
-    # patient_record_details.append(users)
-    # patient_record_details.append(patients)
-    # patient_record_details.append(assessments)
-
-    return jsonify(patient_record_details)
-    # results = connect.execute(query)
-    # records = []
-
-    # for data in results:
-    #     obj = {
-    #         'id': data['id'],
-    #         'fname': data['fname'],
-    #         'lname': data['lname'],
-    #         'age': data['age']
-    #     }
-    #     records.append(obj)
-
-    # return jsonify(records)
-
-    # use this for now
-    # records = Patients.query.all()
-    # return json.dumps(records, cls=AlchemyEncoder)
+    return patient_record_details
     
 def retrievePatientScreeningDetails(id):
-    # switch to SQLAlchemy
 
     if request.method == 'GET':
-    
-        patients_query = select(Patients).where(Patients.id == id)
-        patients_response = connect.execute(patients_query)
-
-        screening_details_query = select(PatientsScreeningDetails).where(PatientsScreeningDetails.id == id)
-        screening_details_response = connect.execute(screening_details_query)
-
-        assessments_query = select(Assessments).where(Assessments.patient_id == 2)
-        assessments_response = connect.execute(assessments_query)
-
-        user = []
-        patients = []
-        screening_details = []
         patient_screening_details = []
 
-        assessment = []
-
-        for data in patients_response:
+        for data in patients_query_response:
             obj = {
                 'id': data['id'],
                 'fname': data['fname'],
@@ -149,41 +107,44 @@ def retrievePatientScreeningDetails(id):
                 'email': data['email'],
                 'phone': data['phone'],
                 'registered_date': data['registered_date'],
-            }
-            patients.append(obj)
-
-        for data in screening_details_response:
-            obj = {
-                'patient_notes':data['patient_notes'],
-                'sad_category':data['sad_category'],
-                'last_edited_by':data['last_edited_by'],
-                'last_edited_on':data['last_edited_on'],
-            }
-            screening_details.append(obj)
-
-        for data in assessments_response:
-            obj = {
-                'responses': data['responses'],
-                'date_taken': data['date_taken'],
-                'assessor_id': data['assessor_id'],
-                'date_finished': data['date_finished'],
-                'prediction_result': data['prediction_result'],
-                'result_description': data['result_description']
-            }
-            assessment.append(obj)
-
-        user_query = select(Users).where(Users.id == assessment[0]['assessor_id'])
-        user_query_response = connect.execute(user_query)
-
-        for data in user_query_response:
-            obj = {
-                'uname': data['uname'],
+                'is_screened': data['is_screened'],
+                'patient_notes': '',
+                'sad_category': '',
+                'last_edited_by': '',
+                'last_edited_on': '',
+                'responses': '',
+                'date_taken': '',
+                'assessor_id': '',
+                'date_finished': '',
+                'prediction_result':'',
+                'result_description': ''
             }
 
-        patient_screening_details.append(user)
-        patient_screening_details.append(patients)
-        patient_screening_details.append(assessment)
-        patient_screening_details.append(screening_details)
+            if data['is_screened'] != False:
+                for screening_data in screening_details_query_response:
+                    if screening_data['id'] == data['id']: 
+                        screening_obj = {
+                            'patient_notes': screening_data['patient_notes'],
+                            'sad_category': screening_data['sad_category'],
+                            'last_edited_by': screening_data['last_edited_by'],
+                            'last_edited_on': screening_data['last_edited_on'],
+                        }
+                        obj.update(screening_obj)
+                    
+                for assessment_data in assessment_query_response:
+                    if assessment_data['patient_id'] == data['id']: 
+                        assessment_obj = {
+                            'responses': assessment_data['responses'],
+                            'date_taken': assessment_data['date_taken'],
+                            'assessor_id': assessment_data['assessor_id'],
+                            'date_finished': assessment_data['date_finished'],
+                            'prediction_result': assessment_data['prediction_result'],
+                            'result_description': assessment_data['result_description']
+                        }
+                        obj.update(assessment_obj)
+
+            patient_screening_details.append(obj)        
+
         return jsonify(patient_screening_details)
 
     elif request.method == 'PUT':
@@ -235,7 +196,6 @@ def deletePatientRecord(id):
 
 def retrieveDashboardContent():
     # switch to SQLAlchemy
-
     patients_query = select(Patients)
     screening_details_query = select(PatientsScreeningDetails)
 

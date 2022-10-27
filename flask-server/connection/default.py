@@ -27,6 +27,14 @@ sql_insert_query_2 = "INSERT INTO `users` (`uname`,`pwd`,`role`,`fname`,`lname`,
 insert_values_2 = ("user", password, "user", "admin", "admin", "user@gmail.com", "000000", "2022-10-27", "male", "uploads\default-admin.png", testImage, "0000", "No Address", "No city", "No country", "0000")
 insert_cursor.execute(sql_insert_query_2, insert_values_2)
 
+sql_insert_query_3 = "INSERT INTO `users` (`uname`,`pwd`,`role`,`fname`,`lname`,`email`,`phone`,`bday`,`gender`,`photo`,`license`,`license_id`,`street`,`city`,`country`,`zip`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+insert_values_3 = ("JohnDoe", password, "user", "John", "Doe", "johndoe@gmail.com", "000000", "2022-10-27", "male", "uploads\default-admin.png", testImage, "0000", "No Address", "No city", "No country", "0000")
+insert_cursor.execute(sql_insert_query_3, insert_values_3)
+
+sql_insert_query_4 = "INSERT INTO `users` (`uname`,`pwd`,`role`,`fname`,`lname`,`email`,`phone`,`bday`,`gender`,`photo`,`license`,`license_id`,`street`,`city`,`country`,`zip`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+insert_values_4 = ("SweeneyTodd", password, "user", "Sweeney", "Todd", "sweeneytodd@gmail.com", "000000", "2022-10-27", "male", "uploads\default-admin.png", testImage, "0000", "No Address", "No city", "No country", "0000")
+insert_cursor.execute(sql_insert_query_4, insert_values_4)
+
 new_conn.commit()
 new_conn.close()
 

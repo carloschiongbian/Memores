@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Modal, Button, Skeleton } from "@mui/material";
+import { Box, Modal, Button } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import MaterialReactTable from "material-react-table";
@@ -37,8 +37,8 @@ const PatientRecord = () => {
       header: "Age",
     },
     {
-      accessorKey: "assessor_name",
-      header: "Screened By",
+      accessorKey: "is_screened",
+      header: "Screened",
     },
     {
       accessorKey: "actions",
@@ -76,9 +76,10 @@ const PatientRecord = () => {
         firstName: data.fname,
         lastName: data.lname,
         age: data.age,
-        assessor_name: data.assessor_name,
+        is_screened: data.is_screened === false ? 'No' : 'Yes',
         action: DeleteIcon,
       };
+      
       setPatientRecords((patientRecords) => [...patientRecords, patientRecord]);
     });
   };

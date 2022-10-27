@@ -10,16 +10,10 @@ import Layout from "../components/Layout";
 const PatientDetails = () => {
   const { id } = useParams();
   const [open, setOpen] = useState(false);
-  const [userDetails, setUserDetails] = useState([])
   const [patientDetails, setPatientDetails] = useState([]);
-  const [screeningDetails, setScreeningDetails] = useState([]);
-  const [assessmentDetails, setAssessmentDetails] = useState([])
 
   const setData = async (data) => {
-    setUserDetails(data[0])
-    setPatientDetails(data[1]);
-    setAssessmentDetails(data[2]);
-    setScreeningDetails(data[3]);
+    setPatientDetails(data[0]);
   };
 
   const getPatientDetails = () => {
@@ -51,53 +45,53 @@ const PatientDetails = () => {
           <div className="patient-details-container">
             <div className="patient-details">
               <div className="patient-name">
-                {patientDetails[0].fname + " " + patientDetails[0].lname}
+                {patientDetails.fname + " " + patientDetails.lname}
               </div>
 
               <div className="patient-information">
                 <div className="patient-gender">
                   <label htmlFor="gender">Gender</label>
-                  <span>{patientDetails[0].gender}</span>
+                  <span>{patientDetails.gender}</span>
                 </div>
 
                 <div className="patient-birthday">
                   <label htmlFor="birthday">Birthday</label>
-                  <span>{patientDetails[0].bday}</span>
+                  <span>{patientDetails.bday}</span>
                 </div>
 
                 <div className="patient-contact-number">
                   <label htmlFor="contact-number">Contact Number</label>
-                  <span>{patientDetails[0].phone}</span>
+                  <span>{patientDetails.phone}</span>
                 </div>
 
                 <div className="patient-street-address">
                   <label htmlFor="street-address">Street Address</label>
-                  <span>{patientDetails[0].street}</span>
+                  <span>{patientDetails.street}</span>
                 </div>
 
                 <div className="patient-address-city">
                   <label htmlFor="city-address">City</label>
-                  <span>{patientDetails[0].city}</span>
+                  <span>{patientDetails.city}</span>
                 </div>
 
                 <div className="patient-zip-code">
                   <label htmlFor="zip-code">Zip Code</label>
-                  <span>{patientDetails[0].zip}</span>
+                  <span>{patientDetails.zip}</span>
                 </div>
 
                 <div className="patient-registered-date">
                   <label htmlFor="registered-date">Registered Date</label>
-                  <span>{patientDetails[0].registered_date}</span>
+                  <span>{patientDetails.registered_date}</span>
                 </div>
 
                 <div className="patient-screened-time">
                   <label htmlFor="screened-time">Date Taken</label>
-                  <span>{assessmentDetails[0].date_taken}</span>
+                  <span>{patientDetails.date_taken}</span>
                 </div>
 
                 <div className="patient-screened-date">
                   <label htmlFor="screened-date">Date Finished</label>
-                  <span>{assessmentDetails[0].date_finished}</span>
+                  <span>{patientDetails.date_finished}</span>
                 </div>
               </div>
 
@@ -122,7 +116,7 @@ const PatientDetails = () => {
                   </div>
 
                   <div className="patient-screening-results">
-                    <h6>{"Description: "+assessmentDetails[0].result_description}</h6>
+                    <h6>{"Description: "+patientDetails.result_description}</h6>
                   </div>
                 </div>
               </div>
@@ -133,7 +127,7 @@ const PatientDetails = () => {
                 <label htmlFor="patient-notes-label">Notes</label>
 
                 <div className="patient-notes">
-                  {screeningDetails[0].patient_notes}
+                  {patientDetails.patient_notes}
                 </div>
 
                 <div className="patient-notes-actions">
@@ -144,7 +138,7 @@ const PatientDetails = () => {
                     Edit
                   </button>
                   <EditPatientModal
-                    patientDetails={patientDetails[0]}
+                    patientDetails={patientDetails}
                     getPatientDetails={getPatientDetails}
                     openModal={open}
                     setOpen={setOpen}
@@ -154,12 +148,12 @@ const PatientDetails = () => {
                 <div className="patient-notes-status">
                   <div className="patient-notes-editor">
                     <label htmlFor="notes-edited-by">Last Edited By:</label>
-                    <p>{screeningDetails[0].last_edited_by}</p>
+                    <p>{patientDetails.last_edited_by}</p>
                   </div>
 
                   <div className="patient-notes-edited-date">
                     <label htmlFor="date-edited-on">Last Edited On:</label>
-                    <p>{screeningDetails[0].last_edited_on}</p>
+                    <p>{patientDetails.last_edited_on}</p>
                   </div>
                 </div>
               </div>
