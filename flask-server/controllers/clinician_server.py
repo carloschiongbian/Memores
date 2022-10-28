@@ -186,12 +186,17 @@ def retrievePatientScreeningDetails(id):
 
 def deletePatientRecord(id):
     
-    # temporary until finalized with data of assessments table 
-    # deletion wont reflect
-    print(id)
-    query = delete(Patients).where(Patients.id == id)
-    connect.execute(query)
-    # records = Patients.query.filter_by(Patients.id == id).delete()
+    # deletion wont reflect right away on the table
+    # table component for patient records needs to be re-rendered
+    
+    delete_patients_query = delete(Patients).where(Patients.id == id)
+    delete_assessment_query = delete(Assessments).where(Assessments.patient_id == id)
+    delete_screening_details_query = delete(PatientsScreeningDetails).where(PatientsScreeningDetails.id == id)
+
+    connect.execute(delete_patients_query)
+    connect.execute(delete_assessment_query)
+    connect.execute(delete_screening_details_query)
+    
     return jsonify(request.get_json())
 
 def retrieveDashboardContent():
