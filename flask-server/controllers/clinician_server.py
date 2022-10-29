@@ -273,7 +273,7 @@ def deletePatientRecord(id):
     connect.execute(delete_assessment_query)
     connect.execute(delete_screening_details_query)
     
-    return jsonify(request.get_json())
+    return retrieveData()
 
 def retrieveDashboardContent():
 
@@ -344,7 +344,7 @@ def retrieveDashboardContent():
     for data in patients:
         if data['created_by'] == user_id:
             obj = {
-                'patient_id': data['patient_id'],
+                'id': data['patient_id'],
                 'fname': data['fname'],
                 'lname': data['lname'],
                 'created_by': data['created_by'],
@@ -361,7 +361,7 @@ def retrieveDashboardContent():
                         'assessment_id': screening_data['assessment_id']
                     }
                     obj.update(screening_obj)
-                    
+
             dashboard_content.append(obj)
  
     return dashboard_content

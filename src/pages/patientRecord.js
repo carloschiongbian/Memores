@@ -114,12 +114,16 @@ const PatientRecord = () => {
   };
 
   const handleDelete = () => {
-    fetch("/patient-records/delete/id=" + (parseInt(getRecord.id) + 1), {
+    console.log(getRecord.original.id)
+    fetch("/patient-records/delete/id=" + parseInt(getRecord.original.id), {
       method: "DELETE",
-    });
+    })
+    .then((response) => response.json())
+    .then((response) => console.log(response))
+    .catch((error) => console.log(error));
 
     const newArr = patientRecords.filter(
-      (record) => record.id !== getRecord.id
+      (record) => record.id !== getRecord.original.id
     );
     
     setPatientRecords(newArr);
