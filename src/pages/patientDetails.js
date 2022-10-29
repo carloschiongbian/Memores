@@ -101,6 +101,10 @@ const PatientDetails = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const test = (test) => {
+    console.log(test)
+  }
+
   return (
     <Layout>
       {patientDetails.length !== 0 && (
@@ -153,8 +157,8 @@ const PatientDetails = () => {
 
                 <div className="patient-screened-time">
                   <label htmlFor="screened-time">Date Taken</label>
-                  {!patientDetails.is_screened && <span style={{color: 'gray', fontSize: '15px'}}>Not available. Patient must be screened first</span>}
-                  {patientDetails.is_screened && <span>{patientDetails.date_taken}</span>}
+                  {patientDetails.is_screened === false && <span style={{color: 'gray', fontSize: '15px'}}>Not available. Patient must be screened first</span>}
+                  {patientDetails.is_screened === true && <span>{patientDetails.date_taken}</span>}
                 </div>
 
                 <div className="patient-screened-date">
@@ -165,26 +169,14 @@ const PatientDetails = () => {
               </div>
 
               <div className="patient-screening-details">
-                {/* <div className="screening-details-label">
-                  <label htmlFor="screening-details">Screening Details</label>
-                </div> */}
-
-                {/* <div className="patient-screening-details-top-section"> */}
-                  
-
-                  {/* <div className="screened-on"> */}
-                    {/* <label>Screened on: {patientDetails.screened_on}</label> */}
-                  {/* </div> */}
-                {/* </div> */}
-
                 <div className="patient-screening-details-bottom-section">
                   <div className="patient-screening-results-label">
                     <label>Results</label>
                   </div>
 
-                  <div className="patient-screening-results">
+                  <div className="patient-screening-results" style={{padding:'10px 0'}}>
                   {!patientDetails.is_screened && <span style={{color: 'gray', fontSize: '15px'}}>Not available. Patient must be screened first</span>}
-                  {patientDetails.is_screened && <h6>"Description: " + patientDetails.result_description</h6>}
+                  {patientDetails.is_screened && <h6>Description: {patientDetails.result_description}</h6>}
                   </div>
                 </div>
               </div>
