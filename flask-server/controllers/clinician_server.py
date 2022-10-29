@@ -81,15 +81,15 @@ def retrieveData():
                 'is_screened': patient['is_screened']
             }
 
-        for assessment in assessments:
-            if patient['patient_id'] == assessment['patient_id']:
-                is_screened_obj = {
-                    'is_screened': True
-                }
-                obj.update(is_screened_obj)
+            for assessment in assessments:
+                if patient['patient_id'] == assessment['patient_id']:
+                    is_screened_obj = {
+                        'is_screened': True
+                    }
+                    obj.update(is_screened_obj)
 
             patient_record_details.append(obj)
-            
+
     return patient_record_details
     
 def retrievePatientScreeningDetails(id):
