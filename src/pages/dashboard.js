@@ -54,6 +54,7 @@ const Dashboard = () => {
   const checkIfScreened = () => {
     let count = 0;
     patients.map((patient) => (patient.is_screened === true ? count++ : null));
+    // const filteredScreenedPatients = patients.filter(patient =>)
 
     return count > 0 ? true : false;
   };
@@ -61,6 +62,7 @@ const Dashboard = () => {
   const getCategoryCount = (data) => {
     const countCategory = (patients, sadCategory) => {
       const categories = patients.filter((data) => {
+        console.log(data)
         return data.sad_category === sadCategory;
       });
       return categories.length;
@@ -76,9 +78,7 @@ const Dashboard = () => {
   };
 
   const countScreenedPatients = (data) => {
-    let True = 1;
-    const is_screened = data.map((data) => data.is_screened === True);
-
+    const is_screened = data.map((data) => data.is_screened === true);
     return is_screened.filter((data) => data === true);
   };
 
@@ -88,7 +88,7 @@ const Dashboard = () => {
 
   const getScreenedPatients = () => {
     const screenedPatients = patients.filter(patient => patient.is_screened === true)
-
+    
     if(screenedPatients.length > 0){
       return {
         screenedPatients: screenedPatients,
@@ -223,7 +223,7 @@ const Dashboard = () => {
                 )}
                 {patients.length !== 0 &&
                   checkIfScreened() &&
-                  patients.slice(0, 3).map((patient, index) => (
+                  getScreenedPatients().screenedPatients.slice(0, 3).map((patient, index) => (
                     <ListItem
                       key={index}
                       divider={true}
@@ -241,7 +241,7 @@ const Dashboard = () => {
 
                       <div className="screening-information-summary">
                         <div className="screening-information-summary-date">
-                          <h6> {patient.screened_date} </h6>
+                          <h6> {patient.date_taken} </h6>
                         </div>
 
                         <div className="screening-information-summary-time">
@@ -273,7 +273,7 @@ const Dashboard = () => {
             </div>
 
             <div className="graph-container">
-              <DashboardChart sadCategories={sadCategories} />
+              <DashboardChart normal={sadCategories.normal} mild={sadCategories.mild} moderate={sadCategories.moderate} severe={sadCategories.severe} />
             </div>
           </div>
         </div>

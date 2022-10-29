@@ -3,16 +3,17 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const DashboardChart = ({ sadCategories }) => {
+const DashboardChart = ({ normal, mild, moderate, severe }) => {
+  
   const data = {
     labels: ["Normal", "Mild", "Moderate", "Severe"],
     datasets: [
       {
         data: [
-          sadCategories.normal,
-          sadCategories.mild,
-          sadCategories.moderate,
-          sadCategories.severe,
+          normal,
+          mild,
+          moderate,
+          severe,
         ],
         backgroundColor: [
           "rgba(99, 237, 229, 0.6)",

@@ -1,11 +1,11 @@
-import "../public/css/pages/PatientDetails/patientDetails.scss";
-import EditPatientModal from "../components/editPatientModal";
-
-import BreadCrumbs from "../components/BreadCrumbs";
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "../components/Layout";
+
+import BreadCrumbs from "../components/BreadCrumbs";
+import EditPatientModal from "../components/editPatientModal";
+import "../public/css/pages/PatientDetails/patientDetails.scss";
 
 const PatientDetails = () => {
   const { id } = useParams();
@@ -14,73 +14,7 @@ const PatientDetails = () => {
 
   const setData = async (data) => {
     setPatientDetails(data);
-
-    // if(!patientDetails.is_screened){
-    //   console.log('not screened')
-    //   setPatientDetails({...patientDetails, patient_notes: 'Patient not screened'})
-    // }
-
-    // const assessmentDetails = [
-    //   'patient_notes',
-    //   'sad_category',
-    // 'last_edited_by',
-    //   'last_edited_on',
-    //   'responses',
-    //   'date_taken',
-    //   'assessor_id',
-    //   'date_finished',
-    //   'prediction_result',
-    //   'result_description'
-    // ]
-
-    // assessmentDetails.map(detail => {
-    //   // console.log(detail)
-    //   if(patientDetails[detail] === false){
-    //     setPatientDetails({...patientDetails, patient_notes: 'Patient Not Screened'})
-    //     setPatientDetails({...patientDetails, sad_category: 'Patient Not Screened'})
-    //     // setPatientDetails({...patientDetails, last_edited_by: 'Patient Not Screened'})
-    //     setPatientDetails({...patientDetails, last_edited_on: 'Patient Not Screened'})
-    //     setPatientDetails({...patientDetails, responses: 'Patient Not Screened'})
-    //     setPatientDetails({...patientDetails, date_taken: 'Patient Not Screened'})
-    //     setPatientDetails({...patientDetails, assessor_id: 'Patient Not Screened'})
-    //     setPatientDetails({...patientDetails, date_finished: 'Patient Not Screened'})
-    //     setPatientDetails({...patientDetails, prediction_result: 'Patient Not Screened'})
-    //     setPatientDetails({...patientDetails, result_description: 'Patient Not Screened'})
-    //   }
-    //   return true
-    // })
   };
-
-  // const checkIfAssessed = () => {
-  //   const assessmentDetails = [
-  //     'patient_notes',
-  //     'sad_category',
-  //     'last_edited_by',
-  //     'last_edited_on',
-  //     'responses',
-  //     'date_taken',
-  //     'assessor_id',
-  //     'date_finished',
-  //     'prediction_result',
-  //     'result_description'
-  //   ]
-
-  //   assessmentDetails.map(detail => {
-  //     if(patientDetails[detail] === false){
-  //       setPatientDetails({...patientDetails, patient_notes: 'Patient Not Screened'})
-  //       setPatientDetails({...patientDetails, sad_category: 'Patient Not Screened'})
-  //       setPatientDetails({...patientDetails, last_edited_by: 'Patient Not Screened'})
-  //       setPatientDetails({...patientDetails, last_edited_on: 'Patient Not Screened'})
-  //       setPatientDetails({...patientDetails, responses: 'Patient Not Screened'})
-  //       setPatientDetails({...patientDetails, date_taken: 'Patient Not Screened'})
-  //       setPatientDetails({...patientDetails, assessor_id: 'Patient Not Screened'})
-  //       setPatientDetails({...patientDetails, date_finished: 'Patient Not Screened'})
-  //       setPatientDetails({...patientDetails, prediction_result: 'Patient Not Screened'})
-  //       setPatientDetails({...patientDetails, result_description: 'Patient Not Screened'})
-  //     }
-  //     return true
-  //   })
-  // }
 
   const getPatientDetails = () => {
     fetch("/patient-details/id=" + id, {
@@ -97,7 +31,6 @@ const PatientDetails = () => {
 
   useEffect(() => {
     getPatientDetails();
-    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -153,8 +86,8 @@ const PatientDetails = () => {
 
                 <div className="patient-screened-time">
                   <label htmlFor="screened-time">Date Taken</label>
-                  {!patientDetails.is_screened && <span style={{color: 'gray', fontSize: '15px'}}>Not available. Patient must be screened first</span>}
-                  {patientDetails.is_screened && <span>{patientDetails.date_taken}</span>}
+                  {patientDetails.is_screened === false && <span style={{color: 'gray', fontSize: '15px'}}>Not available. Patient must be screened first</span>}
+                  {patientDetails.is_screened === true && <span>{patientDetails.date_taken}</span>}
                 </div>
 
                 <div className="patient-screened-date">
@@ -165,26 +98,14 @@ const PatientDetails = () => {
               </div>
 
               <div className="patient-screening-details">
-                {/* <div className="screening-details-label">
-                  <label htmlFor="screening-details">Screening Details</label>
-                </div> */}
-
-                {/* <div className="patient-screening-details-top-section"> */}
-                  
-
-                  {/* <div className="screened-on"> */}
-                    {/* <label>Screened on: {patientDetails.screened_on}</label> */}
-                  {/* </div> */}
-                {/* </div> */}
-
                 <div className="patient-screening-details-bottom-section">
                   <div className="patient-screening-results-label">
                     <label>Results</label>
                   </div>
 
-                  <div className="patient-screening-results">
+                  <div className="patient-screening-results" style={{padding:'10px 0'}}>
                   {!patientDetails.is_screened && <span style={{color: 'gray', fontSize: '15px'}}>Not available. Patient must be screened first</span>}
-                  {patientDetails.is_screened && <h6>"Description: " + patientDetails.result_description</h6>}
+                  {patientDetails.is_screened && <h6>Description: {patientDetails.result_description}</h6>}
                   </div>
                 </div>
               </div>

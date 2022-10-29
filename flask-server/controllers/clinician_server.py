@@ -80,6 +80,14 @@ def retrieveData():
                 'created_by': patient['created_by'],
                 'is_screened': patient['is_screened']
             }
+
+            for assessment in assessments:
+                if patient['patient_id'] == assessment['patient_id']:
+                    is_screened_obj = {
+                        'is_screened': True
+                    }
+                    obj.update(is_screened_obj)
+
             patient_record_details.append(obj)
 
     return patient_record_details
@@ -102,6 +110,30 @@ def retrievePatientScreeningDetails(id):
     users_query_response = connect.execute(users_query)
 
     users = []
+    assessments = []
+    screening_details = []
+
+    for data in assessment_query_response:
+        obj = {
+            'patient_id': data['patient_id'],
+            'assessor_id': data['assessor_id'],
+            'responses': data['responses'],
+            'date_taken': data['date_taken'],
+            'date_finished': data['date_finished'],
+            'prediction_result': data['prediction_result'],
+            'result_description': data['result_description'],
+        }
+        assessments.append(obj)
+        
+    for data in screening_details_query_response:
+        obj = {
+            'id': data['id'],
+            'patient_notes': data['patient_notes'],
+            'sad_category': data['sad_category'],
+            'last_edited_by': data['last_edited_by'],
+            'last_edited_on': data['last_edited_on'],
+        }
+        screening_details.append(obj)
 
     for data in users_query_response:
         obj = {
@@ -112,6 +144,7 @@ def retrievePatientScreeningDetails(id):
         users.append(obj)
 
     if request.method == 'GET':
+        
         patient_screening_details = []
 
         for data in patients_query_response:
@@ -142,6 +175,13 @@ def retrievePatientScreeningDetails(id):
                 'result_description': False
             }
 
+            for assessment in assessments:
+                if data['id'] == assessment['patient_id']:
+                    is_screened_obj = {
+                        'is_screened': True
+                    }
+                    obj.update(is_screened_obj)
+
             for user_data in users:
                 if user_data['id'] == data['created_by']:
                     user_obj = {
@@ -149,16 +189,16 @@ def retrievePatientScreeningDetails(id):
                     }
                     obj.update(user_obj)
 
-            for screening_data in screening_details_query_response:
-                if data['id'] == screening_data['id']:
+            for screening_data in screening_details:
+                if obj['id'] == screening_data['id']:
                     screening_obj = {
                         'last_edited_on': screening_data['last_edited_on']
                     }
                     obj.update(screening_obj)
 
-            if data['is_screened'] != False:
-                for screening_data in screening_details_query_response:
-                    if screening_data['id'] == data['id']: 
+            if obj['is_screened'] == True:
+                for screening_data in screening_details:
+                    if screening_data['id'] == obj['id']: 
                         screening_obj = {
                             'patient_notes': screening_data['patient_notes'],
                             'sad_category': screening_data['sad_category'],
@@ -167,7 +207,7 @@ def retrievePatientScreeningDetails(id):
                         }
                         obj.update(screening_obj)
                     
-                for assessment_data in assessment_query_response:
+                for assessment_data in assessments:
                     if assessment_data['patient_id'] == data['id']: 
                         assessment_obj = {
                             'responses': assessment_data['responses'],
@@ -176,7 +216,7 @@ def retrievePatientScreeningDetails(id):
                             'date_finished': assessment_data['date_finished'],
                             'prediction_result': assessment_data['prediction_result'],
                             'result_description': assessment_data['result_description']
-                        }
+                        }                        
                         obj.update(assessment_obj)
 
             patient_screening_details.append(obj)        
@@ -233,12 +273,15 @@ def deletePatientRecord(id):
     connect.execute(delete_assessment_query)
     connect.execute(delete_screening_details_query)
     
-    return jsonify(request.get_json())
+    return retrieveData()
 
 def retrieveDashboardContent():
 
     patients_query = select(Patients)
     patients_query_response = connect.execute(patients_query)
+
+    screening_details_query = select(PatientsScreeningDetails)
+    screening_details_query_response = connect.execute(screening_details_query)
 
     assessment_query = select(Assessments)
     assessment_query_response = connect.execute(assessment_query)
@@ -248,7 +291,28 @@ def retrieveDashboardContent():
  
     patients = []
     assessments = []
+    screening_details = []
     dashboard_content = []
+
+    for data in screening_details_query_response:
+        obj = {
+            'id': data['id'],
+            'sad_category': data['sad_category'],
+            'assessment_id': data['assessment_id']
+        }
+        screening_details.append(obj)
+
+    for data in assessment_query_response:
+        obj = {
+            'patient_id': data['patient_id'],
+            'assessor_id': data['assessor_id'],
+            'responses': data['responses'],
+            'date_taken': data['date_taken'],
+            'date_finished': data['date_finished'],
+            'prediction_result': data['prediction_result'],
+            'result_description': data['result_description'],
+        }
+        assessments.append(obj)
 
     for data in patients_query_response:
         obj = {
@@ -256,10 +320,20 @@ def retrieveDashboardContent():
             'fname': data['fname'],
             'lname': data['lname'],
             'created_by': data['created_by'],
-            'is_screened': data['is_screened']
+            'is_screened': data['is_screened'],
+            'date_taken': ''
         }
+
+        for assessment in assessments:
+            if obj['patient_id'] == assessment['patient_id']:
+                is_screened_obj = {
+                    'is_screened': True,
+                    'date_taken': assessment['date_taken']
+                }
+                obj.update(is_screened_obj)
+
         patients.append(obj)
-    
+
     for data in assessment_query_response:
         obj = {
             'patient_id': data['patient_id'],
@@ -270,12 +344,24 @@ def retrieveDashboardContent():
     for data in patients:
         if data['created_by'] == user_id:
             obj = {
-                'patient_id': data['patient_id'],
+                'id': data['patient_id'],
                 'fname': data['fname'],
                 'lname': data['lname'],
                 'created_by': data['created_by'],
-                'is_screened': data['is_screened']
+                'is_screened': data['is_screened'],
+                'date_taken': data['date_taken'],
+                'sad_category': '',
+                'assessment_id': ''
             }
+
+            for screening_data in screening_details:
+                if data['patient_id'] == screening_data['id']:
+                    screening_obj = {
+                        'sad_category': screening_data['sad_category'],
+                        'assessment_id': screening_data['assessment_id']
+                    }
+                    obj.update(screening_obj)
+
             dashboard_content.append(obj)
  
     return dashboard_content
