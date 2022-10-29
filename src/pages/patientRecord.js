@@ -79,7 +79,7 @@ const PatientRecord = () => {
         is_screened: data.is_screened === false ? 'No' : 'Yes',
         action: DeleteIcon,
       };
-      
+      console.log(data.is_screened)
       setPatientRecords((patientRecords) => [...patientRecords, patientRecord]);
     });
   };
