@@ -222,6 +222,7 @@ def retrieveDashboardContent():
     users = []
     patients = []
     assessments = []
+    dashboard_content = []
 
     for data in patients_query_response:
         obj = {
