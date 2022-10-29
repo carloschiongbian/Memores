@@ -169,7 +169,7 @@ const EditPatientModal = ({ patientDetails, getPatientDetails, openModal, setOpe
                 onChange={(e) =>
                   setEditForm({ ...editForm, patient_notes: e.target.value })
                 }
-                placeholder={patientDetails.patient_notes}
+                // placeholder={patientDetails.patient_notes}
               />
 
               {/* <TextField id="screened-time-field" value={editForm.screened} label="Screened Time" placeholder={patientDetails.city} variant="outlined" /> */}
