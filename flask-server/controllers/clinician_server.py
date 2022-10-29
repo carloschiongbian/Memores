@@ -27,23 +27,20 @@ connection = pymysql.connect(
     cursorclass=pymysql.cursors.DictCursor
 )
 
-patients_query = select(Patients)
-patients_query_response = connect.execute(patients_query)
-
-assessment_query = select(Assessments)
-assessment_query_response = connect.execute(assessment_query)
-
-screening_details_query = select(PatientsScreeningDetails)
-screening_details_query_response = connect.execute(screening_details_query)
-
-users_query = select(Users)
-users_query_response = connect.execute(users_query)
-
 def retrieveData():
 
-    user = get_current_user()
-    user_id = user.get_json()['id']
+    patients_query = select(Patients)
+    patients_query_response = connect.execute(patients_query)
 
+    assessment_query = select(Assessments)
+    assessment_query_response = connect.execute(assessment_query)
+
+    users_query = select(Users)
+    users_query_response = connect.execute(users_query)
+
+    user = get_current_user()
+    user_id = user.get_json(force=True)['id']
+ 
     users = []
     patients = []
     assessments = []
@@ -89,6 +86,15 @@ def retrieveData():
     return patient_record_details
     
 def retrievePatientScreeningDetails(id):
+
+    patients_query = select(Patients)
+    patients_query_response = connect.execute(patients_query)
+
+    assessment_query = select(Assessments)
+    assessment_query_response = connect.execute(assessment_query)
+
+    screening_details_query = select(PatientsScreeningDetails)
+    screening_details_query_response = connect.execute(screening_details_query)
 
     if request.method == 'GET':
         patient_screening_details = []
@@ -188,7 +194,7 @@ def deletePatientRecord(id):
     
     # deletion wont reflect right away on the table
     # table component for patient records needs to be re-rendered
-    
+
     delete_patients_query = delete(Patients).where(Patients.id == id)
     delete_assessment_query = delete(Assessments).where(Assessments.patient_id == id)
     delete_screening_details_query = delete(PatientsScreeningDetails).where(PatientsScreeningDetails.id == id)
@@ -200,34 +206,59 @@ def deletePatientRecord(id):
     return jsonify(request.get_json())
 
 def retrieveDashboardContent():
-    # switch to SQLAlchemy
+
     patients_query = select(Patients)
-    screening_details_query = select(PatientsScreeningDetails)
+    patients_query_response = connect.execute(patients_query)
 
-    patients_results = connect.execute(patients_query)
-    screening_details_results = connect.execute(screening_details_query)
+    assessment_query = select(Assessments)
+    assessment_query_response = connect.execute(assessment_query)
+
+    users_query = select(Users)
+    users_query_response = connect.execute(users_query)
+
+    user = get_current_user()
+    user_id = user.get_json(force=True)
+ 
+    users = []
     patients = []
-    screening_details = []
-    dashboard_content = []
+    assessments = []
 
-    for data in patients_results:
+    for data in patients_query_response:
         obj = {
-            'id': data['id'],
+            'patient_id': data['id'],
             'fname': data['fname'],
             'lname': data['lname'],
+            'created_by': data['created_by'],
+            'is_screened': data['is_screened']
         }
         patients.append(obj)
-
-    for data in screening_details_results:
+    
+    for data in assessment_query_response:
         obj = {
-            'sad_category': data['sad_category'],
+            'patient_id': data['patient_id'],
+            'assessor_id': data['assessor_id']
         }
-        screening_details.append(obj)
+        assessments.append(obj)
 
-    dashboard_content.append(patients)
-    dashboard_content.append(screening_details)
+    for data in users_query_response:
+        obj = {
+            'id': data['id'],
+            'username': data['uname']
+        }
+        users.append(obj)
 
-    return jsonify(dashboard_content)
+    for data in patients:
+        if data['created_by'] == user_id:
+            obj = {
+                'patient_id': data['patient_id'],
+                'fname': data['fname'],
+                'lname': data['lname'],
+                'created_by': data['created_by'],
+                'is_screened': data['is_screened']
+            }
+            dashboard_content.append(obj)
+    
+    return dashboard_content
         
 if __name__ == "__main__":
     app.run(debug=True)

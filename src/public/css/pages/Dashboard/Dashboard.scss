@@ -4,6 +4,7 @@
   .dashboard {
     background-image: linear-gradient(to right, #8860d0, #a79bff);
     border-radius: 7px;
+    height: 100%;
 
     .top-section {
       display: grid;
@@ -72,6 +73,7 @@
       padding-bottom: 20px;
       margin: 0 20px 90px 20px;
       grid-template-columns: 1fr 1fr;
+      height: 100%;
 
       .patients-list-container {
         padding: 0;
