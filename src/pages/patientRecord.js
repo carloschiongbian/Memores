@@ -56,11 +56,11 @@ const PatientRecord = () => {
             }}
           >
             <FindInPageIcon
-              style={{ color: "#8860D0" }}
+              style={{ color: "#8860D0", cursor: 'pointer' }}
               onClick={() => handleRecordAction(cell.row, recordActions.EDIT)}
             />
             <DeleteIcon
-              style={{ color: "red" }}
+              style={{ color: "red", cursor: 'pointer' }}
               onClick={() => handleRecordAction(cell.row, recordActions.DELETE)}
             />
           </Box>

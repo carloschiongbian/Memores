@@ -14,6 +14,7 @@
       padding: 20px 20px 10px 20px;
 
       .number-of-patients-container {
+        cursor: pointer;
         background-color: white;
         display: flex;
         flex-direction: column;
@@ -25,6 +26,7 @@
       }
 
       .number-of-patients-screened-container {
+        cursor: pointer;
         background-color: white;
         display: flex;
         flex-direction: column;

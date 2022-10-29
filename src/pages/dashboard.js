@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { List, ListItem, Skeleton } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import HealingIcon from "@mui/icons-material/Healing";
 import GroupIcon from "@mui/icons-material/Group";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 
 import Layout from "../components/Layout";
+import CommonModal from "../components/modal/CommonModal";
 import "../public/css/pages/Dashboard/Dashboard.scss";
 import DashboardChart from "../components/dashboard/DashboardChart.js";
 
@@ -26,8 +28,10 @@ const Dashboard = () => {
     severe: 0,
   });
   const [patients, setPatients] = useState([]);
+  const [openScreenedModal, setOpenScreenedModal] = useState(false);
 
-  let path = "../patient-details/id=";
+  let patientRecordsPath = "../patient-records";
+  let patientDetailsPath = "../patient-details/id=";
 
   const getDashboardData = () => {
     fetch("/dashboard", {
@@ -47,7 +51,7 @@ const Dashboard = () => {
     getCategoryCount(data);
   };
 
-  const checkIfScreened = (data) => {
+  const checkIfScreened = () => {
     let count = 0;
     patients.map((patient) => (patient.is_screened === true ? count++ : null));
 
@@ -78,6 +82,26 @@ const Dashboard = () => {
     return is_screened.filter((data) => data === true);
   };
 
+  const handleModal = () => {
+    setOpenScreenedModal(!openScreenedModal ? true : false);
+  };
+
+  const getScreenedPatients = () => {
+    const screenedPatients = patients.filter(patient => patient.is_screened === true)
+
+    if(screenedPatients.length > 0){
+      return {
+        screenedPatients: screenedPatients,
+        hasScreened: true
+      } 
+    } else {
+      return{
+        empty_message: 'No patients were screened yet',
+        hasScreened: false
+      }
+    }
+  }
+
   useEffect(() => {
     getDashboardData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -88,20 +112,54 @@ const Dashboard = () => {
       <div className="dashboard-container">
         <div className="dashboard">
           <div className="top-section">
-            <div className="number-of-patients-container">
+            <div
+              className="number-of-patients-container"
+              onClick={() => navigate(patientRecordsPath)}
+            >
               <h4>
                 <GroupIcon /> Patients
               </h4>
               <h1>{patients.length}</h1>
             </div>
 
-            <div className="number-of-patients-screened-container">
+            <div
+              onClick={() => handleModal()}
+              className="number-of-patients-screened-container"
+            >
               <h4>
                 <MedicalServicesIcon /> Screened
               </h4>
-              <h1>
-                {countScreenedPatients(patients).length}
-              </h1>
+              <h1>{countScreenedPatients(patients).length}</h1>
+
+              <CommonModal
+                dialogTitle="Your Screened Patients"
+                btnPrimaryText='Okay'
+                width='800'
+                handleSubmit={handleModal}
+                openModal={openScreenedModal}
+                handleClose={handleModal}
+              >
+                {
+                  getScreenedPatients().hasScreened &&
+                  getScreenedPatients().screenedPatients.map((patient, index) => (
+                    <ListItem
+                      key={index}
+                      divider={true}
+                      button={true}
+                      onClick={() => {
+                        navigate(patientDetailsPath + patient.id);
+                      }}
+                      className="patient-information-item"
+                    >
+                      <div className="patient-name">
+                        <h5> {patient.fname + " " + patient.lname} </h5>
+                      </div>
+                    </ListItem>
+                  ))}
+                {!getScreenedPatients().hasScreened &&
+                  <span style={{color: 'gray', fontSize: '15px'}}>{getScreenedPatients().empty_message}</span>
+                }
+              </CommonModal>
             </div>
 
             <div className="average-time-duration-of-screening-container">
@@ -140,7 +198,6 @@ const Dashboard = () => {
               <List className="patients-list-container">
                 <ListItem divider={true} className="patient-list-header">
                   <h5>Recently Screened Patients</h5>
-
                   <h6>
                     <Link
                       to="/patient-records"
@@ -156,6 +213,7 @@ const Dashboard = () => {
                       margin: 0,
                       display: "flex",
                       flexDirection: "column",
+                      alignItems: "center",
                     }}
                   >
                     <Skeleton height={100} width={"100%"} />
@@ -171,7 +229,7 @@ const Dashboard = () => {
                       divider={true}
                       button={true}
                       onClick={() => {
-                        navigate(path + patient.id);
+                        navigate(patientDetailsPath + patient.id);
                       }}
                       className="patient-information-item"
                     >
@@ -192,17 +250,23 @@ const Dashboard = () => {
                       </div>
                     </ListItem>
                   ))}
-                ,
+
                 {patients.length !== 0 && !checkIfScreened() && (
                   <div
                     className="no-data"
                     style={{
-                      textAlign: "center",
-                      backgroundColor: "white",
-                      padding: "100px 0 0 0",
+                      display: "flex",
+                      columnGap: "10px",
+                      padding: "100px 0",
+                      lineHeight: "normal",
+                      flexDirection: "row",
+                      justifyContent: "center",
                     }}
                   >
-                    <h6>No patients have been screened</h6>
+                    <HealingIcon style={{ float: "left" }} />
+                    <h6 style={{ color: "gray" }}>
+                      None of your patients have been screened yet
+                    </h6>
                   </div>
                 )}
               </List>
