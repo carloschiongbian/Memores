@@ -118,9 +118,6 @@ const PatientRecord = () => {
     fetch("/patient-records/delete/id=" + parseInt(getRecord.original.id), {
       method: "DELETE",
     })
-    .then((response) => response.json())
-    .then((response) => console.log(response))
-    .catch((error) => console.log(error));
 
     const newArr = patientRecords.filter(
       (record) => record.id !== getRecord.original.id
