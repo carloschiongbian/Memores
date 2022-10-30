@@ -33,10 +33,12 @@ const CommonModal = ({
         {dialogTitle}
       </DialogTitle>
       <DialogContent>{children}</DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit}>{btnPrimaryTxt}</Button>
-      </DialogActions>
+      {handleClose && handleSubmit && (
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleSubmit}>{btnPrimaryTxt}</Button>
+        </DialogActions>
+      )}
     </Dialog>
   );
 };

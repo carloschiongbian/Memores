@@ -1,4 +1,7 @@
 # input "python server.py" to run the flask server
+from controllers.manage import update_user_account, get_user_account, delete_user_account, get_user_view, get_dashboard_data, get_deleted_users, get_updated_users, get_distinct_roles, get_general_users
+from controllers.screening import get_questions, submit_answers
+from controllers import get_users, login, register_user, get_current_user, logout, clinician_server
 import os
 from flask import Flask
 from flask_bcrypt import Bcrypt
@@ -9,7 +12,7 @@ from connection.connection import db, ma
 from routes.routes import *
 from dotenv import load_dotenv
 from flask_cors import CORS
-import redis 
+import redis
 from flask_session import Session
 
 UPLOAD_FOLDER = 'uploads'
@@ -19,14 +22,18 @@ load_dotenv(dotenv_path)
 
 # Init app
 app = Flask(__name__)
-CORS(app, supports_credentials=True) # allows Cross-Origin Resource Sharing
+CORS(app, supports_credentials=True)  # allows Cross-Origin Resource Sharing
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # SESSION CONFIGURATION USING REDIS FOR SERVER-SIDE AUTHENTICATION/ PERSIST DATA SERVER SIDE
 app.config['SESSION_TYPE'] = 'redis'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_REDIS'] = redis.from_url("redis://127.0.0.1:6379")
+
 
 # Secret Key
 # NOTE: I am not sure what this is for
@@ -36,10 +43,12 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 # syntax: 'mysql://username:password@localhost/db_name'
 # NOTE: These credentials need to be inside the .env file
 #           Create your own .env file
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQL_ALCHEMY_DATABASE_URI')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    'SQL_ALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.environ.get(
+    'SQLALCHEMY_TRACK_MODIFICATIONS')
 
-#init Session
+# init Session
 server_session = Session(app)
 
 # Init bcrypt
@@ -62,43 +71,68 @@ app.add_url_rule('<URL>', '<NICKNAME>', <FUNCTION_NAME>, methods = ["GET", "POST
     WHERE:
             <URL> - URL of the API Route -> can be found inside /routes/routes.py
 """
-from controllers import get_users, login, register_user, get_current_user, logout, clinician_server
-from controllers.screening import get_questions, submit_answers
-from controllers.manage import update_user_account, get_user_account, delete_user_account
 # Get Users
-app.add_url_rule(GET_USERS, 'get_users', get_users.get_users, methods = ['GET'])
+app.add_url_rule(GET_USERS, 'get_users', get_users.get_users, methods=['GET'])
 # Assessment Questions
-app.add_url_rule(QUESTIONS, 'questions', get_questions.get_questions, methods = ['GET'])
+app.add_url_rule(QUESTIONS, 'questions',
+                 get_questions.get_questions, methods=['GET'])
 # Submit answers
-app.add_url_rule(SUBMIT_ANSWERS, 'submit_answers', submit_answers.submit_answers, methods = ['POST'])
-#add_user
-app.add_url_rule(ADD_USER, 'register_user', register_user.register_user, methods = ['POST'])
-#login
-app.add_url_rule(LOGIN, 'login', login.login, methods = ['POST'])
-#get current authenticated user
-app.add_url_rule(CURRENT_USER, 'get_current_user', get_current_user.get_current_user, methods = ['GET'])
-#logout
-app.add_url_rule(LOGOUT, 'logout', logout.logout_user, methods = ['POST'])
-#Get Patient Records
-app.add_url_rule(PATIENT_RECORDS, 'patient_records', clinician_server.retrieveData, methods = ['GET'])
-#Delete Patient Record
-app.add_url_rule(DELETE_PATIENT_RECORD, 'delete_patient_record', clinician_server.deletePatientRecord, methods = ['DELETE'])
-#Get Patient Details
-app.add_url_rule(PATIENT_DETAILS, 'patient_details', clinician_server.retrievePatientScreeningDetails, methods = ['GET'])
-#Update Patient Details
-app.add_url_rule(PATIENT_DETAILS, 'patient_details', clinician_server.retrievePatientScreeningDetails, methods = ['PUT'])
-#Get Dashboard Data
-app.add_url_rule(DASHBOARD, 'dashboard', clinician_server.retrieveDashboardContent, methods = ['GET'])
+app.add_url_rule(SUBMIT_ANSWERS, 'submit_answers',
+                 submit_answers.submit_answers, methods=['POST'])
+# add_user
+app.add_url_rule(ADD_USER, 'register_user',
+                 register_user.register_user, methods=['POST'])
+# login
+app.add_url_rule(LOGIN, 'login', login.login, methods=['POST'])
+# get current authenticated user
+app.add_url_rule(CURRENT_USER, 'get_current_user',
+                 get_current_user.get_current_user, methods=['GET'])
+# logout
+app.add_url_rule(LOGOUT, 'logout', logout.logout_user, methods=['POST'])
+# Get Patient Records
+app.add_url_rule(PATIENT_RECORDS, 'patient_records',
+                 clinician_server.retrieveData, methods=['GET'])
+# Delete Patient Record
+app.add_url_rule(DELETE_PATIENT_RECORD, 'delete_patient_record',
+                 clinician_server.deletePatientRecord, methods=['DELETE'])
+# Get Patient Details
+app.add_url_rule(PATIENT_DETAILS, 'patient_details',
+                 clinician_server.retrievePatientScreeningDetails, methods=['GET'])
+# Update Patient Details
+app.add_url_rule(PATIENT_DETAILS, 'patient_details',
+                 clinician_server.retrievePatientScreeningDetails, methods=['PUT'])
+# Get Dashboard Data
+app.add_url_rule(DASHBOARD, 'dashboard',
+                 clinician_server.retrieveDashboardContent, methods=['GET'])
 
 
-#update user
-app.add_url_rule(UPDATE_USER_ACCOUNT, 'update_user', update_user_account.update_user_by_admin, methods = ['PUT'])
-#get user account by id
-app.add_url_rule(GET_USER_ACCOUNT_DETAILS, 'get_user_account', get_user_account.get_user_account_details, methods = ['GET'])
-#delete user(soft)
-app.add_url_rule(DELETE_USER, 'delete_user', delete_user_account.delete_user_account, methods = ['PUT'])
-
-
+# update user
+app.add_url_rule(UPDATE_USER_ACCOUNT, 'update_user',
+                 update_user_account.update_user_by_admin, methods=['PUT'])
+# get user account by id
+app.add_url_rule(GET_USER_ACCOUNT_DETAILS, 'get_user_account',
+                 get_user_account.get_user_account_details, methods=['GET'])
+# delete user(soft)
+app.add_url_rule(DELETE_USER, 'delete_user',
+                 delete_user_account.delete_user_account, methods=['PUT'])
+# get user account by id for viewing
+app.add_url_rule(GET_USER_VIEW, 'get_user_view',
+                 get_user_view.get_user_account_view, methods=['GET'])
+# get admin dashboard data
+app.add_url_rule(GET_DASHBOARD_DATA, 'get_dashboard_data',
+                 get_dashboard_data.get_dashboard_data, methods=['GET'])
+# get deleted users
+app.add_url_rule(GET_DELETED_USERS, 'get_deleted_users',
+                 get_deleted_users.get_deleted_users, methods=['GET'])
+# get updated users
+app.add_url_rule(GET_UPDATED_USERS, 'get_updated_users',
+                 get_updated_users.get_updated_users, methods=['GET'])
+# get distinct roles
+app.add_url_rule(GET_DISTINCT_ROLES, 'get_distinct_roles',
+                 get_distinct_roles.get_distinct_roles, methods=['GET'])
+# get general users
+app.add_url_rule(GET_GENERAL_USERS, 'get_general_users',
+                 get_general_users.get_general_users, methods=['GET'])
 # To create database tables inside the database,
 # run the command: python server.py --create-db
 if len(sys.argv) > 1 and sys.argv[1] == "--create-db":

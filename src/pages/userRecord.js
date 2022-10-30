@@ -6,97 +6,46 @@ import Api from "../services/api";
 import dayjs from "dayjs";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Box, IconButton, TextField, Snackbar, Alert } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import CommonModal from "../components/modal/CommonModal";
 import CreateUser from "./createUser";
-
-const schema = yup.object({
-  id: yup.number().required(),
-  uname: yup.string().required(),
-  npwd: yup.string(),
-  cnpwd: yup.string().oneOf([yup.ref("npwd")], "Passwords do not match"),
-});
+import UserPage from "./userPage";
+import {
+  createUserSchemaValidation,
+  updateAccountSchemaValidation,
+  updateClinicianSchemaValidation,
+} from "../validation/manageValidation";
 
 // const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
-const createUserSchemaValidation = yup
-  .object({
-    profile: yup
-      .mixed()
-      .test("required", "Profile photo is required", (file) =>
-        file.length ? true : false
-      )
-      .test("fileSize", "The file is too large", (file) => {
-        if (file.length) {
-          return file[0].size > 2000000 ? false : true;
-        }
-      })
-      .nullable(),
-    img: yup
-      .mixed()
-      .test("required", "License photo is required", (file) =>
-        file.length ? true : false
-      )
-      .test("fileSize", "The file is too large", (file) => {
-        if (file.length) {
-          return file[0].size > 2000000 ? false : true;
-        }
-      })
-      .nullable(),
-    license: yup.string().required(),
-    firstname: yup
-      .string()
-      .min(2)
-      .max(25)
-      .matches("^[A-Za-z ]*$", {
-        message: "Special characters is not allowed",
-        excludeEmptyString: true,
-      })
-      .required(),
-    lastname: yup
-      .string()
-      .min(2)
-      .max(25)
-      .matches("^[A-Za-z ]*$", {
-        message: "Special characters is not allowed",
-        excludeEmptyString: true,
-      })
-      .required(),
-    email: yup.string().email().required(),
-    contact: yup
-      .string()
-      .matches("^[0-9 -]*$", {
-        message: "number, dash and spaces only",
-        excludeEmptyString: true,
-      })
-      .required(),
-    birthday: yup.date().required(),
-    gender: yup.string().required(),
-    username: yup.string().required(),
-    password: yup.string().min(4).max(12).required(),
-    confirm: yup
-      .string()
-      .min(4)
-      .max(12)
-      .oneOf([yup.ref("password")], "Passwords do not match")
-      .required(),
-    address: yup.string().required(),
-    city: yup.string().required(),
-    country: yup.string().required(),
-    zipcode: yup.string().required(),
-  })
-  .required();
 
 const UserRecord = () => {
   const [data, setData] = useState([]);
+  const [imagePreview, setImagePreview] = useState({});
   const [loading, setLoading] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [userDataForEdit, setUserDataForEdit] = useState({
     id: "",
     uname: "",
     npwd: "",
     cnpwd: "",
+  });
+  const [userDataForView, setUserDataForView] = useState({
+    profile: "",
+    img: "",
+    license: "",
+    firstname: "",
+    lastname: "",
+    email: "",
+    contact: "",
+    birthday: "",
+    gender: "",
+    address: "",
+    city: "",
+    country: "",
+    zipcode: "",
   });
   const [responseMessage, setResponseMessage] = useState({});
   const [openSnackbar, setOpenSnackbar] = useState({
@@ -107,6 +56,7 @@ const UserRecord = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState("");
   const { open } = openSnackbar;
   const handleCloseSnackbar = () => {
@@ -142,8 +92,36 @@ const UserRecord = () => {
     },
   });
 
-  const onSubmitCreateUser = async (data) => {
+  const {
+    register: registerForm2,
+    handleSubmit: handleSubmitForm2,
+    control: controlForm2,
+    reset: resetForm2,
+    formState: { errors: errorsForm2 },
+  } = useForm({
+    resolver: yupResolver(updateClinicianSchemaValidation),
+    defaultValues: userDataForView,
+  });
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(updateAccountSchemaValidation),
+    defaultValues: userDataForEdit,
+  });
+  const { inputRefForId, ...inputPropsForId } = register("id");
+  const { inputRefForUserName, ...inputPropsForUserName } = register("uname");
+  const { inputRefForPassword, ...inputPropsForPassword } = register("npwd");
+  const { inputRefForConfirm, ...inputPropsForConFirm } = register("cnpwd");
+
+  const onSubmitUpdateUser = async (data) => {
     console.log(data);
+  };
+
+  const onSubmitCreateUser = async (data) => {
     let formData = new FormData();
     formData.append("img", data.img[0]);
     formData.append("profile", data.profile[0]);
@@ -158,17 +136,18 @@ const UserRecord = () => {
     }
 
     try {
-      const response = await fetch("/api/add-user", {
-        method: "POST",
-        body: formData,
+      const response = await Api().post("/add-user", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
-      const data = await response.json();
-      console.log(response);
+
       if (response.ok || response.status === 200) {
+        setData(response.data);
         setIsCreateModalOpen(false);
         setResponseMessage({
           status: "success",
-          message: "Create Successfully",
+          message: "Created Successfully",
         });
         setOpenSnackbar({ open: true });
       }
@@ -184,30 +163,33 @@ const UserRecord = () => {
       setOpenSnackbar({ open: true });
     }
   };
+  const getUserAccountForView = async (id) => {
+    const response = await Api().get("/get-user-view", {
+      params: { id: id },
+    });
+    setUserDataForView(response.data);
+    setIsLoaded(true);
+    // const url = URL.createObjectURL(response.data.img);
+    // console.log(dayjs(response.data.birthday).toISOString());
+    setImagePreview({ profile: response.data.profile, img: response.data.img });
+    resetForm2({
+      ...response.data,
+      birthday: dayjs(response.data.birthday).format("YYYY-MM-DD"),
+    });
+  };
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: userDataForEdit,
-  });
-  const { inputRefForId, ...inputPropsForId } = register("id");
-  const { inputRefForUserName, ...inputPropsForUserName } = register("uname");
-  const { inputRefForPassword, ...inputPropsForPassword } = register("npwd");
-  const { inputRefForConfirm, ...inputPropsForConFirm } = register("cnpwd");
+  const handleOpenViewModal = (id) => {
+    getUserAccountForView(id);
+    setIsViewModalOpen(true);
+  };
 
   const handleClickOpen = (id) => {
     getUserAccountById(id);
-    setTimeout(() => {
-      setIsEditModalOpen(true);
-    }, 500);
+    setIsEditModalOpen(true);
   };
 
   const handleClose = () => {
+    setIsLoaded(false);
     setIsEditModalOpen(false);
   };
 
@@ -222,6 +204,7 @@ const UserRecord = () => {
       params: { id: id },
     });
     setUserDataForEdit({ ...response.data[0], ...emptyField });
+    setIsLoaded(true);
     reset({ ...response.data[0], ...emptyField });
   };
 
@@ -301,6 +284,9 @@ const UserRecord = () => {
         Cell: ({ cell }) => {
           return (
             <Box sx={{ display: "flex", gap: "1rem" }}>
+              <IconButton onClick={() => handleOpenViewModal(cell.getValue())}>
+                <VisibilityIcon color="primary" />
+              </IconButton>
               <IconButton onClick={() => handleClickOpen(cell.getValue())}>
                 <EditIcon color="warning" />
               </IconButton>
@@ -322,7 +308,6 @@ const UserRecord = () => {
   const onSubmitEditUser = async (data) => {
     try {
       const response = await Api().put("/update-user", data);
-      console.log(response.data[0]);
       if (response.status === 200) {
         reset();
         // setData(data.map(d =>d.id !== response.data[0].id ? d: response.data[0]))
@@ -477,6 +462,23 @@ const UserRecord = () => {
             errors={errorsForm1}
             control={controlForm1}
             setValueForm1={setValueForm1}
+          />
+        </CommonModal>
+        <CommonModal
+          width={"lg"}
+          dialogTitle={"User Details"}
+          openModal={isViewModalOpen}
+          textAlign={"center"}
+          handleClose={() => setIsViewModalOpen(false)}
+          // handleSubmit={setIsViewModalOpen}
+          btnPrimaryTxt={"Update"}
+        >
+          <UserPage
+            register={registerForm2}
+            reset={() => resetForm2(userDataForView)}
+            errors={errorsForm2}
+            handleSubmit={handleSubmitForm2(onSubmitUpdateUser)}
+            imagePreview={imagePreview}
           />
         </CommonModal>
         <Snackbar

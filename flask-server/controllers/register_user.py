@@ -1,6 +1,6 @@
 from flask import request, session
 from flask.json import jsonify
-from models.users import Users
+from models.users import Users, users_schema
 from flask import current_app as app
 from werkzeug.utils import secure_filename
 import pymysql
@@ -12,12 +12,14 @@ from flask_bcrypt import generate_password_hash, check_password_hash
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 def register_user():
-     # Store form data values to variable.
+    # Store form data values to variable.
     fname = request.form['firstname']
     lname = request.form['lastname']
     email = request.form['email']
@@ -33,18 +35,19 @@ def register_user():
     country = request.form['country']
     zipcode = request.form['zipcode']
 
-    #Check if session exist
+    # Check if session exist
     user_id = session.get("user_id")
     if not user_id:
         return jsonify({"error": "Unauthorized"}), 401
-    
-    #Check if role is admin
-    user = Users.query.filter_by(id = user_id).first()
+
+    # Check if role is admin
+    user = Users.query.filter_by(id=user_id).first()
     if user.role != "admin":
         return jsonify({"error": "Unauthorized"}), 401
 
-    #Check if username or email exist in the database
-    user_exist = Users.query.filter_by(uname = uname, email = email).first() is not None
+    # Check if username or email exist in the database
+    user_exist = Users.query.filter_by(
+        uname=uname, email=email).first() is not None
     if user_exist:
         return jsonify({"error": "Username or email already exist!"}), 409
 
@@ -54,7 +57,6 @@ def register_user():
     if check_password_hash(hashed_password, confirm) is False:
         return jsonify({"error": "Password and confirmed password are not match"}), 400
 
-    
     # check if profile picture is empty
     file = request.files['profile']
     if 'profile' not in request.files or file.filename == '':
@@ -78,13 +80,15 @@ def register_user():
             file.save(filepath)
             try:
                 binaryLicense = license_file.read()
-                 # Finally, Insert new user in mysql
-                new_user = Users( uname = uname, pwd = hashed_password, fname = fname, lname = lname, email = email, phone = contact, bday = bday, gender = gender, photo = filepath, license = binaryLicense, license_id = license, street = addr, city = city, country = country, zip = zipcode  )
+                # Finally, Insert new user in mysql
+                new_user = Users(uname=uname, pwd=hashed_password, fname=fname, lname=lname, email=email, phone=contact, bday=bday, gender=gender,
+                                 photo=filepath, license=binaryLicense, license_id=license, street=addr, city=city, country=country, zip=zipcode)
                 db.session.add(new_user)
                 db.session.commit()
             except pymysql.Error as e:
                 print("could not close connection error pymysql %d: %s" %
                       (e.args[0], e.args[1]))
 
-
-    return jsonify({"success": "Registered Successfully"}), 200
+    users = Users.query.filter_by(role='user', is_deleted=0).with_entities(
+        Users.id, Users.uname, Users.fname, Users.lname, Users.role, Users.email, Users.created_at)
+    return users_schema.jsonify(users)
