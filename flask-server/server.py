@@ -1,6 +1,6 @@
 # input "python server.py" to run the flask server
 from controllers.manage import update_user_account, get_user_account, delete_user_account, get_user_view, get_dashboard_data, get_deleted_users, get_updated_users, get_distinct_roles, get_general_users, update_user_photo_details, update_user_license_details, update_user_both_image, update_user_details_only
-from controllers.screening import get_questions, submit_answers
+from controllers.screening import get_questions, submit_answers, get_patients
 from controllers import get_users, login, register_user, get_current_user, logout, clinician_server
 import os
 from flask import Flask
@@ -79,6 +79,9 @@ app.add_url_rule(QUESTIONS, 'questions',
 # Submit answers
 app.add_url_rule(SUBMIT_ANSWERS, 'submit_answers',
                  submit_answers.submit_answers, methods=['POST'])
+# Get Patient Details for screening
+app.add_url_rule(GET_PATIENTS, 'get_patients',
+                 get_patients.get_patients, methods=['GET'])
 # add_user
 app.add_url_rule(ADD_USER, 'register_user',
                  register_user.register_user, methods=['POST'])
@@ -153,7 +156,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "--create-db":
     We need to import the models so that db.create_all() knows which 
     database model we are trying to create.
     """
-    from models import assessment_questions, assessment_responses, assessments, options, patient_screening_details, patients, questions, responses, users
+    from models import assessments, patient_screening_details, patients, questions, users
     with app.app_context():
         db.create_all()
 

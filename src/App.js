@@ -57,7 +57,7 @@ const App = () => {
             <Route
               path={routes.user.SCREENING}
               element={
-                <UserRoute>
+                <UserRoute isLoading={loading}>
                   <ScreeningPage />
                 </UserRoute>
               }
@@ -65,7 +65,7 @@ const App = () => {
             <Route
               path={routes.user.DASHBOARD}
               element={
-                <UserRoute>
+                <UserRoute isLoading={loading}>
                   <Dashboard />
                 </UserRoute>
               }
@@ -73,7 +73,7 @@ const App = () => {
             <Route
               path={routes.user.PATIENT_RECORDS}
               element={
-                <UserRoute>
+                <UserRoute isLoading={loading}>
                   <PatientRecord />
                 </UserRoute>
               }
@@ -81,7 +81,7 @@ const App = () => {
             <Route
               path={routes.user.PATIENT_DETAILS}
               element={
-                <UserRoute>
+                <UserRoute isLoading={loading}>
                   <PatientDetails />
                 </UserRoute>
               }

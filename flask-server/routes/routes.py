@@ -13,6 +13,7 @@ ROUTE FORMAT SAMPLE:
 
 GET_USERS = "/api/get-users"
 QUESTIONS = "/api/get-assessment-questions"
+GET_PATIENTS = "/api/get-patients"
 ADD_USER = "/api/add-user"
 LOGIN = "/api/login"
 CURRENT_USER = "/api/@me"
