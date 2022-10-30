@@ -2,7 +2,14 @@ import "../public/css/pages/UserPage/index.css";
 import { useState } from "react";
 import countriesSelect from "../components/countriesSelect";
 
-const UserPage = ({ register, handleSubmit, reset, errors, imagePreview }) => {
+const UserPage = ({
+  register,
+  handleSubmit,
+  reset,
+  errors,
+  imagePreview,
+  setImagePreview,
+}) => {
   const [isEdittable, setIsEdittable] = useState(false);
 
   const handleDiscardChanges = () => {
@@ -96,6 +103,21 @@ const UserPage = ({ register, handleSubmit, reset, errors, imagePreview }) => {
                         type="file"
                         name="profile"
                         accept="image/*"
+                        onChange={(e) => {
+                          if (e.target.files) {
+                            let reader = new FileReader();
+                            reader.onload = (e) => {
+                              setImagePreview({
+                                ...imagePreview,
+                                profile: e.target.result.replace(
+                                  /^data:image\/[a-z]+;base64,/,
+                                  ""
+                                ),
+                              });
+                            };
+                            reader.readAsDataURL(e.target.files[0]);
+                          }
+                        }}
                       />
                       <label>
                         <i
@@ -136,6 +158,21 @@ const UserPage = ({ register, handleSubmit, reset, errors, imagePreview }) => {
                         type="file"
                         name="img"
                         accept="image/*"
+                        onChange={(e) => {
+                          if (e.target.files) {
+                            let reader = new FileReader();
+                            reader.onload = (e) => {
+                              setImagePreview({
+                                ...imagePreview,
+                                img: e.target.result.replace(
+                                  /^data:image\/[a-z]+;base64,/,
+                                  ""
+                                ),
+                              });
+                            };
+                            reader.readAsDataURL(e.target.files[0]);
+                          }
+                        }}
                       />
                       <label>
                         <i
@@ -147,6 +184,20 @@ const UserPage = ({ register, handleSubmit, reset, errors, imagePreview }) => {
                     </div>
                   </div>
                 </div>
+              </div>
+              <div className="mb-3">
+                <input
+                  {...register("id")}
+                  name="id"
+                  type="number"
+                  className="form-control"
+                  id="id-number"
+                  readOnly={!isEdittable}
+                  hidden
+                />
+                {errors.id && (
+                  <span className="text-danger">{errors.id.message}</span>
+                )}
               </div>
               <div className="mb-3">
                 <label htmlFor="license-number" className="form-label">

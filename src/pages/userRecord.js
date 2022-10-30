@@ -33,6 +33,7 @@ const UserRecord = () => {
     cnpwd: "",
   });
   const [userDataForView, setUserDataForView] = useState({
+    id: "",
     profile: "",
     img: "",
     license: "",
@@ -119,6 +120,142 @@ const UserRecord = () => {
 
   const onSubmitUpdateUser = async (data) => {
     console.log(data);
+    console.log(data.profile[0] instanceof File);
+    console.log(data.img[0] instanceof File);
+
+    if (data.img[0] instanceof File && data.profile[0] instanceof File) {
+      console.log("Upload both!");
+      let formData = new FormData();
+      formData.append("profile", data.profile[0]);
+      formData.append("img", data.img[0]);
+      for (let key in data) {
+        if (key === "birthday") {
+          const formatted_date = dayjs(data[key]).format("YYYY-MM-DD");
+          formData.append(key, formatted_date);
+        } else {
+          formData.append(key, data[key]);
+        }
+      }
+      try {
+        const response = await Api().put("/update-both-image", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log(response);
+
+        if (response.ok || response.status === 200) {
+          setData(response.data);
+          setIsViewModalOpen(false);
+          setResponseMessage({
+            status: "success",
+            message: "Updated Successfully",
+          });
+          setOpenSnackbar({ open: true });
+        }
+      } catch (error) {
+        setResponseMessage({
+          status: "error",
+          message: "Something went wrong, try again!",
+        });
+        setOpenSnackbar({ open: true });
+      }
+    } else if (data.img[0] instanceof File) {
+      console.log("update with image here");
+      let formData = new FormData();
+      formData.append("img", data.img[0]);
+      for (let key in data) {
+        if (key === "birthday") {
+          const formatted_date = dayjs(data[key]).format("YYYY-MM-DD");
+          formData.append(key, formatted_date);
+        } else {
+          formData.append(key, data[key]);
+        }
+      }
+      try {
+        const response = await Api().put("/update-user-and-license", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log(response);
+
+        if (response.ok || response.status === 200) {
+          setData(response.data);
+          setIsViewModalOpen(false);
+          setResponseMessage({
+            status: "success",
+            message: "Updated Successfully",
+          });
+          setOpenSnackbar({ open: true });
+        }
+      } catch (error) {
+        setResponseMessage({
+          status: "error",
+          message: "Something went wrong, try again!",
+        });
+        setOpenSnackbar({ open: true });
+      }
+    } else if (data.profile[0] instanceof File) {
+      console.log("upload new profile file here");
+      let formData = new FormData();
+      formData.append("profile", data.profile[0]);
+      for (let key in data) {
+        if (key === "birthday") {
+          const formatted_date = dayjs(data[key]).format("YYYY-MM-DD");
+          formData.append(key, formatted_date);
+        } else {
+          formData.append(key, data[key]);
+        }
+      }
+
+      try {
+        const response = await Api().put("/update-user-and-photo", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log(response);
+
+        if (response.ok || response.status === 200) {
+          setData(response.data);
+          setIsViewModalOpen(false);
+          setResponseMessage({
+            status: "success",
+            message: "Updated Successfully",
+          });
+          setOpenSnackbar({ open: true });
+        }
+      } catch (error) {
+        setResponseMessage({
+          status: "error",
+          message: "Something went wrong, try again!",
+        });
+        setOpenSnackbar({ open: true });
+      }
+    } else {
+      console.log("update bt no new image");
+      try {
+        const response = await Api().put("/update-user-only", data);
+        console.log(response);
+
+        if (response.ok || response.status === 200) {
+          setData(response.data);
+          setIsViewModalOpen(false);
+          setResponseMessage({
+            status: "success",
+            message: "Updated Successfully",
+          });
+          setOpenSnackbar({ open: true });
+        }
+      } catch (error) {
+        setResponseMessage({
+          status: "error",
+          message: "Something went wrong, try again!",
+        });
+        setOpenSnackbar({ open: true });
+      }
+    }
   };
 
   const onSubmitCreateUser = async (data) => {
@@ -150,10 +287,6 @@ const UserRecord = () => {
           message: "Created Successfully",
         });
         setOpenSnackbar({ open: true });
-      }
-
-      if (response.status === 409 || response.status === 400) {
-        alert(`Error: ${response.status}, ${data.error}`);
       }
     } catch (error) {
       setResponseMessage({
@@ -479,6 +612,7 @@ const UserRecord = () => {
             errors={errorsForm2}
             handleSubmit={handleSubmitForm2(onSubmitUpdateUser)}
             imagePreview={imagePreview}
+            setImagePreview={setImagePreview}
           />
         </CommonModal>
         <Snackbar

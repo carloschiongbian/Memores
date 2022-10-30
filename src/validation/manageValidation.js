@@ -74,6 +74,7 @@ export const updateAccountSchemaValidation = yup.object({
 });
 
 export const updateClinicianSchemaValidation = yup.object({
+  id: yup.number().required(),
   profile: yup
     .mixed()
     .test("required", "Profile photo is required", (file) =>

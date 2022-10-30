@@ -1,5 +1,5 @@
 # input "python server.py" to run the flask server
-from controllers.manage import update_user_account, get_user_account, delete_user_account, get_user_view, get_dashboard_data, get_deleted_users, get_updated_users, get_distinct_roles, get_general_users
+from controllers.manage import update_user_account, get_user_account, delete_user_account, get_user_view, get_dashboard_data, get_deleted_users, get_updated_users, get_distinct_roles, get_general_users, update_user_photo_details, update_user_license_details, update_user_both_image, update_user_details_only
 from controllers.screening import get_questions, submit_answers
 from controllers import get_users, login, register_user, get_current_user, logout, clinician_server
 import os
@@ -133,6 +133,19 @@ app.add_url_rule(GET_DISTINCT_ROLES, 'get_distinct_roles',
 # get general users
 app.add_url_rule(GET_GENERAL_USERS, 'get_general_users',
                  get_general_users.get_general_users, methods=['GET'])
+# update a user details and profile photo
+app.add_url_rule(UPDATE_USER_AND_PHOTO, 'update_user_photo_details',
+                 update_user_photo_details.update_user_photo_and_details, methods=['PUT'])
+# update a user details and license image
+app.add_url_rule(UPDATE_USER_AND_LICENSE, 'update_user_license_details',
+                 update_user_license_details.update_user_license_and_details, methods=['PUT'])
+# update a user details and both image
+app.add_url_rule(UPDATE_BOTH_IMAGE, 'update_both_image',
+                 update_user_both_image.update_user_both_image, methods=['PUT'])
+# update user details only
+app.add_url_rule(UPDATE_USER_DETAILS_ONLY, 'update_user_details_only',
+                 update_user_details_only.update_user_details_only, methods=['PUT'])
+
 # To create database tables inside the database,
 # run the command: python server.py --create-db
 if len(sys.argv) > 1 and sys.argv[1] == "--create-db":

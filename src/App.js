@@ -5,6 +5,7 @@ import UserRecord from "./pages/userRecord";
 // import CreateUser from './pages/createUser';
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import ScreeningPage from "./pages/screeningPage";
+import UserPage from "./pages/userPage";
 import { useState, useEffect } from "react";
 import Error404 from "./pages/error404";
 import AuthContext from "./auth/AuthContext";
@@ -18,12 +19,14 @@ import AdminDashboard from "./pages/adminDashboard";
 
 const App = () => {
   const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
       try {
         const response = await Api().get("/@me");
         setUser(response.data);
+        setLoading(true);
       } catch (error) {
         console.log(error);
       }
@@ -87,7 +90,7 @@ const App = () => {
             <Route
               path={routes.admin.USER_RECORDS}
               element={
-                <ProtectedRoute>
+                <ProtectedRoute isLoading={loading}>
                   <UserRecord />
                 </ProtectedRoute>
               }
@@ -95,7 +98,7 @@ const App = () => {
             <Route
               path={routes.admin.ADMIN_DASHBOARD}
               element={
-                <ProtectedRoute>
+                <ProtectedRoute isLoading={loading}>
                   <AdminDashboard />
                 </ProtectedRoute>
               }
