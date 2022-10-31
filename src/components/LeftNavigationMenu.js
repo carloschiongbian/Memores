@@ -37,7 +37,7 @@ const LeftNavigationMenu = ({ isLeftNavigationOpen }) => {
     {
       link: routes.admin.USER_RECORDS,
       name: "User Records",
-      icon: "bi bi-speedometer2",
+      icon: "bi bi-people",
     },
   ];
 
@@ -99,22 +99,28 @@ const LeftNavigationMenu = ({ isLeftNavigationOpen }) => {
       </div>
       <div className="row justify-content-between h-100">
         <div className="d-flex align-items-center justify-content-center">
-          <button
-            className="btn btn-link text-white align-self-end"
-            onClick={async () => {
-              try {
-                const response = await BaseApi.post("/logout");
-                if (response.status === 200) {
-                  authUser.setUser({});
-                  navigate(routes.shared.INDEX);
-                }
-              } catch (error) {
-                alert(error);
-              }
-            }}
+          <div
+            className="align-self-end w-100 d-flex align-items-center justify-content-center py-1"
+            style={{ backgroundColor: "#7f5fd9" }}
           >
-            Sign Out
-          </button>
+            <i className="bi bi-box-arrow-left text-white"></i>
+            <button
+              className="btn btn-link text-white text-decoration-none"
+              onClick={async () => {
+                try {
+                  const response = await BaseApi.post("/logout");
+                  if (response.status === 200) {
+                    authUser.setUser({});
+                    navigate(routes.shared.INDEX);
+                  }
+                } catch (error) {
+                  alert(error);
+                }
+              }}
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
       </div>
     </div>
