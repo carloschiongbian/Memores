@@ -16,16 +16,11 @@ const PatientDetails = () => {
     console.log(date)
     if (date.length < 20) {
       const [dateValue, timeValue] = date.split(" ");
-      return {'dateValue': dateValue};
+      return dateValue;
     } else {
       const [dayValue, day, dateNum, month, year, timeValue] = date.split(" ");
-      return {
-        'monthFirst': {
-          'date': day, 
-          'month': dateNum, 
-          'year': month
-        }
-      };
+      const dateValue = dateNum + " " + day + " " + month;
+      return dateValue;
     }
   };
   
@@ -74,7 +69,8 @@ const PatientDetails = () => {
 
                 <div className="patient-birthday">
                   <label htmlFor="birthday">Birthday</label>
-                  <span>{ parseDate(patientDetails.bday).monthFirst.month +", "+ parseDate(patientDetails.bday).monthFirst.date +", "+ parseDate(patientDetails.bday).monthFirst.year}</span>
+                  {/* <span>{ parseDate(patientDetails.bday).monthFirst.month +", "+ parseDate(patientDetails.bday).monthFirst.date +", "+ parseDate(patientDetails.bday).monthFirst.year}</span> */}
+                  <span>{ parseDate(patientDetails.bday)}</span>
                 </div>
 
                 <div className="patient-contact-number">
@@ -99,7 +95,8 @@ const PatientDetails = () => {
 
                 <div className="patient-registered-date">
                   <label htmlFor="registered-date">Registered Date</label>
-                  <span>{ parseDate(patientDetails.registered_date).monthFirst.month +", "+ parseDate(patientDetails.registered_date).monthFirst.date +", "+ parseDate(patientDetails.registered_date).monthFirst.year}</span>
+                  <span>{ parseDate(patientDetails.registered_date)}</span>
+                  {/* <span>{ parseDate(patientDetails.registered_date).monthFirst.month +", "+ parseDate(patientDetails.registered_date).monthFirst.date +", "+ parseDate(patientDetails.registered_date).monthFirst.year}</span> */}
                 </div>
 
                 <div className="patient-screened-time">
@@ -110,7 +107,7 @@ const PatientDetails = () => {
                     </span>
                   )}
                   {patientDetails.is_screened === true && ( 
-                    <span>{ parseDate(patientDetails.date_taken).monthFirst.month +", "+ parseDate(patientDetails.date_taken).monthFirst.date +", "+ parseDate(patientDetails.date_taken).monthFirst.year}</span>
+                    <span>{ parseDate(patientDetails.date_taken) }</span>
                   )}
                 </div>
 
@@ -122,7 +119,7 @@ const PatientDetails = () => {
                     </span>
                   )}
                   {patientDetails.is_screened && (
-                    <span>{ parseDate(patientDetails.date_finished).monthFirst.month +", "+ parseDate(patientDetails.date_finished).monthFirst.date +", "+ parseDate(patientDetails.date_finished).monthFirst.year}</span>
+                    <span>{ parseDate(patientDetails.date_finished) }</span>
                   )}
                 </div>
               </div>
@@ -190,7 +187,7 @@ const PatientDetails = () => {
 
                   <div className="patient-notes-edited-date">
                     <label htmlFor="date-edited-on">Last Edited On:</label>
-                    <span>{ parseDate(patientDetails.last_edited_on).monthFirst.month +", "+ parseDate(patientDetails.last_edited_on).monthFirst.date +", "+ parseDate(patientDetails.last_edited_on).monthFirst.year}</span>
+                    <span>{ parseDate(patientDetails.last_edited_on)}</span>
                   </div>
                 </div>
               </div>

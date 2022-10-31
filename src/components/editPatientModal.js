@@ -233,7 +233,7 @@ const EditPatientModal = ({
                 <TextField
                   type="date"
                   id="screened_by"
-                  // defaultValue={parseDate(patientDetails.date_taken).dateValue}
+                  defaultValue={parseDate(patientDetails.date_taken)}
                   onChange={(e) =>
                     setEditForm({ ...editForm, date_taken: e.target.value })
                   }
@@ -248,9 +248,9 @@ const EditPatientModal = ({
                 <TextField
                   style={{width: '100%'}}
                   className="screened_on"
-                  // defaultValue={
-                  //   parseDate(patientDetails.date_finished).dateValue
-                  // }
+                  defaultValue={
+                    parseDate(patientDetails.date_finished)
+                  }
                   onChange={(e) =>
                     setEditForm({ ...editForm, date_finished: e.target.value })
                   }
