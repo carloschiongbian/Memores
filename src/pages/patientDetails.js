@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "../components/Layout";
@@ -9,11 +8,23 @@ import "../public/css/pages/PatientDetails/patientDetails.scss";
 
 const PatientDetails = () => {
   const { id } = useParams();
+  const [isScreened, setIsScreened] = useState(false);
   const [open, setOpen] = useState(false);
   const [patientDetails, setPatientDetails] = useState([]);
 
+  const parseDate = (date) => {
+    if (date.length < 20) {
+      const [dateValue, timeValue] = date.split(" ");
+      return dateValue;
+    } else {
+      const [dayValue, dateValue, timeValue] = date.split(" ");
+      return dateValue;
+    }
+  };
+  
   const setData = async (data) => {
     setPatientDetails(data);
+    setIsScreened(data.is_screened);
   };
 
   const getPatientDetails = () => {
@@ -56,7 +67,8 @@ const PatientDetails = () => {
 
                 <div className="patient-birthday">
                   <label htmlFor="birthday">Birthday</label>
-                  <span>{patientDetails.bday}</span>
+                  {/* <span>{new Date(patientDetails.bday).split(' ')}</span> */}
+                  <span>{parseDate(patientDetails.bday)}</span>
                 </div>
 
                 <div className="patient-contact-number">
@@ -86,14 +98,26 @@ const PatientDetails = () => {
 
                 <div className="patient-screened-time">
                   <label htmlFor="screened-time">Date Taken</label>
-                  {patientDetails.is_screened === false && <span style={{color: 'gray', fontSize: '15px'}}>Not available. Patient must be screened first</span>}
-                  {patientDetails.is_screened === true && <span>{patientDetails.date_taken}</span>}
+                  {patientDetails.is_screened === false && (
+                    <span style={{ color: "gray", fontSize: "15px" }}>
+                      Not available. Patient must be screened first
+                    </span>
+                  )}
+                  {patientDetails.is_screened === true && (
+                    <span>{patientDetails.date_taken}</span>
+                  )}
                 </div>
 
                 <div className="patient-screened-date">
                   <label htmlFor="screened-date">Date Finished</label>
-                  {!patientDetails.is_screened && <span style={{color: 'gray', fontSize: '15px'}}>Not available. Patient must be screened first</span>}
-                  {patientDetails.is_screened && <span>{patientDetails.date_finished}</span>}
+                  {!patientDetails.is_screened && (
+                    <span style={{ color: "gray", fontSize: "15px" }}>
+                      Not available. Patient must be screened first
+                    </span>
+                  )}
+                  {patientDetails.is_screened && (
+                    <span>{patientDetails.date_finished}</span>
+                  )}
                 </div>
               </div>
 
@@ -103,9 +127,18 @@ const PatientDetails = () => {
                     <label>Results</label>
                   </div>
 
-                  <div className="patient-screening-results" style={{padding:'10px 0'}}>
-                  {!patientDetails.is_screened && <span style={{color: 'gray', fontSize: '15px'}}>Not available. Patient must be screened first</span>}
-                  {patientDetails.is_screened && <h6>Description: {patientDetails.result_description}</h6>}
+                  <div
+                    className="patient-screening-results"
+                    style={{ padding: "10px 0" }}
+                  >
+                    {!patientDetails.is_screened && (
+                      <span style={{ color: "gray", fontSize: "15px" }}>
+                        Not available. Patient must be screened first
+                      </span>
+                    )}
+                    {patientDetails.is_screened && (
+                      <h6>Description: {patientDetails.result_description}</h6>
+                    )}
                   </div>
                 </div>
               </div>
@@ -116,9 +149,14 @@ const PatientDetails = () => {
                 <label htmlFor="patient-notes-label">Notes</label>
 
                 <div className="patient-notes">
-                {!patientDetails.is_screened && <span style={{color: 'gray', fontSize: '15px'}}>Not available. Patient must be screened first</span>}
-                {patientDetails.is_screened && <span>{patientDetails.patient_notes}</span>}
-                  
+                  {!patientDetails.is_screened && (
+                    <span style={{ color: "gray", fontSize: "15px" }}>
+                      Not available. Patient must be screened first
+                    </span>
+                  )}
+                  {patientDetails.is_screened && (
+                    <span>{patientDetails.patient_notes}</span>
+                  )}
                 </div>
 
                 <div className="patient-notes-actions">
@@ -133,6 +171,7 @@ const PatientDetails = () => {
                     getPatientDetails={getPatientDetails}
                     openModal={open}
                     setOpen={setOpen}
+                    isScreened={isScreened}
                   />
                 </div>
 

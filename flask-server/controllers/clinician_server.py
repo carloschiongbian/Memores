@@ -1,4 +1,5 @@
 import json
+from datetime import timedelta
 import pymysql.cursors
 from connection.connection import db
 from json_encoder import AlchemyEncoder
@@ -74,9 +75,9 @@ def retrieveData():
         if patient['created_by'] == user_id:
             obj = {
                 'patient_id': patient['patient_id'],
+                'age': patient['age'],
                 'fname': patient['fname'],
                 'lname': patient['lname'],
-                'age': patient['age'],
                 'created_by': patient['created_by'],
                 'is_screened': patient['is_screened']
             }
@@ -288,7 +289,31 @@ def retrieveDashboardContent():
 
     user = get_current_user()
     user_id = user.get_json(force=True)['id']
- 
+
+    start_time = []
+    finish_time = []
+
+    cursor = connection.cursor()
+    cursor.execute('SELECT TIME(date_taken) as start_time FROM assessments')
+    result_time = cursor.fetchall()
+    for time in result_time:
+        start_time.append(time['start_time'])
+
+    cursor = connection.cursor()
+    cursor.execute('SELECT TIME(date_finished) as finished_time FROM assessments')
+    result_time = cursor.fetchall()
+    for time in result_time:
+        finish_time.append(time['finished_time'])
+
+    timeStamps = []
+
+    for i in range(len(start_time)):
+        timeStamps.append(finish_time[i] - start_time[i])
+    # timeStamps.sort()
+
+    print(timeStamps)
+    # avg_time_duration = str((timeStamps[len(timeStamps) - 1] + timeStamps[0] / 2))
+    
     patients = []
     assessments = []
     screening_details = []
@@ -351,7 +376,6 @@ def retrieveDashboardContent():
                 'is_screened': data['is_screened'],
                 'date_taken': data['date_taken'],
                 'sad_category': '',
-                'assessment_id': ''
             }
 
             for screening_data in screening_details:
@@ -361,9 +385,9 @@ def retrieveDashboardContent():
                         'assessment_id': screening_data['assessment_id']
                     }
                     obj.update(screening_obj)
-
             dashboard_content.append(obj)
- 
+
+    dashboard_content.append({'time_stamps': str(timeStamps)})
     return dashboard_content
         
 if __name__ == "__main__":
