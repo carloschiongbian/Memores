@@ -9,7 +9,7 @@ const LeftNavigationMenu = () => {
   const authUser = useContext(AuthContext);
   const currentLocation = useLocation();
   const navigate = useNavigate();
-
+  console.log(authUser.user);
   const userNavMenu = [
     {
       link: routes.user.DASHBOARD,
@@ -42,19 +42,24 @@ const LeftNavigationMenu = () => {
   ];
 
   return (
-    <div id="side-menu" className="sidemenu" style={{ width: "0px" }}>
-      <div className="row mb-4">
+    <div
+      id="side-menu"
+      className="sidemenu d-flex flex-column"
+      style={{ width: "0px" }}
+    >
+      <div className="row mb-4 justify-content-between">
         <div className="col px-0 d-flex justify-content-center">
           <img
-            src="/logo192.png"
+            src={"data:image/png;base64," + authUser.user.photo}
             className="bg-light rounded-circle"
+            style={{ objectFit: "cover" }}
             width={90}
             height={90}
             alt=""
           />
         </div>
       </div>
-      <div className="row mt-4">
+      <div className="row mt-4 justify-content-between">
         <div className="col">
           <div className="text-white">
             <div className="list-group">
@@ -93,10 +98,10 @@ const LeftNavigationMenu = () => {
           </div>
         </div>
       </div>
-      <div className="row">
-        <div className="d-flex align-items-center justify-content-center bottom-0">
+      <div className="row justify-content-between h-100">
+        <div className="d-flex align-items-center justify-content-center">
           <button
-            className="btn btn-link text-white"
+            className="btn btn-link text-white align-self-end"
             onClick={async () => {
               try {
                 const response = await BaseApi.post("/logout");
