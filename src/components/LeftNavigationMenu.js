@@ -10,6 +10,8 @@ const LeftNavigationMenu = () => {
   const currentLocation = useLocation();
   const navigate = useNavigate();
 
+  console.log(authUser.user);
+
   const userNavMenu = [
     {
       link: routes.user.DASHBOARD,

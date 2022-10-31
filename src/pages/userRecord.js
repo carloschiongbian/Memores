@@ -602,7 +602,10 @@ const UserRecord = () => {
           dialogTitle={"User Details"}
           openModal={isViewModalOpen}
           textAlign={"center"}
-          handleClose={() => setIsViewModalOpen(false)}
+          handleClose={() => {
+            setImagePreview("");
+            setIsViewModalOpen(false);
+          }}
           // handleSubmit={setIsViewModalOpen}
           btnPrimaryTxt={"Update"}
         >

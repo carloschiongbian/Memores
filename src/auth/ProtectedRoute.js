@@ -4,8 +4,11 @@ import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children, isLoading }) => {
   const authUser = useContext(AuthContext);
-  console.log(authUser.user);
-  console.log(isLoading);
+
+  if (Object.keys(authUser.user).length === 0 && isLoading) {
+    return <Navigate to="/error-404" replace />;
+  }
+
   if (authUser.user.role !== "admin" && isLoading) {
     return <Navigate to="/error-404" replace />;
   }
