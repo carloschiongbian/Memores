@@ -229,6 +229,7 @@ def retrievePatientScreeningDetails(id):
 
         fname = request.get_json()['fname']
         lname = request.get_json()['lname']
+        fullname = request.get_json()['fullname']
         bday = request.get_json()['bday']
         gender = request.get_json()['gender']
         country = request.get_json()['country']
@@ -236,18 +237,22 @@ def retrievePatientScreeningDetails(id):
         zip = request.get_json()['zip']
         phone = request.get_json()['phone']
         street = request.get_json()['street']
-        # patient_notes = request.get_json()['patient_notes']
-        # screened_date = request.get_json()['screened_date']
-        # screened_by = request.get_json()['screened_by']
-        # screened_on = request.get_json()['screened_on']
-        # results = request.get_json()['results']
 
-        query = (
+        #screening details
+        patient_notes = request.get_json()['patient_notes']
+
+        #assessment details
+        date_taken = request.get_json()['date_taken']
+        date_finished = request.get_json()['date_finished']
+        result_description = request.get_json()['result_description']
+
+        update_patient_query = (
             update(Patients).
             where(Patients.id == id).
             values(
                 fname = fname,
                 lname = lname,
+                fullname = fullname,
                 bday = bday,
                 gender = gender,
                 country = country,
@@ -258,7 +263,27 @@ def retrievePatientScreeningDetails(id):
             )
         )
 
-        connect.execute(query)
+        update_assessment_query = (
+            update(Assessments).
+            where(Assessments.patient_id == id).
+            values(
+                date_taken = date_taken,
+                date_finished = date_finished,
+                result_description = result_description
+            )
+        )
+
+        update_screening_query = (
+            update(PatientsScreeningDetails).
+            where(PatientsScreeningDetails.id == id).
+            values(
+                patient_notes = patient_notes
+            )
+        )
+
+        connect.execute(update_patient_query)
+        connect.execute(update_screening_query)
+        connect.execute(update_assessment_query)
         return jsonify(request.get_json())
 
 def deletePatientRecord(id):
