@@ -15,10 +15,16 @@ const PatientDetails = () => {
   const parseDate = (date) => {
     if (date.length < 20) {
       const [dateValue, timeValue] = date.split(" ");
-      return dateValue;
+      return {'dateValue': dateValue};
     } else {
-      const [dayValue, dateValue, timeValue] = date.split(" ");
-      return dateValue;
+      const [dayValue, day, dateNum, month, year, timeValue] = date.split(" ");
+      return {
+        'birthDay': {
+          'date': day, 
+          'month': dateNum, 
+          'year': month
+        }
+      };
     }
   };
   
@@ -67,8 +73,7 @@ const PatientDetails = () => {
 
                 <div className="patient-birthday">
                   <label htmlFor="birthday">Birthday</label>
-                  {/* <span>{new Date(patientDetails.bday).split(' ')}</span> */}
-                  <span>{parseDate(patientDetails.bday)}</span>
+                  <span>{ parseDate(patientDetails.bday).birthDay.month +", "+ parseDate(patientDetails.bday).birthDay.date +", "+ parseDate(patientDetails.bday).birthDay.year}</span>
                 </div>
 
                 <div className="patient-contact-number">
@@ -93,7 +98,7 @@ const PatientDetails = () => {
 
                 <div className="patient-registered-date">
                   <label htmlFor="registered-date">Registered Date</label>
-                  <span>{patientDetails.registered_date}</span>
+                  <span>{ parseDate(patientDetails.registered_date).birthDay.month +", "+ parseDate(patientDetails.registered_date).birthDay.date +", "+ parseDate(patientDetails.registered_date).birthDay.year}</span>
                 </div>
 
                 <div className="patient-screened-time">
@@ -104,7 +109,7 @@ const PatientDetails = () => {
                     </span>
                   )}
                   {patientDetails.is_screened === true && (
-                    <span>{patientDetails.date_taken}</span>
+                    <span>{ parseDate(patientDetails.date_taken).dateValue }</span>
                   )}
                 </div>
 
@@ -116,7 +121,7 @@ const PatientDetails = () => {
                     </span>
                   )}
                   {patientDetails.is_screened && (
-                    <span>{patientDetails.date_finished}</span>
+                    <span>{ parseDate(patientDetails.date_finished).dateValue }</span>
                   )}
                 </div>
               </div>
