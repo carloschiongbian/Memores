@@ -5,12 +5,10 @@ import { useContext } from "react";
 import AuthContext from "../auth/AuthContext";
 import { BaseApi } from "../services/api";
 
-const LeftNavigationMenu = () => {
+const LeftNavigationMenu = ({ isLeftNavigationOpen }) => {
   const authUser = useContext(AuthContext);
   const currentLocation = useLocation();
   const navigate = useNavigate();
-
-  console.log(authUser.user);
 
   const userNavMenu = [
     {
@@ -21,12 +19,12 @@ const LeftNavigationMenu = () => {
     {
       link: routes.user.SCREENING,
       name: "Screening",
-      icon: "bi bi-speedometer2",
+      icon: "bi bi-person-workspace",
     },
     {
       link: routes.user.PATIENT_RECORDS,
       name: "Patient Records",
-      icon: "bi bi-speedometer2",
+      icon: "bi bi-clipboard2-pulse",
     },
   ];
 
@@ -47,21 +45,20 @@ const LeftNavigationMenu = () => {
     <div
       id="side-menu"
       className="sidemenu d-flex flex-column"
-      style={{ width: "0px" }}
+      style={{ width: isLeftNavigationOpen ? "250px" : "0px" }}
     >
       <div className="row mb-4 justify-content-between">
         <div className="col px-0 d-flex justify-content-center">
           <img
             src={"data:image/png;base64," + authUser.user.photo}
             className="bg-light rounded-circle"
-            style={{ objectFit: "cover" }}
             width={90}
             height={90}
             alt=""
           />
         </div>
       </div>
-      <div className="row mt-4 justify-content-between">
+      <div className="row mt-4">
         <div className="col">
           <div className="text-white">
             <div className="list-group">

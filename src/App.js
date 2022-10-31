@@ -96,15 +96,13 @@ const App = () => {
               }
             />
             <Route
-              path={routes.admin.ADMIN_DASHBOARD}
+              path={routes.admin.USER_DETAILS}
               element={
-                <ProtectedRoute isLoading={loading}>
-                  <AdminDashboard />
+                <ProtectedRoute>
+                  <UserPage />
                 </ProtectedRoute>
               }
             />
-            {/* <Route path={routes.admin.USER_DETAILS} element={<ProtectedRoute><UserPage /></ProtectedRoute>} /> */}
-            {/* <Route path={routes.admin.CREATE_USER} element={<ProtectedRoute><CreateUser /></ProtectedRoute>} /> */}
           </Routes>
         </BrowserRouter>
       </div>

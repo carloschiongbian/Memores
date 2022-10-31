@@ -2,7 +2,6 @@
 import WizardContent from "./wizardContent";
 import ScreeningResult from "./screeningResult";
 import { useState, useEffect, useContext } from "react";
-// import { sections } from "./dummy";
 import Api from "../../services/api";
 import { parseQuestions } from "../../lib/parseAssessmentQuestions";
 import { AnswerContext } from "./AnswerContext"; // not exported as default
@@ -61,7 +60,7 @@ const ScreeningWizard = () => {
 
         setTotalAnswered(totalChecks)
 
-        setAnswers({...answers, [e.target.name]: parseInt(e.target.value)})
+        setAnswers({...answers, [e.target.name]: Number(e.target.value)})
 
         if (totalQuestions === totalChecks)
             setShouldEnableSubmit(true)
@@ -95,6 +94,7 @@ const ScreeningWizard = () => {
         setTimeout(() => {
             setMustShowResult(false)
             setShouldEnableSubmit(false)
+            setTotalAnswered(0)
         }, 1000)
     }
 

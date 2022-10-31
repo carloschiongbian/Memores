@@ -11,8 +11,6 @@ const PATIENT_DETAILS = "/patient-details/id=:id";
 // ADMIN ROUTES
 const USER_RECORDS = "/user-record";
 const ADMIN_DASHBOARD = "/admin-dashboard";
-// const USER_DETAILS = "/user-details/:id"
-// const CREATE_USER = "/create-user"
 
 // ADD THE ROUTES HERE TOO
 const routes = {
