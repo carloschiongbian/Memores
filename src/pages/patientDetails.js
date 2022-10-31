@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "../components/Layout";
@@ -9,11 +8,29 @@ import "../public/css/pages/PatientDetails/patientDetails.scss";
 
 const PatientDetails = () => {
   const { id } = useParams();
+  const [isScreened, setIsScreened] = useState(false);
   const [open, setOpen] = useState(false);
   const [patientDetails, setPatientDetails] = useState([]);
 
+  const parseDate = (date) => {
+    if (date.length < 20) {
+      const [dateValue, timeValue] = date.split(" ");
+      return {'dateValue': dateValue};
+    } else {
+      const [dayValue, day, dateNum, month, year, timeValue] = date.split(" ");
+      return {
+        'monthFirst': {
+          'date': day, 
+          'month': dateNum, 
+          'year': month
+        }
+      };
+    }
+  };
+  
   const setData = async (data) => {
     setPatientDetails(data);
+    setIsScreened(data.is_screened);
   };
 
   const getPatientDetails = () => {
@@ -56,7 +73,7 @@ const PatientDetails = () => {
 
                 <div className="patient-birthday">
                   <label htmlFor="birthday">Birthday</label>
-                  <span>{patientDetails.bday}</span>
+                  <span>{ parseDate(patientDetails.bday).monthFirst.month +", "+ parseDate(patientDetails.bday).monthFirst.date +", "+ parseDate(patientDetails.bday).monthFirst.year}</span>
                 </div>
 
                 <div className="patient-contact-number">
@@ -81,19 +98,31 @@ const PatientDetails = () => {
 
                 <div className="patient-registered-date">
                   <label htmlFor="registered-date">Registered Date</label>
-                  <span>{patientDetails.registered_date}</span>
+                  <span>{ parseDate(patientDetails.registered_date).monthFirst.month +", "+ parseDate(patientDetails.registered_date).monthFirst.date +", "+ parseDate(patientDetails.registered_date).monthFirst.year}</span>
                 </div>
 
                 <div className="patient-screened-time">
                   <label htmlFor="screened-time">Date Taken</label>
-                  {patientDetails.is_screened === false && <span style={{color: 'gray', fontSize: '15px'}}>Not available. Patient must be screened first</span>}
-                  {patientDetails.is_screened === true && <span>{patientDetails.date_taken}</span>}
+                  {patientDetails.is_screened === false && (
+                    <span style={{ color: "gray", fontSize: "15px" }}>
+                      Not available. Patient must be screened first
+                    </span>
+                  )}
+                  {patientDetails.is_screened === true && (
+                    <span>{ parseDate(patientDetails.date_taken).monthFirst.month +", "+ parseDate(patientDetails.date_taken).monthFirst.date +", "+ parseDate(patientDetails.date_taken).monthFirst.year}</span>
+                  )}
                 </div>
 
                 <div className="patient-screened-date">
                   <label htmlFor="screened-date">Date Finished</label>
-                  {!patientDetails.is_screened && <span style={{color: 'gray', fontSize: '15px'}}>Not available. Patient must be screened first</span>}
-                  {patientDetails.is_screened && <span>{patientDetails.date_finished}</span>}
+                  {!patientDetails.is_screened && (
+                    <span style={{ color: "gray", fontSize: "15px" }}>
+                      Not available. Patient must be screened first
+                    </span>
+                  )}
+                  {patientDetails.is_screened && (
+                    <span>{ parseDate(patientDetails.date_finished).monthFirst.month +", "+ parseDate(patientDetails.date_finished).monthFirst.date +", "+ parseDate(patientDetails.date_finished).monthFirst.year}</span>
+                  )}
                 </div>
               </div>
 
@@ -103,9 +132,18 @@ const PatientDetails = () => {
                     <label>Results</label>
                   </div>
 
-                  <div className="patient-screening-results" style={{padding:'10px 0'}}>
-                  {!patientDetails.is_screened && <span style={{color: 'gray', fontSize: '15px'}}>Not available. Patient must be screened first</span>}
-                  {patientDetails.is_screened && <h6>Description: {patientDetails.result_description}</h6>}
+                  <div
+                    className="patient-screening-results"
+                    style={{ padding: "10px 0" }}
+                  >
+                    {!patientDetails.is_screened && (
+                      <span style={{ color: "gray", fontSize: "15px" }}>
+                        Not available. Patient must be screened first
+                      </span>
+                    )}
+                    {patientDetails.is_screened && (
+                      <h6>Description: {patientDetails.result_description}</h6>
+                    )}
                   </div>
                 </div>
               </div>
@@ -116,9 +154,14 @@ const PatientDetails = () => {
                 <label htmlFor="patient-notes-label">Notes</label>
 
                 <div className="patient-notes">
-                {!patientDetails.is_screened && <span style={{color: 'gray', fontSize: '15px'}}>Not available. Patient must be screened first</span>}
-                {patientDetails.is_screened && <span>{patientDetails.patient_notes}</span>}
-                  
+                  {!patientDetails.is_screened && (
+                    <span style={{ color: "gray", fontSize: "15px" }}>
+                      Not available. Patient must be screened first
+                    </span>
+                  )}
+                  {patientDetails.is_screened && (
+                    <span>{patientDetails.patient_notes}</span>
+                  )}
                 </div>
 
                 <div className="patient-notes-actions">
@@ -133,6 +176,8 @@ const PatientDetails = () => {
                     getPatientDetails={getPatientDetails}
                     openModal={open}
                     setOpen={setOpen}
+                    isScreened={isScreened}
+                    parseDate={parseDate}
                   />
                 </div>
 
@@ -144,7 +189,7 @@ const PatientDetails = () => {
 
                   <div className="patient-notes-edited-date">
                     <label htmlFor="date-edited-on">Last Edited On:</label>
-                    <p>{patientDetails.last_edited_on}</p>
+                    <span>{ parseDate(patientDetails.date_taken).monthFirst.month +", "+ parseDate(patientDetails.date_taken).monthFirst.date +", "+ parseDate(patientDetails.date_taken).monthFirst.year}</span>
                   </div>
                 </div>
               </div>
