@@ -9,7 +9,7 @@ const LeftNavigationMenu = () => {
   const authUser = useContext(AuthContext);
   const currentLocation = useLocation();
   const navigate = useNavigate();
-  console.log(authUser.user);
+
   const userNavMenu = [
     {
       link: routes.user.DASHBOARD,
