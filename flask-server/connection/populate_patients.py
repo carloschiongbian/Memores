@@ -39,26 +39,26 @@ INSERT INTO `patients` (`id`, `fname`, `lname`, `fullname`, `email`, `phone`, `a
 
 my_cursor.execute("""
 INSERT INTO `patients_screening_details`(`id`, `assessment_id`, `patient_notes`, `sad_category`, `last_edited_by`, `last_edited_on`, `created_at`, `updated_at`) VALUES 
-('1','1','Robin is normal', 'Normal', 'Dr. Murphy','2022-06-03','',''),
-('2','2','Tony shows symptoms of severe SAD', 'Severe', 'Dr. Poller','2022-06-05','',''),
-('3','3','Peter has moderate SAD', 'Moderate', 'Dr. Logan','2022-06-03','',''),
-('4','4','Sara is screened with mild SAD', 'Mild','Dr. Krop','2022-07-04','',''),
-('5','5','Jim is normal and does not have SAD', 'Normal', 'Dr. Poller','2022-07-18','',''),
-('6','6','Ethan displays symptoms of mild SAD', 'Mild', 'Dr. Logan','2022-03-10','',''),
-('7','7','Shionne is normal', 'Normal', 'Dr. Murphy','2022-06-03','',''),
-('8','8','Velvet shows symptoms of severe SAD', 'Severe', 'Dr. Poller','2022-06-05','',''),
-('9','9','Edna has moderate SAD', 'Moderate', 'Dr. Logan','2022-06-03','',''),
-('10','10','Eleanor is screened with mild SAD', 'Mild','Dr. Krop','2022-07-04','',''),
-('11','11','Celica is normal and does not have SAD', 'Normal', 'Dr. Poller','2022-07-18','',''),
-('12','12','Artorius displays symptoms of mild SAD', 'Mild', 'Dr. Logan','2022-03-10','',''),
-('13','13','Melchior is normal', 'Normal', 'Dr. Murphy','2022-06-03','',''),
-('14','14','Oscar shows symptoms of severe SAD', 'Severe', 'Dr. Poller','2022-06-05','',''),
-('15','15','Teresa has moderate SAD', 'Moderate', 'Dr. Logan','2022-06-03','',''),
-('16','16','Van is screened with mild SAD', 'Mild','Dr. Krop','2022-07-04','',''),
-('17','17','Laphicet is normal and does not have SAD', 'Normal', 'Dr. Poller','2022-07-18','',''),
-('18','18','Vholran displays symptoms of mild SAD', 'Mild', 'Dr. Logan','2022-03-10','',''),
-('19','19','Rinwell is normal and does not have SAD', 'Normal', 'Dr. Poller','2022-07-18','',''),
-('20','20','Farah displays symptoms of mild SAD', 'Mild', 'Dr. Logan','2022-03-10','','')
+('1','1','Robin is normal', 'Normal', 'Dr. Murphy','2022-10-15 21:53:37','',''),
+('2','2','Tony shows symptoms of severe SAD', 'Severe', 'Dr. Poller','2022-10-15 21:53:37','',''),
+('3','3','Peter has moderate SAD', 'Moderate', 'Dr. Logan','2022-10-15 21:53:37','',''),
+('4','4','Sara is screened with mild SAD', 'Mild','Dr. Krop','2022-10-15 21:53:37','',''),
+('5','5','Jim is normal and does not have SAD', 'Normal', 'Dr. Poller','2022-10-15 21:53:37','',''),
+('6','6','Ethan displays symptoms of mild SAD', 'Mild', 'Dr. Logan','2022-10-15 21:53:37','',''),
+('7','7','Shionne is normal', 'Normal', 'Dr. Murphy','2022-10-15 21:53:37','',''),
+('8','8','Velvet shows symptoms of severe SAD', 'Severe', 'Dr. Poller','2022-10-15 21:53:37','',''),
+('9','9','Edna has moderate SAD', 'Moderate', 'Dr. Logan','2022-10-15 21:53:37','',''),
+('10','10','Eleanor is screened with mild SAD', 'Mild','Dr. Krop','2022-10-15 21:53:37','',''),
+('11','11','Celica is normal and does not have SAD', 'Normal', 'Dr. Poller','2022-10-15 21:53:37','',''),
+('12','12','Artorius displays symptoms of mild SAD', 'Mild', 'Dr. Logan','2022-10-15 21:53:37','',''),
+('13','13','Melchior is normal', 'Normal', 'Dr. Murphy','2022-10-15 21:53:37','',''),
+('14','14','Oscar shows symptoms of severe SAD', 'Severe', 'Dr. Poller','2022-10-15 21:53:37','',''),
+('15','15','Teresa has moderate SAD', 'Moderate', 'Dr. Logan','2022-10-15 21:53:37','',''),
+('16','16','Van is screened with mild SAD', 'Mild','Dr. Krop','2022-10-15 21:53:37','',''),
+('17','17','Laphicet is normal and does not have SAD', 'Normal', 'Dr. Poller','2022-10-15 21:53:37','',''),
+('18','18','Vholran displays symptoms of mild SAD', 'Mild', 'Dr. Logan','2022-10-15 21:53:37','',''),
+('19','19','Rinwell is normal and does not have SAD', 'Normal', 'Dr. Poller','2022-10-15 21:53:37','',''),
+('20','20','Farah displays symptoms of mild SAD', 'Mild', 'Dr. Logan','2022-10-15 21:53:37','','')
 """)
 
 my_db.commit()

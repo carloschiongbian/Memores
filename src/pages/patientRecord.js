@@ -79,7 +79,7 @@ const PatientRecord = () => {
         is_screened: data.is_screened === false ? 'No' : 'Yes',
         action: DeleteIcon,
       };
-      console.log(data.is_screened)
+      
       setPatientRecords((patientRecords) => [...patientRecords, patientRecord]);
     });
   };
@@ -114,7 +114,6 @@ const PatientRecord = () => {
   };
 
   const handleDelete = () => {
-    console.log(getRecord.original.id)
     fetch("/patient-records/delete/id=" + parseInt(getRecord.original.id), {
       method: "DELETE",
     })
@@ -128,7 +127,7 @@ const PatientRecord = () => {
   };
 
   useEffect(() => {
-    retrieveRecords();
+    retrieveRecords();    
   }, []);
 
   return (

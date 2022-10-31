@@ -1,4 +1,5 @@
 import json
+from datetime import timedelta
 import pymysql.cursors
 from connection.connection import db
 from json_encoder import AlchemyEncoder
@@ -74,9 +75,9 @@ def retrieveData():
         if patient['created_by'] == user_id:
             obj = {
                 'patient_id': patient['patient_id'],
+                'age': patient['age'],
                 'fname': patient['fname'],
                 'lname': patient['lname'],
-                'age': patient['age'],
                 'created_by': patient['created_by'],
                 'is_screened': patient['is_screened']
             }
@@ -228,6 +229,7 @@ def retrievePatientScreeningDetails(id):
 
         fname = request.get_json()['fname']
         lname = request.get_json()['lname']
+        fullname = request.get_json()['fullname']
         bday = request.get_json()['bday']
         gender = request.get_json()['gender']
         country = request.get_json()['country']
@@ -235,18 +237,22 @@ def retrievePatientScreeningDetails(id):
         zip = request.get_json()['zip']
         phone = request.get_json()['phone']
         street = request.get_json()['street']
-        # patient_notes = request.get_json()['patient_notes']
-        # screened_date = request.get_json()['screened_date']
-        # screened_by = request.get_json()['screened_by']
-        # screened_on = request.get_json()['screened_on']
-        # results = request.get_json()['results']
 
-        query = (
+        #screening details
+        patient_notes = request.get_json()['patient_notes']
+
+        #assessment details
+        date_taken = request.get_json()['date_taken']
+        date_finished = request.get_json()['date_finished']
+        result_description = request.get_json()['result_description']
+
+        update_patient_query = (
             update(Patients).
             where(Patients.id == id).
             values(
                 fname = fname,
                 lname = lname,
+                fullname = fullname,
                 bday = bday,
                 gender = gender,
                 country = country,
@@ -257,7 +263,27 @@ def retrievePatientScreeningDetails(id):
             )
         )
 
-        connect.execute(query)
+        update_assessment_query = (
+            update(Assessments).
+            where(Assessments.patient_id == id).
+            values(
+                date_taken = date_taken,
+                date_finished = date_finished,
+                result_description = result_description
+            )
+        )
+
+        update_screening_query = (
+            update(PatientsScreeningDetails).
+            where(PatientsScreeningDetails.id == id).
+            values(
+                patient_notes = patient_notes
+            )
+        )
+
+        connect.execute(update_patient_query)
+        connect.execute(update_screening_query)
+        connect.execute(update_assessment_query)
         return jsonify(request.get_json())
 
 def deletePatientRecord(id):
@@ -288,7 +314,31 @@ def retrieveDashboardContent():
 
     user = get_current_user()
     user_id = user.get_json(force=True)['id']
- 
+
+    start_time = []
+    finish_time = []
+
+    cursor = connection.cursor()
+    cursor.execute('SELECT TIME(date_taken) as start_time FROM assessments')
+    result_time = cursor.fetchall()
+    for time in result_time:
+        start_time.append(time['start_time'])
+
+    cursor = connection.cursor()
+    cursor.execute('SELECT TIME(date_finished) as finished_time FROM assessments')
+    result_time = cursor.fetchall()
+    for time in result_time:
+        finish_time.append(time['finished_time'])
+
+    timeStamps = []
+
+    for i in range(len(start_time)):
+        timeStamps.append(finish_time[i] - start_time[i])
+    # timeStamps.sort()
+
+    print(timeStamps)
+    # avg_time_duration = str((timeStamps[len(timeStamps) - 1] + timeStamps[0] / 2))
+    
     patients = []
     assessments = []
     screening_details = []
@@ -351,7 +401,6 @@ def retrieveDashboardContent():
                 'is_screened': data['is_screened'],
                 'date_taken': data['date_taken'],
                 'sad_category': '',
-                'assessment_id': ''
             }
 
             for screening_data in screening_details:
@@ -361,9 +410,9 @@ def retrieveDashboardContent():
                         'assessment_id': screening_data['assessment_id']
                     }
                     obj.update(screening_obj)
-
             dashboard_content.append(obj)
- 
+
+    dashboard_content.append({'time_stamps': str(timeStamps)})
     return dashboard_content
         
 if __name__ == "__main__":

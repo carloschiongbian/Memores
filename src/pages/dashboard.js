@@ -1,15 +1,17 @@
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { List, ListItem, Skeleton } from "@mui/material";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import HealingIcon from "@mui/icons-material/Healing";
+
 import GroupIcon from "@mui/icons-material/Group";
+import HealingIcon from "@mui/icons-material/Healing";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 
 import Layout from "../components/Layout";
-import CommonModal from "../components/modal/CommonModal";
 import "../public/css/pages/Dashboard/Dashboard.scss";
+import CommonModal from "../components/modal/CommonModal";
 import DashboardChart from "../components/dashboard/DashboardChart.js";
 
 const SAD_CATEGORIES = {
@@ -46,23 +48,37 @@ const Dashboard = () => {
       .catch((error) => console.log(error));
   };
 
+  const parseDate = (date) => {
+    if (date.length < 20) {
+      const [dateValue, timeValue] = date.split(" ");
+      return {'dateValue': dateValue};
+    } else {
+      const [dayValue, day, dateNum, month, year, timeValue] = date.split(" ");
+      return {
+        'monthFirst': {
+          'date': day, 
+          'month': dateNum, 
+          'year': month
+        }
+      };
+    }
+  };
+
   const setData = (data) => {
     setPatients(data);
     getCategoryCount(data);
-  };
+  }; 
 
   const checkIfScreened = () => {
     let count = 0;
     patients.map((patient) => (patient.is_screened === true ? count++ : null));
-    // const filteredScreenedPatients = patients.filter(patient =>)
-
+    
     return count > 0 ? true : false;
   };
 
   const getCategoryCount = (data) => {
     const countCategory = (patients, sadCategory) => {
       const categories = patients.filter((data) => {
-        console.log(data)
         return data.sad_category === sadCategory;
       });
       return categories.length;
@@ -119,7 +135,7 @@ const Dashboard = () => {
               <h4>
                 <GroupIcon /> Patients
               </h4>
-              <h1>{patients.length}</h1>
+              <h1>{patients.length - 1}</h1>
             </div>
 
             <div
@@ -152,7 +168,7 @@ const Dashboard = () => {
                       className="patient-information-item"
                     >
                       <div className="patient-name">
-                        <h5> {patient.fname + " " + patient.lname} </h5>
+                        <h5>{index + 1}) {patient.fname + " " + patient.lname} </h5>
                       </div>
                     </ListItem>
                   ))}
@@ -163,33 +179,9 @@ const Dashboard = () => {
             </div>
 
             <div className="average-time-duration-of-screening-container">
-              <h4>Average Time Duration of Screening</h4>
-
-              <div className="average-time">
-                <div className="hours-number-format">
-                  <h2>0</h2>
-                </div>
-
-                <div className="minutes-number-format">
-                  <h2>46</h2>
-                </div>
-
-                <div className="seconds-number-format">
-                  <h2>21</h2>
-                </div>
-
-                <div className="hours-string-format">
-                  <h3>Hour(s)</h3>
-                </div>
-
-                <div className="minutes-string-format">
-                  <h3>Minute(s)</h3>
-                </div>
-
-                <div className="seconds-string-format">
-                  <h3>Second(s)</h3>
-                </div>
-              </div>
+              <h3> <HourglassBottomIcon /> Average screening time duration: </h3>
+              {/* <h2 style={{float: 'left'}}>{patients.length !== 0 && patients[patients.length - 1].avg_time_duration}</h2>
+              <span style={{fontSize: '14px'}}>Hours / minutes / seconds</span> */}
             </div>
           </div>
 
@@ -239,15 +231,12 @@ const Dashboard = () => {
                         <h5> {patient.fname + " " + patient.lname} </h5>
                       </div>
 
-                      <div className="screening-information-summary">
-                        <div className="screening-information-summary-date">
-                          <h6> {patient.date_taken} </h6>
-                        </div>
-
-                        <div className="screening-information-summary-time">
-                          {patient.screened_time}
-                        </div>
-                      </div>
+                      {/* <div className="screening-information-summary">
+                        <div className="screening-information-summary-date"> */}
+                          {/* <h6> {parseDate(patient.date_taken).dateValue} </h6> */}
+                          {/* <span>{ parseDate(patient.date_taken).monthFirst.month +", "+ parseDate(patient.date_taken).monthFirst.date +", "+ parseDate(patient.date_taken).monthFirst.year}</span> */}
+                        {/* </div>
+                      </div> */}
                     </ListItem>
                   ))}
 
