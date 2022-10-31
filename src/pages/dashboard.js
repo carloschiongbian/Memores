@@ -48,22 +48,6 @@ const Dashboard = () => {
       .catch((error) => console.log(error));
   };
 
-  const parseDate = (date) => {
-    if (date.length < 20) {
-      const [dateValue, timeValue] = date.split(" ");
-      return {'dateValue': dateValue};
-    } else {
-      const [dayValue, day, dateNum, month, year, timeValue] = date.split(" ");
-      return {
-        'monthFirst': {
-          'date': day, 
-          'month': dateNum, 
-          'year': month
-        }
-      };
-    }
-  };
-
   const setData = (data) => {
     setPatients(data);
     getCategoryCount(data);
