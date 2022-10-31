@@ -13,13 +13,13 @@ const PatientDetails = () => {
   const [patientDetails, setPatientDetails] = useState([]);
 
   const parseDate = (date) => {
-    console.log(date)
     if (date.length < 20) {
       const [dateValue, timeValue] = date.split(" ");
-      return dateValue;
+      const value = dateValue
+      return value;
     } else {
-      const [dayValue, day, dateNum, month, year, timeValue] = date.split(" ");
-      const dateValue = dateNum + " " + day + " " + month;
+      const [dayAbbr, day, dateNum, year, month, timeValue] = date.split(" ");
+      const dateValue = dateNum + " " + day + " " + year;
       return dateValue;
     }
   };
@@ -69,8 +69,7 @@ const PatientDetails = () => {
 
                 <div className="patient-birthday">
                   <label htmlFor="birthday">Birthday</label>
-                  {/* <span>{ parseDate(patientDetails.bday).monthFirst.month +", "+ parseDate(patientDetails.bday).monthFirst.date +", "+ parseDate(patientDetails.bday).monthFirst.year}</span> */}
-                  <span>{ parseDate(patientDetails.bday)}</span>
+                  <span>{ parseDate(patientDetails.bday) }</span>
                 </div>
 
                 <div className="patient-contact-number">
