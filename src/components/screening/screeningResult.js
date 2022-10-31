@@ -6,7 +6,7 @@ const calc = (number) => {
 const ScreeningResult = ({classification, classProbability, patientSelected}) => {
 
     const _class = classification === '0' ? "Negative" : "Positive"
-    const _probability = calc(parseFloat(classProbability) * 100)
+    const _probability = calc(Number(classProbability) * 100)
     const positiveIndicative = <span className="text-danger fw-bold">DOES</span>
     const negativeIndicative = <span className="text-success fw-bold">DOES NOT</span>
 
