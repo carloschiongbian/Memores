@@ -38,7 +38,7 @@ const ScreeningPage = () => {
         })
             .then(res => {
                 setPatients(res.data.patients)
-                setTotal(parseInt(res.data.total))
+                setTotal(Number(res.data.total))
                 setCurrentPage(1)
             })
     }
@@ -57,7 +57,7 @@ const ScreeningPage = () => {
         })
             .then(res => {
                 setPatients(res.data.patients)
-                setTotal(parseInt(res.data.total))
+                setTotal(Number(res.data.total))
                 setCurrentPage(1)
             })
     }
@@ -69,7 +69,7 @@ const ScreeningPage = () => {
         })
             .then(res => {
                 setPatients(res.data.patients)
-                setTotal(parseInt(res.data.total))
+                setTotal(Number(res.data.total))
             })
     }, [currentPage, user]);
 

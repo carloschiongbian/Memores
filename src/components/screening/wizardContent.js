@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { useRef } from "react";
 import { useState } from "react";
 import DemographicSection from "./demographicSection";
 import EmotionalSection from "./emotionalSection";
@@ -25,6 +26,7 @@ const WizardContent = ({ sections, handleOptionChange, totalAnswered }) => {
 
     const [activeSection, setActiveSection] = useState("demographic")
     const [activeSectionID, setActiveSectionID] = useState(1)
+    const sectionContent = useRef(null)
 
     const handlePrev = () => {
         if (activeSectionID <= 1)
@@ -32,6 +34,8 @@ const WizardContent = ({ sections, handleOptionChange, totalAnswered }) => {
 
         setActiveSection(SECTION_ID[activeSectionID - 1])
         setActiveSectionID((active) => active - 1)
+
+        sectionContent.current.scrollTo(0, 0)
     }
 
     const handleNext = () => {
@@ -40,6 +44,8 @@ const WizardContent = ({ sections, handleOptionChange, totalAnswered }) => {
 
         setActiveSection(SECTION_ID[activeSectionID + 1])
         setActiveSectionID((active) => active + 1)
+
+        sectionContent.current.scrollTo(0, 0)
     }
 
     return (
@@ -92,7 +98,7 @@ const WizardContent = ({ sections, handleOptionChange, totalAnswered }) => {
                 </div>
 
                 {/* Content */}
-                <div id="section-indicators" className="card-body py-4 wizard-content custom-scroll">
+                <div ref={sectionContent} id="section-indicators" className="card-body py-4 wizard-content custom-scroll">
 
 
                     {
@@ -149,7 +155,7 @@ const WizardContent = ({ sections, handleOptionChange, totalAnswered }) => {
                         })
                     }
 
-                    <div className="d-flex justify-content-around">
+                    <div className="d-flex justify-content-around mt-4">
                         <button className={`btn text-primary ${activeSectionID === 1 ? 'disabled' : ''}`} type="button" onClick={handlePrev}>
                             <i className="bi bi-chevron-double-left"></i> Previous Items
                         </button>

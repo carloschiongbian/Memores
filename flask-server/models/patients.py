@@ -20,7 +20,6 @@ class Patients(db.Model):
     city = db.Column(db.String(255), nullable = False)
     country = db.Column(db.String(255), nullable = False)
     zip = db.Column(db.String(255), nullable = False)
-    is_screened = db.Column(db.Boolean(False), nullable = False)
     registered_date = db.Column(db.DateTime, nullable = False)
     created_by = db.Column(db.Integer, db.ForeignKey("users.id"))
     created_at = db.Column(db.DateTime, nullable = False, server_default=func.now())

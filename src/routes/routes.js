@@ -12,8 +12,7 @@ const PATIENT_DETAILS = "/patient-details/id=:id"
 
 // ADMIN ROUTES
 const USER_RECORDS = "/user-record"
-const USER_DETAILS = "/user-details/:id"
-const CREATE_USER = "/create-user"
+const ADMIN_DASHBOARD = "/admin-dashboard"
 
 // ADD THE ROUTES HERE TOO
 const routes = {
@@ -25,8 +24,7 @@ const routes = {
         PATIENT_RECORDS, PATIENT_DETAILS
     },
     admin: {
-        USER_RECORDS, USER_DETAILS,
-        CREATE_USER
+        USER_RECORDS, ADMIN_DASHBOARD,
     }
 }
 

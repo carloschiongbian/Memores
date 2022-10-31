@@ -5,7 +5,7 @@ import { useContext } from "react";
 import AuthContext from "../auth/AuthContext";
 import { BaseApi } from "../services/api";
 
-const LeftNavigationMenu = () => {
+const LeftNavigationMenu = ({ isLeftNavigationOpen }) => {
     const authUser = useContext(AuthContext)
     const currentLocation = useLocation()
     const navigate = useNavigate()
@@ -19,12 +19,12 @@ const LeftNavigationMenu = () => {
         {
             link: routes.user.SCREENING,
             name: "Screening",
-            icon: "bi bi-speedometer2"
+            icon: "bi bi-person-workspace"
         },
         {
             link: routes.user.PATIENT_RECORDS,
             name: "Patient Records",
-            icon: "bi bi-speedometer2"
+            icon: "bi bi-clipboard2-pulse"
         },
     ]
 
@@ -43,7 +43,7 @@ const LeftNavigationMenu = () => {
     ]
 
     return (
-        <div id="side-menu" className="sidemenu" style={{ "width": "0px" }}>
+        <div id="side-menu" className="sidemenu" style={{ "width": isLeftNavigationOpen ? "250px" : "0px" }}>
             <div className='row mb-4'>
                 <div className="col px-0 d-flex justify-content-center">
                     <img src="/logo192.png" className='bg-light rounded-circle' width={90} height={90} alt="" />
