@@ -13,6 +13,7 @@ const PatientDetails = () => {
   const [patientDetails, setPatientDetails] = useState([]);
 
   const parseDate = (date) => {
+    console.log(date)
     if (date.length < 20) {
       const [dateValue, timeValue] = date.split(" ");
       return {'dateValue': dateValue};
@@ -108,7 +109,7 @@ const PatientDetails = () => {
                       Not available. Patient must be screened first
                     </span>
                   )}
-                  {patientDetails.is_screened === true && (
+                  {patientDetails.is_screened === true && ( 
                     <span>{ parseDate(patientDetails.date_taken).monthFirst.month +", "+ parseDate(patientDetails.date_taken).monthFirst.date +", "+ parseDate(patientDetails.date_taken).monthFirst.year}</span>
                   )}
                 </div>
@@ -189,7 +190,7 @@ const PatientDetails = () => {
 
                   <div className="patient-notes-edited-date">
                     <label htmlFor="date-edited-on">Last Edited On:</label>
-                    <span>{ parseDate(patientDetails.date_taken).monthFirst.month +", "+ parseDate(patientDetails.date_taken).monthFirst.date +", "+ parseDate(patientDetails.date_taken).monthFirst.year}</span>
+                    <span>{ parseDate(patientDetails.last_edited_on).monthFirst.month +", "+ parseDate(patientDetails.last_edited_on).monthFirst.date +", "+ parseDate(patientDetails.last_edited_on).monthFirst.year}</span>
                   </div>
                 </div>
               </div>
