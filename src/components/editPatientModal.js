@@ -9,6 +9,11 @@ import TextField from "@mui/material/TextField";
 import countriesSelect from "./countriesSelect";
 import "../public/css/components/editModal/editModal.scss";
 
+const genders = [
+  { value: "Male", label: "Male" },
+  { value: "Female", label: "Female" },
+];
+
 let editValues = {
   fname: "",
   lname: "",
@@ -31,6 +36,7 @@ const EditPatientModal = ({
   openModal,
   setOpen,
   isScreened,
+  parseDate,
 }) => {
   const [editForm, setEditForm] = useState(editValues);
   const [disableEdit, setDisableEdit] = useState(true);
@@ -42,7 +48,7 @@ const EditPatientModal = ({
 
   const handleUpdateEvent = async () => {
     let formValues = editForm;
-    
+
     let values = {
       fname: "",
       fullname: "",
@@ -57,18 +63,17 @@ const EditPatientModal = ({
       patient_notes: "",
       date_taken: "",
       date_finished: "",
-      result_description: ""
+      result_description: "",
     };
 
     for (let key in formValues) {
       if (editForm[key] === "") {
-        values[key] = patientDetails[key]
-      } 
-      else {
-        values[key] = editForm[key]
+        values[key] = patientDetails[key];
+      } else {
+        values[key] = editForm[key];
       }
     }
-    console.log(values)
+    console.log(values);
     await fetch("/patient-details/id=" + patientDetails.id, {
       method: "PUT",
       headers: {
@@ -124,39 +129,19 @@ const EditPatientModal = ({
                 variant="outlined"
               />
 
-              <TextField
-                id="gender"
-                required={true}
-                defaultValue={patientDetails.gender}
-                onChange={(e) =>
-                  setEditForm({ ...editForm, gender: e.target.value })
-                }
-                label="Gender"
-                placeholder={patientDetails.gender}
-                variant="outlined"
-              />
-
+              <div className="birthday">
+                <label style={{fontSize:'14px'}}>Birthday</label>
               <TextField
                 id="bday"
                 required={true}
-                defaultValue={patientDetails.bday}
+                defaultValue={parseDate(patientDetails.bday).dateValue}
                 onChange={(e) =>
                   setEditForm({ ...editForm, bday: e.target.value })
                 }
-                label="Birthday"
                 type="date"
-                placeholder={patientDetails.bday}
                 variant="outlined"
               />
-
-              <Select
-                options={countriesSelect}
-                required={true}
-                placeholder={patientDetails.country}
-                onChange={(choice) =>
-                  setEditForm({ ...editForm, country: choice.label })
-                }
-              />
+              </div>
 
               <TextField
                 id="city"
@@ -169,6 +154,30 @@ const EditPatientModal = ({
                 variant="outlined"
               />
 
+              <div className="country">
+                <label style={{ fontSize: "14px" }}>Country</label>
+                <Select
+                  options={countriesSelect}
+                  required={true}
+                  placeholder={patientDetails.country}
+                  onChange={(choice) =>
+                    setEditForm({ ...editForm, country: choice.label })
+                  }
+                />
+              </div>
+
+              <div className="gender">
+                <label style={{ fontSize: "14px" }}>Gender</label>
+                <Select
+                  options={genders}
+                  required={true}
+                  placeholder={patientDetails.gender}
+                  onChange={(choice) =>
+                    setEditForm({ ...editForm, gender: choice.label })
+                  }
+                />
+              </div>
+
               <TextField
                 id="zip"
                 defaultValue={patientDetails.zip}
@@ -179,7 +188,6 @@ const EditPatientModal = ({
                 placeholder={patientDetails.zip}
                 variant="outlined"
               />
-              {/* <TextField id="registered-date-field" value={editForm.registered_date} label="Registered Time" placeholder={patientDetails.bday} variant="outlined" /> */}
 
               <TextField
                 id="phone"
@@ -220,34 +228,42 @@ const EditPatientModal = ({
                 }
               />
 
-              <TextField
-                id="screened_by"
-                defaultValue={patientDetails.date_taken}
-                label={isScreened ? "Date Taken" : "Disabled"}
-                onChange={(e) =>
-                  setEditForm({ ...editForm, date_taken: e.target.value })
-                }
-                disabled={disableEdit}
-                placeholder={
-                  isScreened ? patientDetails.date_taken : "Disabled."
-                }
-                variant="outlined"
-              />
+              <div className="date-taken">
+                <label style={{fontSize:'14px'}}>Date Taken</label>
+                <TextField
+                  type="date"
+                  id="screened_by"
+                  defaultValue={parseDate(patientDetails.date_taken).dateValue}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, date_taken: e.target.value })
+                  }
+                  disabled={disableEdit}
+                  variant="outlined"
+                  style={{width: '100%'}}
+                />
+              </div>
 
-              <TextField
-                className="screened_on"
-                defaultValue={patientDetails.date_finished}
-                onChange={(e) =>
-                  setEditForm({ ...editForm, date_finished: e.target.value })
-                }
-                label={isScreened ? "Date Finished" : "Disabled"}
-                type="date"
-                placeholder={
-                  isScreened ? patientDetails.date_finished : "Disabled."
-                }
-                variant="outlined"
-                disabled={disableEdit}
-              />
+              <div className="date-finished">
+                <label style={{fontSize:'14px'}}>Date Finished</label>
+                <TextField
+                  style={{width: '100%'}}
+                  className="screened_on"
+                  defaultValue={
+                    parseDate(patientDetails.date_finished).dateValue
+                  }
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, date_finished: e.target.value })
+                  }
+                  type="date"
+                  placeholder={
+                    isScreened
+                      ? null
+                      : "Disabled."
+                  }
+                  variant="outlined"
+                  disabled={disableEdit}
+                />
+              </div>
 
               <TextField
                 className="results"
@@ -256,10 +272,15 @@ const EditPatientModal = ({
                 defaultValue={patientDetails.result_description}
                 rows={4.3}
                 onChange={(e) =>
-                  setEditForm({ ...editForm, result_description: e.target.value })
+                  setEditForm({
+                    ...editForm,
+                    result_description: e.target.value,
+                  })
                 }
                 label={isScreened ? "Results" : "Disabled"}
-                placeholder={isScreened ? patientDetails.result_description : "Disabled."}
+                placeholder={
+                  isScreened ? patientDetails.result_description : "Disabled."
+                }
                 variant="outlined"
               />
             </div>

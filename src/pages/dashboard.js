@@ -48,6 +48,22 @@ const Dashboard = () => {
       .catch((error) => console.log(error));
   };
 
+  const parseDate = (date) => {
+    if (date.length < 20) {
+      const [dateValue, timeValue] = date.split(" ");
+      return {'dateValue': dateValue};
+    } else {
+      const [dayValue, day, dateNum, month, year, timeValue] = date.split(" ");
+      return {
+        'monthFirst': {
+          'date': day, 
+          'month': dateNum, 
+          'year': month
+        }
+      };
+    }
+  };
+
   const setData = (data) => {
     setPatients(data);
     getCategoryCount(data);
@@ -61,7 +77,6 @@ const Dashboard = () => {
   };
 
   const getCategoryCount = (data) => {
-    // console.log(split(data[7].time_stamps))
     const countCategory = (patients, sadCategory) => {
       const categories = patients.filter((data) => {
         return data.sad_category === sadCategory;
@@ -216,15 +231,12 @@ const Dashboard = () => {
                         <h5> {patient.fname + " " + patient.lname} </h5>
                       </div>
 
-                      <div className="screening-information-summary">
-                        <div className="screening-information-summary-date">
-                          <h6> {patient.date_taken} </h6>
-                        </div>
-
-                        <div className="screening-information-summary-time">
-                          {patient.screened_time}
-                        </div>
-                      </div>
+                      {/* <div className="screening-information-summary">
+                        <div className="screening-information-summary-date"> */}
+                          {/* <h6> {parseDate(patient.date_taken).dateValue} </h6> */}
+                          {/* <span>{ parseDate(patient.date_taken).monthFirst.month +", "+ parseDate(patient.date_taken).monthFirst.date +", "+ parseDate(patient.date_taken).monthFirst.year}</span> */}
+                        {/* </div>
+                      </div> */}
                     </ListItem>
                   ))}
 
