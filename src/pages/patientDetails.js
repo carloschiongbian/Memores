@@ -21,8 +21,9 @@ const PatientDetails = () => {
   };
 
   const setData = async (data) => {
+
     setPatientDetails(data.patients[0]);
-    setAssessmentDetails(data.assessment.length > 0 ? data.assessment[0] : []);
+    setAssessmentDetails((data.assessment.length > 0) ? data.assessment[0] : []);
     setScreeningDetails(data.screeningDetails[0]);
 
     setIsScreened(data.assessment.length > 0 ? true : false);
@@ -41,9 +42,7 @@ const PatientDetails = () => {
       },
     })
       .then((response) => response.json())
-      // .then((response) => setPatientDetails(response.patients))
       .then((response) => setData(response))
-      // .then((response) => console.log(response.patients.length))
       .catch((error) => console.log(error));
   };
 
@@ -72,7 +71,7 @@ const PatientDetails = () => {
                 className="patient-name-container"
                 style={{
                   backgroundColor: "white",
-                  padding: "20px 10px 20px 10px",
+                  padding: "20px 0px 20px 10px",
                   borderRadius: "10px",
                   display: "flex",
                   flexDirection: "column",
@@ -170,9 +169,7 @@ const PatientDetails = () => {
                       </span>
                     )}
                     {isScreened === true && (
-                      <h6>
-                        Description: {assessmentDetails.result_description}
-                      </h6>
+                      <h6>Description: {assessmentDetails.result_description}</h6>
                     )}
                   </div>
                 </div>
@@ -184,7 +181,14 @@ const PatientDetails = () => {
                 <label htmlFor="patient-notes-label">Notes</label>
 
                 <div className="patient-notes">
-                  <span>{screeningDetails.patient_notes}</span>
+                  {isScreened === false && (
+                    <span style={{ color: "gray", fontSize: "15px" }}>
+                      Not available. Patient must be screened first
+                    </span>
+                  )}
+                  {isScreened === true && (
+                    <span>{screeningDetails.patient_notes}</span>
+                  )}
                 </div>
 
                 <div className="patient-notes-actions">
@@ -202,7 +206,7 @@ const PatientDetails = () => {
                     openModal={open}
                     setOpen={setOpen}
                     checkIfScreened={checkIfScreened}
-                    isScreened={isScreened}
+                    parseDate={parseDate}
                   />
                 </div>
 

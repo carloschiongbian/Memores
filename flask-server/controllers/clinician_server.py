@@ -63,7 +63,7 @@ def retrievePatientScreeningDetails(id):
         }
         
         return records
-# 
+        
     elif request.method == 'PUT':
         # update with assessment table
 
