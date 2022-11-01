@@ -29,8 +29,8 @@ connection = pymysql.connect(
 )
 
 def retrieveData():
-    user = get_current_user()
-    user_id = user.get_json(force=True)['id']
+    # user = get_current_user()
+    user_id = session.get("user_id")
 
     patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients)
     patients_query = patients_query.outerjoin(Assessments, Patients.id == Assessments.patient_id).filter(Patients.created_by == user_id).order_by(Patients.id)

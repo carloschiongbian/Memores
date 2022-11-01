@@ -70,16 +70,13 @@ const PatientRecord = () => {
   ];
 
   const updatePatientRecords = (data) => {
-    let patientRecord = {}
     data.patients.forEach((patient) => {
       let patientRecord = {
         id: patient.id,
         firstName: patient.fname,
         lastName: patient.lname,
         age: patient.age,
-        is_screened: data.assessment.map((assessment) => {
-          return assessment.patient_id === patient.id ? "Yes" : "No";
-        }),
+        is_screened: (data.assessment.find(assessment => assessment.patient_id === patient.id)) ? 'Yes' : 'No',
         action: DeleteIcon,
       };
 
