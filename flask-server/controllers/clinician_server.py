@@ -29,7 +29,6 @@ connection = pymysql.connect(
 )
 
 def retrieveData():
-    # user = get_current_user()
     user_id = session.get("user_id")
 
     patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients)
@@ -143,123 +142,25 @@ def deletePatientRecord(id):
 
 def retrieveDashboardContent():
 
-    patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients).where(Patients.id == id)
+    user_id = session.get("user_id")
+
+    patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients)
+    patients_query = patients_query.outerjoin(Assessments, Patients.id == Assessments.patient_id).filter(Patients.created_by == user_id).order_by(Patients.id)
     patient_response_object = patient_record_schema.jsonify(patients_query)
 
-    assessments_query = db.session.query(*Assessments.__table__.columns).select_from(Assessments).where(Assessments.patient_id == id)
-    assessment_response_object = patient_assessment_schema.jsonify(assessments_query)
+    assessed_patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients).where(Assessments.patient_id == Patients.id)
+    assessed_patients_response_object = patient_record_schema.jsonify(assessed_patients_query)
 
-    screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails).where(patient_response_object.get_json()[0]['id'] == PatientsScreeningDetails.id)
+    screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails).where(Assessments.patient_id == PatientsScreeningDetails.id)
     screening_response_object = patient_screening_details_schema.jsonify(screening_query)
 
     records = { 
         'patients': patient_response_object.get_json(), 
-        'assessment': assessment_response_object.get_json(), 
+        'assessed_patients': assessed_patients_response_object.get_json(), 
         'screeningDetails': screening_response_object.get_json() 
     }
-
-    # user = get_current_user()
-    # user_id = user.get_json(force=True)['id']
-
-    # start_time = []
-    # finish_time = []
-
-    # cursor = connection.cursor()
-    # cursor.execute('SELECT TIME(date_taken) as start_time FROM assessments')
-    # result_time = cursor.fetchall()
-    # for time in result_time:
-    #     start_time.append(time['start_time'])
-
-    # cursor = connection.cursor()
-    # cursor.execute('SELECT TIME(date_finished) as finished_time FROM assessments')
-    # result_time = cursor.fetchall()
-    # for time in result_time:
-    #     finish_time.append(time['finished_time'])
-
-    # timeStamps = []
-
-    # for i in range(len(start_time)):
-        # timeStamps.append(finish_time[i] - start_time[i])
-    # timeStamps.sort()
-
-    # print(timeStamps)
-    # avg_time_duration = str((timeStamps[len(timeStamps) - 1] + timeStamps[0] / 2))
     
-    patients = []
-    assessments = []
-    screening_details = []
-    dashboard_content = []
-
-    for data in screening_details_query_response:
-        obj = {
-            'id': data['id'],
-            'sad_category': data['sad_category'],
-            'assessment_id': data['assessment_id']
-        }
-        screening_details.append(obj)
-
-    for data in assessment_query_response:
-        obj = {
-            'patient_id': data['patient_id'],
-            'assessor_id': data['assessor_id'],
-            'responses': data['responses'],
-            'date_taken': data['date_taken'],
-            'date_finished': data['date_finished'],
-            'prediction_result': data['prediction_result'],
-            'result_description': data['result_description'],
-        }
-        assessments.append(obj)
-
-    for data in patients_query_response:
-        obj = {
-            'patient_id': data['id'],
-            'fname': data['fname'],
-            'lname': data['lname'],
-            'created_by': data['created_by'],
-            'is_screened': data['is_screened'],
-            'date_taken': ''
-        }
-
-        for assessment in assessments:
-            if obj['patient_id'] == assessment['patient_id']:
-                is_screened_obj = {
-                    'is_screened': True,
-                    'date_taken': assessment['date_taken']
-                }
-                obj.update(is_screened_obj)
-
-        patients.append(obj)
-
-    for data in assessment_query_response:
-        obj = {
-            'patient_id': data['patient_id'],
-            'assessor_id': data['assessor_id']
-        }
-        assessments.append(obj)
-
-    for data in patients:
-        if data['created_by'] == user_id:
-            obj = {
-                'id': data['patient_id'],
-                'fname': data['fname'],
-                'lname': data['lname'],
-                'created_by': data['created_by'],
-                'is_screened': data['is_screened'],
-                'date_taken': data['date_taken'],
-                'sad_category': '',
-            }
-
-            for screening_data in screening_details:
-                if data['patient_id'] == screening_data['id']:
-                    screening_obj = {
-                        'sad_category': screening_data['sad_category'],
-                        'assessment_id': screening_data['assessment_id']
-                    }
-                    obj.update(screening_obj)
-            dashboard_content.append(obj)
-
-    dashboard_content.append({'time_stamps': str(timeStamps)})
-    return dashboard_content
+    return records
         
 class PatientAssessmentSchema(ma.Schema):
     class Meta:
