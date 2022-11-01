@@ -9,14 +9,15 @@ class Assessments(db.Model):
     # __tablename__ = 'assessments'
     id = db.Column(db.Integer, primary_key = True)
     prediction_result = db.Column(db.Boolean, nullable = False)
-    hasSad_percentage = db.Column(db.Float, nullable = False)
-    hasNoSad_percentage = db.Column(db.Float, nullable = False)
+    classification_probability = db.Column(db.Float, nullable = False)
     result_description = db.Column(db.String(255), nullable = False)
-    date_taken = db.Column(db.DateTime, nullable = False)
-    patient_id = db.Column(db.Integer)
-    assessor_id = db.Column(db.Integer)
+    date_taken = db.Column(db.DateTime, nullable = False, server_default=func.now())
+    date_finished = db.Column(db.DateTime, nullable = False, server_default=func.now())
+    patient_id = db.Column(db.Integer, db.ForeignKey("patients.id"))
+    assessor_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    responses = db.Column(db.JSON, nullable = False)
     created_at = db.Column(db.DateTime, nullable = False, server_default=func.now())
-    updated_at = db.Column(db.DateTime, nullable = False, onupdate=func.now())
+    updated_at = db.Column(db.DateTime, nullable = False, onupdate=func.now(), server_default=func.now())
 
 
 # Assessments Schema
@@ -24,8 +25,7 @@ class AssessmentsSchema(ma.Schema):
     """This is a database schema."""
     class Meta:
         """Specify which fields you want to see in RESTful API"""
-        fields = ('id', 'prediction_result', 'hasSad_percentage', 'hasNoSad_percentage', 'result_description', 'date_taken', 'patient_id', 'assessor_id', 'created_at', 'updated_at')
-
+        fields = ('id', 'prediction_result', 'classification_probability', 'result_description', 'date_taken', 'date_finished', 'patient_id', 'assessor_id', 'created_at', 'updated_at')
 
 """
 PLURALITY matters

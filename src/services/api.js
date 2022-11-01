@@ -11,7 +11,6 @@ export const BaseApi = axios.create({
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "*"
     },
-    
 })
 
 const Api = function () {

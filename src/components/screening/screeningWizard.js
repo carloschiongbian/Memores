@@ -2,10 +2,10 @@
 import WizardContent from "./wizardContent";
 import ScreeningResult from "./screeningResult";
 import { useState, useEffect, useContext } from "react";
-// import { sections } from "./dummy";
 import Api from "../../services/api";
 import { parseQuestions } from "../../lib/parseAssessmentQuestions";
-import { AnswerContext } from "./AnswerContext";
+import { AnswerContext } from "./AnswerContext"; // not exported as default
+import AuthContext from "../../auth/AuthContext"; // exported as default
 
 const ScreeningWizard = () => {
 
@@ -15,7 +15,10 @@ const ScreeningWizard = () => {
     const [totalAnswered, setTotalAnswered] = useState(0)
     const [shouldEnableSubmit, setShouldEnableSubmit] = useState(false)
     const [sections, setSections] = useState({})
-    const {answers, setAnswers} = useContext(AnswerContext)
+    const {answers, setAnswers, patientSelected, dateStarted} = useContext(AnswerContext)
+    const { user } = useContext(AuthContext)
+    const [classification, setClassification] = useState(null)
+    const [classProbability, setClassProbability] = useState(null)
 
     useEffect(() => {
 
@@ -57,20 +60,26 @@ const ScreeningWizard = () => {
 
         setTotalAnswered(totalChecks)
 
-        setAnswers({...answers, [e.target.name]: parseInt(e.target.value)})
+        setAnswers({...answers, [e.target.name]: Number(e.target.value)})
 
         if (totalQuestions === totalChecks)
             setShouldEnableSubmit(true)
     }
 
     const handleSubmit = () => {
-        console.log(answers)
+        // console.log(answers)
+        // console.log(patientSelected)
         setHasSubmitted(true)
 
         // Post the answers for the screening assessment
-        Api().post("/submit-answers", { data: JSON.stringify(answers) }, {
+        Api().post("/submit-answers", { data: answers, patient: patientSelected, 
+            assessor: user, dateStarted
+         }, {
             headers: { 'Content-Type': 'application/json' } })
-            .then(res => console.log(res))
+            .then(res => {
+                setClassification(res.data.classification)
+                setClassProbability(res.data.probability)
+            })
             .catch(err => console.log(err))
 
 
@@ -85,6 +94,7 @@ const ScreeningWizard = () => {
         setTimeout(() => {
             setMustShowResult(false)
             setShouldEnableSubmit(false)
+            setTotalAnswered(0)
         }, 1000)
     }
 
@@ -108,7 +118,7 @@ const ScreeningWizard = () => {
                             {
                                 // Check first if data has been fetched
                                 Object.keys(sections).length !== 0 &&
-                                mustShowResult && <ScreeningResult></ScreeningResult>
+                                mustShowResult && <ScreeningResult classification={classification} classProbability={classProbability} patientSelected={patientSelected}></ScreeningResult>
                             }
                         </div>
                         <div className="modal-footer">

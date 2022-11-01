@@ -13,6 +13,7 @@ ROUTE FORMAT SAMPLE:
 
 GET_USERS = "/api/get-users"
 QUESTIONS = "/api/get-assessment-questions"
+GET_PATIENTS = "/api/get-patients"
 ADD_USER = "/api/add-user"
 LOGIN = "/api/login"
 CURRENT_USER = "/api/@me"
@@ -23,3 +24,16 @@ PATIENT_DETAILS = "/patient-details/id=<id>"
 DASHBOARD = "/dashboard"
 
 SUBMIT_ANSWERS = "/api/submit-answers"
+UPDATE_USER_ACCOUNT = "/api/update-user"
+GET_USER_ACCOUNT_DETAILS = "/api/get-user-account"
+DELETE_USER = '/api/delete-user'
+GET_USER_VIEW = '/api/get-user-view'
+GET_DASHBOARD_DATA = '/api/get-dashboard-data'
+GET_DELETED_USERS = '/api/get-deleted-users'
+GET_UPDATED_USERS = '/api/get-updated-users'
+GET_DISTINCT_ROLES = '/api/get-distinct-roles'
+GET_GENERAL_USERS = '/api/get-general-users'
+UPDATE_USER_AND_PHOTO = '/api/update-user-and-photo'
+UPDATE_USER_AND_LICENSE = '/api/update-user-and-license'
+UPDATE_BOTH_IMAGE = '/api/update-both-image'
+UPDATE_USER_DETAILS_ONLY = '/api/update-user-only'

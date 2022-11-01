@@ -1,172 +1,309 @@
-import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import GroupIcon from '@mui/icons-material/Group';
-import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { List, ListItem, Skeleton } from "@mui/material";
 
-import Layout from '../components/Layout';
-import '../public/css/pages/Dashboard/Dashboard.scss';
+import GroupIcon from "@mui/icons-material/Group";
+import HealingIcon from "@mui/icons-material/Healing";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
+
+import Layout from "../components/Layout";
+import "../public/css/pages/Dashboard/Dashboard.scss";
+import CommonModal from "../components/modal/CommonModal";
+import DashboardChart from "../components/dashboard/DashboardChart.js";
+import { useContext } from "react";
+import AuthContext from "../auth/AuthContext";
+import Api from "../services/api";
+
+const SAD_CATEGORIES = {
+  NORMAL: "Normal",
+  MILD: "Mild",
+  MODERATE: "Moderate",
+  SEVERE: "Severe",
+};
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const [sadCategories, setSADCategories] = useState({
+    normal: 0,
+    mild: 0,
+    moderate: 0,
+    severe: 0,
+  });
+  const [patients, setPatients] = useState([]);
+  const [openScreenedModal, setOpenScreenedModal] = useState(false);
+  const authUser = useContext(AuthContext);
 
-    const [dashboardContent, setDashboardContent] = useState([])
-
-    useEffect(() => {
-        fetch('/dashboard', {
-            methods: 'GET',
-            headers: {
-                'Access-Control-Allow-Origin':'*',
-                'Content-Type': 'application/json'
-            }
-        }).then((response) =>
-            response.json()
-        ).then((response) =>
-            setDashboardContent(response)
-        ).catch((error) => 
-            console.log(error)
-        )
-        console.log(dashboardContent)
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await Api().get("/@me");
+        console.log(response.data);
+        authUser.setUser(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+  }, []);
 
-    //GRAPH SHOWS NUMBER OF PATIENTS AND NUMBER OF PATIENTS SCREENED
+  let patientRecordsPath = "../patient-records";
+  let patientDetailsPath = "../patient-details/id=";
 
-    return (
-        <Layout>
-            <div className="dashboard-container">
+  const getDashboardData = () => {
+    fetch("/dashboard", {
+      methods: "GET",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setData(data))
+      .catch((error) => console.log(error));
+  };
 
-                <div className="dashboard">
+  const parseDate = (date) => {
+    if (date.length < 20) {
+      const [dateValue, timeValue] = date.split(" ");
+      return { dateValue: dateValue };
+    } else {
+      const [dayValue, day, dateNum, month, year, timeValue] = date.split(" ");
+      return {
+        monthFirst: {
+          date: day,
+          month: dateNum,
+          year: month,
+        },
+      };
+    }
+  };
 
-                    <div className="dashboard-menu">
+  const setData = (data) => {
+    setPatients(data);
+    getCategoryCount(data);
+  };
 
-                    <div className="number-of-patients-container">
-                        <h4><GroupIcon />  Patients</h4>
-                        <h1>{ dashboardContent.length }</h1>
-                    </div>
+  const checkIfScreened = () => {
+    let count = 0;
+    patients.map((patient) => (patient.is_screened === true ? count++ : null));
 
-                        <div className="number-of-patients-screened-container">
-                            <h4><MedicalServicesIcon /> Screened</h4>
-                            <h1>100</h1>
-                        </div>
+    return count > 0 ? true : false;
+  };
 
-                        <div className="average-time-duration-of-screening-container">
-                            <h4>Average Time Duration of Screening</h4>
-                            <div className="average-time">
-                                <div className="hours-number-format">
-                                    <h2>0</h2>
-                                </div>
+  const getCategoryCount = (data) => {
+    const countCategory = (patients, sadCategory) => {
+      const categories = patients.filter((data) => {
+        return data.sad_category === sadCategory;
+      });
+      return categories.length;
+    };
 
-                                <div className="minutes-number-format">
-                                    <h2>46</h2>
-                                </div>
+    setSADCategories({
+      ...sadCategories,
+      normal: countCategory(data, SAD_CATEGORIES.NORMAL),
+      mild: countCategory(data, SAD_CATEGORIES.MILD),
+      moderate: countCategory(data, SAD_CATEGORIES.MODERATE),
+      severe: countCategory(data, SAD_CATEGORIES.SEVERE),
+    });
+  };
 
-                                <div className="seconds-number-format">
-                                    <h2>21</h2>
-                                </div>
+  const countScreenedPatients = (data) => {
+    const is_screened = data.map((data) => data.is_screened === true);
+    return is_screened.filter((data) => data === true);
+  };
 
-                                <div className="hours-string-format">
-                                    <h3>Hour(s)</h3>
-                                </div>
+  const handleModal = () => {
+    setOpenScreenedModal(!openScreenedModal ? true : false);
+  };
 
-                                <div className="minutes-string-format">
-                                    <h3>Minute(s)</h3>
-                                </div>
-
-                                <div className="seconds-string-format">
-                                    <h3>Second(s)</h3>
-                                </div>
-                            </div>
-                        </div> 
-                    </div>
-
-                    <div 
-                        className="recently-screened-patients-container" 
-                        style={{
-                            display: 'grid',
-                            borderRadius: '10px',
-                            margin: '0 20px 90px 20px', 
-                            columnGap: '10px',
-                            gridTemplateColumns: '1fr 1fr',
-                            paddingBottom: '20px'
-                        }}
-                    >
-                        
-                        <div 
-                            className="recently-screened-patients-body" 
-                            style={{
-                                borderRadius: '10px', 
-                                backgroundColor: 'white',
-                            }}
-                        >
-
-                            <div 
-                                className="recently-screened-patients-header"
-                                style={{
-                                    padding: '20px',
-                                    display: 'flex',
-                                    borderBottom: '1px solid grey',
-                                    justifyContent: 'space-between',
-                                }}
-                            >
-                                <label htmlFor="recently-screened-label">Recently Screened Patients</label>
-                                <label htmlFor="view-all-hyperlink"><Link to="/patient-records" style={{textDecoration: 'none'}}>View All</Link></label>
-                            </div>
-
-                            {
-                                dashboardContent.map((patient, index) => (
-                                    <div 
-                                        className="recently-screened-patient-data" 
-                                        key={ index }
-                                        style={{
-                                            display: 'flex',                    
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
-                                            padding: '15px 35px 15px 35px',
-                                            borderBottom: '1px solid rgb(167, 165, 165)'
-                                        }}
-                                    >
-                                        <div className="patient-profile">
-                                            <div className="patient-name">
-                                                { patient.fname + " " + patient.lname }
-                                            </div>
-                                        </div>
-
-                                        <div 
-                                            className="screening-information-summary"
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'row'
-                                            }}
-                                        >
-                                            <div className="screening-information-summary-date">
-                                                { patient.screened_date }
-                                            </div>
-
-                                            <div className="screening-information-summary-time">
-                                                { patient.screened_time }
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                ))
-                            }                            
-                        </div>
-                        
-                        <div 
-                            className="graphical-representation-of-data-container" 
-                            style={{
-                                backgroundColor: 'white',
-                                borderRadius: '10px'
-                            }}
-                        >
-                            <p>graphical-representation-of-data</p>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </Layout>
+  const getScreenedPatients = () => {
+    const screenedPatients = patients.filter(
+      (patient) => patient.is_screened === true
     );
-}
+
+    if (screenedPatients.length > 0) {
+      return {
+        screenedPatients: screenedPatients,
+        hasScreened: true,
+      };
+    } else {
+      return {
+        empty_message: "No patients were screened yet",
+        hasScreened: false,
+      };
+    }
+  };
+
+  useEffect(() => {
+    getDashboardData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <Layout>
+      <div className="dashboard-container">
+        <div className="dashboard">
+          <div className="top-section">
+            <div
+              className="number-of-patients-container"
+              onClick={() => navigate(patientRecordsPath)}
+            >
+              <h4>
+                <GroupIcon /> Patients
+              </h4>
+              <h1>{patients.length - 1}</h1>
+            </div>
+
+            <div
+              onClick={() => handleModal()}
+              className="number-of-patients-screened-container"
+            >
+              <h4>
+                <MedicalServicesIcon /> Screened
+              </h4>
+              <h1>{countScreenedPatients(patients).length}</h1>
+
+              <CommonModal
+                dialogTitle="Your Screened Patients"
+                btnPrimaryText="Okay"
+                width="800"
+                handleSubmit={handleModal}
+                openModal={openScreenedModal}
+                handleClose={handleModal}
+              >
+                {getScreenedPatients().hasScreened &&
+                  getScreenedPatients().screenedPatients.map(
+                    (patient, index) => (
+                      <ListItem
+                        key={index}
+                        divider={true}
+                        button={true}
+                        onClick={() => {
+                          navigate(patientDetailsPath + patient.id);
+                        }}
+                        className="patient-information-item"
+                      >
+                        <div className="patient-name">
+                          <h5>
+                            {index + 1}) {patient.fname + " " + patient.lname}{" "}
+                          </h5>
+                        </div>
+                      </ListItem>
+                    )
+                  )}
+                {!getScreenedPatients().hasScreened && (
+                  <span style={{ color: "gray", fontSize: "15px" }}>
+                    {getScreenedPatients().empty_message}
+                  </span>
+                )}
+              </CommonModal>
+            </div>
+
+            <div className="average-time-duration-of-screening-container">
+              <h3>
+                {" "}
+                <HourglassBottomIcon /> Average screening time duration:{" "}
+              </h3>
+              {/* <h2 style={{float: 'left'}}>{patients.length !== 0 && patients[patients.length - 1].avg_time_duration}</h2>
+              <span style={{fontSize: '14px'}}>Hours / minutes / seconds</span> */}
+            </div>
+          </div>
+
+          <div className="bottom-section">
+            <div className="recently-screened-patients-body">
+              <List className="patients-list-container">
+                <ListItem divider={true} className="patient-list-header">
+                  <h5>Recently Screened Patients</h5>
+                  <h6>
+                    <Link
+                      to="/patient-records"
+                      style={{ textDecoration: "none" }}
+                    >
+                      View All
+                    </Link>
+                  </h6>
+                </ListItem>
+                {patients.length === 0 && (
+                  <ListItem
+                    style={{
+                      margin: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Skeleton height={100} width={"100%"} />
+                    <Skeleton height={100} width={"100%"} />
+                    <Skeleton height={100} width={"100%"} />
+                  </ListItem>
+                )}
+                {patients.length !== 0 &&
+                  checkIfScreened() &&
+                  getScreenedPatients()
+                    .screenedPatients.slice(0, 3)
+                    .map((patient, index) => (
+                      <ListItem
+                        key={index}
+                        divider={true}
+                        button={true}
+                        onClick={() => {
+                          navigate(patientDetailsPath + patient.id);
+                        }}
+                        className="patient-information-item"
+                      >
+                        <div className="patient-name">
+                          <NavigateNextIcon />
+
+                          <h5> {patient.fname + " " + patient.lname} </h5>
+                        </div>
+
+                        {/* <div className="screening-information-summary">
+                        <div className="screening-information-summary-date"> */}
+                        {/* <h6> {parseDate(patient.date_taken).dateValue} </h6> */}
+                        {/* <span>{ parseDate(patient.date_taken).monthFirst.month +", "+ parseDate(patient.date_taken).monthFirst.date +", "+ parseDate(patient.date_taken).monthFirst.year}</span> */}
+                        {/* </div>
+                      </div> */}
+                      </ListItem>
+                    ))}
+
+                {patients.length !== 0 && !checkIfScreened() && (
+                  <div
+                    className="no-data"
+                    style={{
+                      display: "flex",
+                      columnGap: "10px",
+                      padding: "100px 0",
+                      lineHeight: "normal",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <HealingIcon style={{ float: "left" }} />
+                    <h6 style={{ color: "gray" }}>
+                      None of your patients have been screened yet
+                    </h6>
+                  </div>
+                )}
+              </List>
+            </div>
+
+            <div className="graph-container">
+              <DashboardChart
+                normal={sadCategories.normal}
+                mild={sadCategories.mild}
+                moderate={sadCategories.moderate}
+                severe={sadCategories.severe}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
+};
 
 export default Dashboard;
