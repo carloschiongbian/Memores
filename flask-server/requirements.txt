@@ -33,3 +33,4 @@ six==1.16.0
 SQLAlchemy==1.4.41
 Werkzeug==2.2.2
 wrapt==1.14.1
+scikit-learn==1.1.2
