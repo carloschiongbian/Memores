@@ -22,6 +22,7 @@ import {
   ListItemText,
   Paper,
   Avatar,
+  Skeleton,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
@@ -48,6 +49,7 @@ const AdminDashboard = () => {
   const [dialogData, setDialogData] = useState({});
   const [isUserDialogOpen, setIsUserDialogOpen] = useState(false);
   const authUser = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getAllUsers = async () => {
     try {
@@ -55,6 +57,7 @@ const AdminDashboard = () => {
       if (response.status === 200) {
         setList(response.data);
         setTitle("User List");
+        setIsLoading(false);
       }
     } catch (e) {
       console.log(e);
@@ -112,7 +115,10 @@ const AdminDashboard = () => {
     const getUser = async () => {
       try {
         const response = await Api().get("/@me");
-        authUser.setUser(response.data);
+        if (response.status === 200) {
+          authUser.setUser(response.data);
+          localStorage.setItem("isLogin", true);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -126,6 +132,7 @@ const AdminDashboard = () => {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     getAllUsers();
   }, []);
 
@@ -219,7 +226,88 @@ const AdminDashboard = () => {
             }}
             disablePadding
           >
-            {list &&
+            {isLoading ? (
+              <>
+                <ListItem
+                  sx={{ width: "100%", bgcolor: "background.paper" }}
+                  key={1}
+                >
+                  <ListItemButton>
+                    <ListItemAvatar>
+                      <Skeleton width={40} height={40} variant="circular" />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Skeleton
+                          variant="text"
+                          sx={{ fontSize: "1rem" }}
+                          width="80%"
+                        />
+                      }
+                      secondary={
+                        <Skeleton
+                          variant="text"
+                          sx={{ fontSize: "1rem" }}
+                          width="40%"
+                        />
+                      }
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem
+                  sx={{ width: "100%", bgcolor: "background.paper" }}
+                  key={2}
+                >
+                  <ListItemButton>
+                    <ListItemAvatar>
+                      <Skeleton width={40} height={40} variant="circular" />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Skeleton
+                          variant="text"
+                          sx={{ fontSize: "1rem" }}
+                          width="80%"
+                        />
+                      }
+                      secondary={
+                        <Skeleton
+                          variant="text"
+                          sx={{ fontSize: "1rem" }}
+                          width="40%"
+                        />
+                      }
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem
+                  sx={{ width: "100%", bgcolor: "background.paper" }}
+                  key={3}
+                >
+                  <ListItemButton>
+                    <ListItemAvatar>
+                      <Skeleton width={40} height={40} variant="circular" />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Skeleton
+                          variant="text"
+                          sx={{ fontSize: "1rem" }}
+                          width="80%"
+                        />
+                      }
+                      secondary={
+                        <Skeleton
+                          variant="text"
+                          sx={{ fontSize: "1rem" }}
+                          width="40%"
+                        />
+                      }
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </>
+            ) : (
               list.map((d, i) => {
                 return title !== "Role List" ? (
                   <ListItem
@@ -256,8 +344,8 @@ const AdminDashboard = () => {
                     <ListItemText primary={capitalize(d)} />
                   </ListItem>
                 );
-              })}
-            {list.length === 0 && <Item>No Data</Item>}
+              })
+            )}
           </List>
         </Grid>
       </Grid>

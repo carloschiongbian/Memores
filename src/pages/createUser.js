@@ -18,7 +18,6 @@ import {
 const options = [
   { value: "male", label: "Male" },
   { value: "female", label: "Female" },
-  { value: "other", label: "other" },
 ];
 
 const CreateUser = ({

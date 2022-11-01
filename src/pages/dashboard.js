@@ -40,8 +40,10 @@ const Dashboard = () => {
     const getUser = async () => {
       try {
         const response = await Api().get("/@me");
-        console.log(response.data);
-        authUser.setUser(response.data);
+        if (response.status === 200) {
+          authUser.setUser(response.data);
+          localStorage.setItem("isLogin", true);
+        }
       } catch (error) {
         console.log(error);
       }
