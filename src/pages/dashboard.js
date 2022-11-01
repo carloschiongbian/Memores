@@ -33,6 +33,8 @@ const Dashboard = () => {
     severe: 0,
   });
   const [patients, setPatients] = useState([]);
+  const [assessedPatients, setAssessedPatients] = useState([]);
+  const [screeningDetails, setScreeningDetails] = useState([]);
   const [openScreenedModal, setOpenScreenedModal] = useState(false);
   const authUser = useContext(AuthContext);
 
@@ -49,6 +51,7 @@ const Dashboard = () => {
       }
     };
     getUser();
+    getDashboardData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -68,35 +71,16 @@ const Dashboard = () => {
       .catch((error) => console.log(error));
   };
 
-  const parseDate = (date) => {
-    if (date.length < 20) {
-      const [dateValue, timeValue] = date.split(" ");
-      return { dateValue: dateValue };
-    } else {
-      const [dayValue, day, dateNum, month, year, timeValue] = date.split(" ");
-      return {
-        monthFirst: {
-          date: day,
-          month: dateNum,
-          year: month,
-        },
-      };
-    }
-  };
-
   const setData = (data) => {
-    setPatients(data);
-    getCategoryCount(data);
-  };
-
-  const checkIfScreened = () => {
-    let count = 0;
-    patients.map((patient) => (patient.is_screened === true ? count++ : null));
-
-    return count > 0 ? true : false;
+    setPatients(data.patients);
+    setAssessedPatients(data.assessed_patients);
+    getCategoryCount(data.screeningDetails);
   };
 
   const getCategoryCount = (data) => {
+
+    //will fix the naming convention but the code works
+
     const countCategory = (patients, sadCategory) => {
       const categories = patients.filter((data) => {
         return data.sad_category === sadCategory;
@@ -113,37 +97,14 @@ const Dashboard = () => {
     });
   };
 
-  const countScreenedPatients = (data) => {
-    const is_screened = data.map((data) => data.is_screened === true);
-    return is_screened.filter((data) => data === true);
-  };
+  // const countScreenedPatients = (data) => {
+  //   const is_screened = data.map((data) => data.is_screened === true);
+  //   return is_screened.filter((data) => data === true);
+  // };
 
   const handleModal = () => {
     setOpenScreenedModal(!openScreenedModal ? true : false);
   };
-
-  const getScreenedPatients = () => {
-    const screenedPatients = patients.filter(
-      (patient) => patient.is_screened === true
-    );
-
-    if (screenedPatients.length > 0) {
-      return {
-        screenedPatients: screenedPatients,
-        hasScreened: true,
-      };
-    } else {
-      return {
-        empty_message: "No patients were screened yet",
-        hasScreened: false,
-      };
-    }
-  };
-
-  useEffect(() => {
-    getDashboardData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <Layout>
@@ -157,7 +118,7 @@ const Dashboard = () => {
               <h4>
                 <GroupIcon /> Patients
               </h4>
-              <h1>{patients.length - 1}</h1>
+              <h1>{patients.length}</h1>
             </div>
 
             <div
@@ -167,7 +128,7 @@ const Dashboard = () => {
               <h4>
                 <MedicalServicesIcon /> Screened
               </h4>
-              <h1>{countScreenedPatients(patients).length}</h1>
+              <h1>{assessedPatients.length}</h1>
 
               <CommonModal
                 dialogTitle="Your Screened Patients"
@@ -177,9 +138,8 @@ const Dashboard = () => {
                 openModal={openScreenedModal}
                 handleClose={handleModal}
               >
-                {getScreenedPatients().hasScreened &&
-                  getScreenedPatients().screenedPatients.map(
-                    (patient, index) => (
+                {assessedPatients.length !== 0 &&
+                  assessedPatients.map((patient, index) => (
                       <ListItem
                         key={index}
                         divider={true}
@@ -197,9 +157,9 @@ const Dashboard = () => {
                       </ListItem>
                     )
                   )}
-                {!getScreenedPatients().hasScreened && (
+                {assessedPatients.length === 0 && (
                   <span style={{ color: "gray", fontSize: "15px" }}>
-                    {getScreenedPatients().empty_message}
+                    "No patients were screened yet"
                   </span>
                 )}
               </CommonModal>
@@ -229,7 +189,7 @@ const Dashboard = () => {
                     </Link>
                   </h6>
                 </ListItem>
-                {patients.length === 0 && (
+                {assessedPatients.length === 0 && (
                   <ListItem
                     style={{
                       margin: 0,
@@ -243,36 +203,26 @@ const Dashboard = () => {
                     <Skeleton height={100} width={"100%"} />
                   </ListItem>
                 )}
-                {patients.length !== 0 &&
-                  checkIfScreened() &&
-                  getScreenedPatients()
-                    .screenedPatients.slice(0, 3)
-                    .map((patient, index) => (
-                      <ListItem
-                        key={index}
-                        divider={true}
-                        button={true}
-                        onClick={() => {
-                          navigate(patientDetailsPath + patient.id);
-                        }}
-                        className="patient-information-item"
-                      >
-                        <div className="patient-name">
-                          <NavigateNextIcon />
+                {assessedPatients.length !== 0 &&
+                  assessedPatients.slice(0, 3).map((patient, index) => (
+                    <ListItem
+                      key={index}
+                      divider={true}
+                      button={true}
+                      onClick={() => {
+                        navigate(patientDetailsPath + patient.id);
+                      }}
+                      className="patient-information-item"
+                    >
+                      <div className="patient-name">
+                        <NavigateNextIcon />
 
-                          <h5> {patient.fname + " " + patient.lname} </h5>
-                        </div>
+                        <h5> {patient.fname + " " + patient.lname} </h5>
+                      </div>
+                    </ListItem>
+                  ))}
 
-                        {/* <div className="screening-information-summary">
-                        <div className="screening-information-summary-date"> */}
-                        {/* <h6> {parseDate(patient.date_taken).dateValue} </h6> */}
-                        {/* <span>{ parseDate(patient.date_taken).monthFirst.month +", "+ parseDate(patient.date_taken).monthFirst.date +", "+ parseDate(patient.date_taken).monthFirst.year}</span> */}
-                        {/* </div>
-                      </div> */}
-                      </ListItem>
-                    ))}
-
-                {patients.length !== 0 && !checkIfScreened() && (
+                {patients.length !== 0 && assessedPatients.length === 0 && (
                   <div
                     className="no-data"
                     style={{
