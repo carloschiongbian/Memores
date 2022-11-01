@@ -1,18 +1,14 @@
-import json
-from datetime import timedelta
 import pymysql.cursors
 from connection.connection import db, ma
-from json_encoder import AlchemyEncoder
 from flask import Flask, jsonify, request, session
 
-from models.users import Users
 from models.patients import Patients
 from models.assessments import Assessments
 from controllers.get_current_user import *
 from models.patient_screening_details import PatientsScreeningDetails
 
 from sqlalchemy import create_engine
-from sqlalchemy import select, delete, update
+from sqlalchemy import delete, update
 
 engine = create_engine("mysql+pymysql://root:@localhost/memores_v2")
 connect = engine.connect()
