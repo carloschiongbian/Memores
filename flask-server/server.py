@@ -62,11 +62,12 @@ app.add_url_rule('<URL>', '<NICKNAME>', <FUNCTION_NAME>, methods = ["GET", "POST
     WHERE:
             <URL> - URL of the API Route -> can be found inside /routes/routes.py
 """
-from controllers import get_users, login, register_user, get_current_user, logout
+from controllers import get_users, login, register_user, get_current_user, logout, clinician_server
 from controllers.screening import get_questions, submit_answers
+
 # Get Users
 app.add_url_rule(GET_USERS, 'get_users', get_users.get_users, methods = ['GET'])
-# Assessment Quesions
+# Assessment Questions
 app.add_url_rule(QUESTIONS, 'questions', get_questions.get_questions, methods = ['GET'])
 # Submit answers
 app.add_url_rule(SUBMIT_ANSWERS, 'submit_answers', submit_answers.submit_answers, methods = ['POST'])
@@ -78,6 +79,18 @@ app.add_url_rule(LOGIN, 'login', login.login, methods = ['POST'])
 app.add_url_rule(CURRENT_USER, 'get_current_user', get_current_user.get_current_user, methods = ['GET'])
 #logout
 app.add_url_rule(LOGOUT, 'logout', logout.logout_user, methods = ['POST'])
+#Get Patient Records
+app.add_url_rule(PATIENT_RECORDS, 'patient_records', clinician_server.retrieveData, methods = ['GET'])
+#Delete Patient Record
+app.add_url_rule(DELETE_PATIENT_RECORD, 'delete_patient_record', clinician_server.deletePatientRecord, methods = ['DELETE'])
+#Get Patient Details
+app.add_url_rule(PATIENT_DETAILS, 'patient_details', clinician_server.retrievePatientScreeningDetails, methods = ['GET'])
+#Update Patient Details
+app.add_url_rule(PATIENT_DETAILS, 'patient_details', clinician_server.retrievePatientScreeningDetails, methods = ['PUT'])
+#Get Dashboard Data
+app.add_url_rule(DASHBOARD, 'dashboard', clinician_server.retrieveDashboardContent, methods = ['GET'])
+
+
 
 # To create database tables inside the database,
 # run the command: python server.py --create-db

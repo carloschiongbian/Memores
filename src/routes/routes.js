@@ -7,7 +7,7 @@ const ERROR_404 = "/error-404"
 const SCREENING = "/screening"
 const DASHBOARD = "/dashboard"
 const PATIENT_RECORDS = "/patient-records"
-const PATIENT_DETAILS = "/patient-details"
+const PATIENT_DETAILS = "/patient-details/id=:id"
 
 
 // ADMIN ROUTES
