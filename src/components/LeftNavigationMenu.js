@@ -4,6 +4,7 @@ import routes from "../routes/routes";
 import { useContext } from "react";
 import AuthContext from "../auth/AuthContext";
 import { BaseApi } from "../services/api";
+import Memores from "../public/images/wisteria-designify.png";
 
 const LeftNavigationMenu = ({ isLeftNavigationOpen }) => {
   const authUser = useContext(AuthContext);
@@ -47,18 +48,18 @@ const LeftNavigationMenu = ({ isLeftNavigationOpen }) => {
       className="sidemenu d-flex flex-column"
       style={{ width: isLeftNavigationOpen ? "250px" : "0px" }}
     >
-      <div className="row mb-4 justify-content-between">
-        <div className="col px-0 d-flex justify-content-center">
+      <div className="row pb-3">
+        <div className="col px-0 d-flex flex-column justify-content-center align-items-center">
           <img
-            src={"data:image/png;base64," + authUser.user.photo}
+            src={Memores}
             className="bg-light rounded-circle"
-            width={90}
-            height={90}
+            width={120}
+            height={120}
             alt=""
           />
         </div>
       </div>
-      <div className="row mt-4">
+      <div className="row">
         <div className="col">
           <div className="text-white">
             <div className="list-group">

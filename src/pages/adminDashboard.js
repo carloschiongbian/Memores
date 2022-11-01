@@ -28,6 +28,8 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import UserDialog from "../components/modal/UserDialog";
 import BlockIcon from "@mui/icons-material/Block";
+import { useContext } from "react";
+import AuthContext from "../auth/AuthContext";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -45,8 +47,7 @@ const AdminDashboard = () => {
   const [title, setTitle] = useState("User List");
   const [dialogData, setDialogData] = useState({});
   const [isUserDialogOpen, setIsUserDialogOpen] = useState(false);
-
-  console.log(dialogData);
+  const authUser = useContext(AuthContext);
 
   const getAllUsers = async () => {
     try {
@@ -75,7 +76,6 @@ const AdminDashboard = () => {
   const getUpdatedUsers = async () => {
     try {
       const response = await Api().get("/get-updated-users");
-      console.log(response.data);
       if (response.status === 200) {
         setList(response.data);
         setTitle("Updated User List");
@@ -107,6 +107,19 @@ const AdminDashboard = () => {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await Api().get("/@me");
+        authUser.setUser(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     getDashboardData();
@@ -252,6 +265,7 @@ const AdminDashboard = () => {
         openModal={isUserDialogOpen}
         handleClose={() => setIsUserDialogOpen(false)}
         dialogData={dialogData}
+        title={title}
       />
     </Layout>
   );

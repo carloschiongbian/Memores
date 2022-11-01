@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 
-const UserDialog = ({ openModal, handleClose, dialogData }) => {
+const UserDialog = ({ openModal, handleClose, dialogData, title }) => {
   return (
     <Dialog open={openModal} onClose={handleClose} fullWidth maxWidth="sm">
       {dialogData && (
@@ -27,10 +27,30 @@ const UserDialog = ({ openModal, handleClose, dialogData }) => {
                 <Typography>{dialogData.uname} </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography sx={{ fontWeight: "bold" }}>Created at:</Typography>
-                <Typography>
-                  {dayjs(dialogData.created_at).format("MMM-DD-YYYY")}
-                </Typography>
+                {title === "Updated User List" && (
+                  <>
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Updated at:
+                    </Typography>
+                    <Typography>
+                      {dayjs(dialogData.updated_at).format(
+                        "MMM-DD-YYYY, hh:mm:ss a"
+                      )}
+                    </Typography>
+                  </>
+                )}
+                {title === "User List" && (
+                  <>
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Created at:
+                    </Typography>
+                    <Typography>
+                      {dayjs(dialogData.created_at).format(
+                        "MMM-DD-YYYY, hh:mm:ss a"
+                      )}
+                    </Typography>
+                  </>
+                )}
               </Grid>
               <Grid item xs={6}>
                 <Typography sx={{ fontWeight: "bold" }}>First name:</Typography>

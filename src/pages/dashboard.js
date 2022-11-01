@@ -6,13 +6,16 @@ import { List, ListItem, Skeleton } from "@mui/material";
 import GroupIcon from "@mui/icons-material/Group";
 import HealingIcon from "@mui/icons-material/Healing";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 
 import Layout from "../components/Layout";
 import "../public/css/pages/Dashboard/Dashboard.scss";
 import CommonModal from "../components/modal/CommonModal";
 import DashboardChart from "../components/dashboard/DashboardChart.js";
+import { useContext } from "react";
+import AuthContext from "../auth/AuthContext";
+import Api from "../services/api";
 
 const SAD_CATEGORIES = {
   NORMAL: "Normal",
@@ -31,6 +34,21 @@ const Dashboard = () => {
   });
   const [patients, setPatients] = useState([]);
   const [openScreenedModal, setOpenScreenedModal] = useState(false);
+  const authUser = useContext(AuthContext);
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await Api().get("/@me");
+        console.log(response.data);
+        authUser.setUser(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   let patientRecordsPath = "../patient-records";
   let patientDetailsPath = "../patient-details/id=";
@@ -51,15 +69,15 @@ const Dashboard = () => {
   const parseDate = (date) => {
     if (date.length < 20) {
       const [dateValue, timeValue] = date.split(" ");
-      return {'dateValue': dateValue};
+      return { dateValue: dateValue };
     } else {
       const [dayValue, day, dateNum, month, year, timeValue] = date.split(" ");
       return {
-        'monthFirst': {
-          'date': day, 
-          'month': dateNum, 
-          'year': month
-        }
+        monthFirst: {
+          date: day,
+          month: dateNum,
+          year: month,
+        },
       };
     }
   };
@@ -67,12 +85,12 @@ const Dashboard = () => {
   const setData = (data) => {
     setPatients(data);
     getCategoryCount(data);
-  }; 
+  };
 
   const checkIfScreened = () => {
     let count = 0;
     patients.map((patient) => (patient.is_screened === true ? count++ : null));
-    
+
     return count > 0 ? true : false;
   };
 
@@ -103,20 +121,22 @@ const Dashboard = () => {
   };
 
   const getScreenedPatients = () => {
-    const screenedPatients = patients.filter(patient => patient.is_screened === true)
-    
-    if(screenedPatients.length > 0){
+    const screenedPatients = patients.filter(
+      (patient) => patient.is_screened === true
+    );
+
+    if (screenedPatients.length > 0) {
       return {
         screenedPatients: screenedPatients,
-        hasScreened: true
-      } 
+        hasScreened: true,
+      };
     } else {
-      return{
-        empty_message: 'No patients were screened yet',
-        hasScreened: false
-      }
+      return {
+        empty_message: "No patients were screened yet",
+        hasScreened: false,
+      };
     }
-  }
+  };
 
   useEffect(() => {
     getDashboardData();
@@ -149,37 +169,45 @@ const Dashboard = () => {
 
               <CommonModal
                 dialogTitle="Your Screened Patients"
-                btnPrimaryText='Okay'
-                width='800'
+                btnPrimaryText="Okay"
+                width="800"
                 handleSubmit={handleModal}
                 openModal={openScreenedModal}
                 handleClose={handleModal}
               >
-                {
-                  getScreenedPatients().hasScreened &&
-                  getScreenedPatients().screenedPatients.map((patient, index) => (
-                    <ListItem
-                      key={index}
-                      divider={true}
-                      button={true}
-                      onClick={() => {
-                        navigate(patientDetailsPath + patient.id);
-                      }}
-                      className="patient-information-item"
-                    >
-                      <div className="patient-name">
-                        <h5>{index + 1}) {patient.fname + " " + patient.lname} </h5>
-                      </div>
-                    </ListItem>
-                  ))}
-                {!getScreenedPatients().hasScreened &&
-                  <span style={{color: 'gray', fontSize: '15px'}}>{getScreenedPatients().empty_message}</span>
-                }
+                {getScreenedPatients().hasScreened &&
+                  getScreenedPatients().screenedPatients.map(
+                    (patient, index) => (
+                      <ListItem
+                        key={index}
+                        divider={true}
+                        button={true}
+                        onClick={() => {
+                          navigate(patientDetailsPath + patient.id);
+                        }}
+                        className="patient-information-item"
+                      >
+                        <div className="patient-name">
+                          <h5>
+                            {index + 1}) {patient.fname + " " + patient.lname}{" "}
+                          </h5>
+                        </div>
+                      </ListItem>
+                    )
+                  )}
+                {!getScreenedPatients().hasScreened && (
+                  <span style={{ color: "gray", fontSize: "15px" }}>
+                    {getScreenedPatients().empty_message}
+                  </span>
+                )}
               </CommonModal>
             </div>
 
             <div className="average-time-duration-of-screening-container">
-              <h3> <HourglassBottomIcon /> Average screening time duration: </h3>
+              <h3>
+                {" "}
+                <HourglassBottomIcon /> Average screening time duration:{" "}
+              </h3>
               {/* <h2 style={{float: 'left'}}>{patients.length !== 0 && patients[patients.length - 1].avg_time_duration}</h2>
               <span style={{fontSize: '14px'}}>Hours / minutes / seconds</span> */}
             </div>
@@ -215,30 +243,32 @@ const Dashboard = () => {
                 )}
                 {patients.length !== 0 &&
                   checkIfScreened() &&
-                  getScreenedPatients().screenedPatients.slice(0, 3).map((patient, index) => (
-                    <ListItem
-                      key={index}
-                      divider={true}
-                      button={true}
-                      onClick={() => {
-                        navigate(patientDetailsPath + patient.id);
-                      }}
-                      className="patient-information-item"
-                    >
-                      <div className="patient-name">
-                        <NavigateNextIcon />
+                  getScreenedPatients()
+                    .screenedPatients.slice(0, 3)
+                    .map((patient, index) => (
+                      <ListItem
+                        key={index}
+                        divider={true}
+                        button={true}
+                        onClick={() => {
+                          navigate(patientDetailsPath + patient.id);
+                        }}
+                        className="patient-information-item"
+                      >
+                        <div className="patient-name">
+                          <NavigateNextIcon />
 
-                        <h5> {patient.fname + " " + patient.lname} </h5>
-                      </div>
+                          <h5> {patient.fname + " " + patient.lname} </h5>
+                        </div>
 
-                      {/* <div className="screening-information-summary">
+                        {/* <div className="screening-information-summary">
                         <div className="screening-information-summary-date"> */}
-                          {/* <h6> {parseDate(patient.date_taken).dateValue} </h6> */}
-                          {/* <span>{ parseDate(patient.date_taken).monthFirst.month +", "+ parseDate(patient.date_taken).monthFirst.date +", "+ parseDate(patient.date_taken).monthFirst.year}</span> */}
+                        {/* <h6> {parseDate(patient.date_taken).dateValue} </h6> */}
+                        {/* <span>{ parseDate(patient.date_taken).monthFirst.month +", "+ parseDate(patient.date_taken).monthFirst.date +", "+ parseDate(patient.date_taken).monthFirst.year}</span> */}
                         {/* </div>
                       </div> */}
-                    </ListItem>
-                  ))}
+                      </ListItem>
+                    ))}
 
                 {patients.length !== 0 && !checkIfScreened() && (
                   <div
@@ -262,7 +292,12 @@ const Dashboard = () => {
             </div>
 
             <div className="graph-container">
-              <DashboardChart normal={sadCategories.normal} mild={sadCategories.mild} moderate={sadCategories.moderate} severe={sadCategories.severe} />
+              <DashboardChart
+                normal={sadCategories.normal}
+                mild={sadCategories.mild}
+                moderate={sadCategories.moderate}
+                severe={sadCategories.severe}
+              />
             </div>
           </div>
         </div>

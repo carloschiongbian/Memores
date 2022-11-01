@@ -9,7 +9,7 @@ const UserRoute = ({ children, isLoading }) => {
     return <Navigate to="/error-404" replace />;
   }
 
-  if (authUser.user.role !== "user" && isLoading === true) {
+  if (authUser.user.role !== "user" && isLoading) {
     return <Navigate to="/error-404" replace />;
   }
 

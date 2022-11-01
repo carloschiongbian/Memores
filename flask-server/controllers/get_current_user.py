@@ -23,6 +23,7 @@ def get_current_user():
 
     return jsonify({
         "id": user.id,
+        "uname": user.uname,
         "fname": user.fname,
         "lname": user.lname,
         "photo": base64String.decode('utf-8'),
