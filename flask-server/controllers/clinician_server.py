@@ -143,40 +143,46 @@ def deletePatientRecord(id):
 
 def retrieveDashboardContent():
 
-    patients_query = select(Patients)
-    patients_query_response = connect.execute(patients_query)
+    patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients).where(Patients.id == id)
+    patient_response_object = patient_record_schema.jsonify(patients_query)
 
-    screening_details_query = select(PatientsScreeningDetails)
-    screening_details_query_response = connect.execute(screening_details_query)
+    assessments_query = db.session.query(*Assessments.__table__.columns).select_from(Assessments).where(Assessments.patient_id == id)
+    assessment_response_object = patient_assessment_schema.jsonify(assessments_query)
 
-    assessment_query = select(Assessments)
-    assessment_query_response = connect.execute(assessment_query)
+    screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails).where(patient_response_object.get_json()[0]['id'] == PatientsScreeningDetails.id)
+    screening_response_object = patient_screening_details_schema.jsonify(screening_query)
 
-    user = get_current_user()
-    user_id = user.get_json(force=True)['id']
+    records = { 
+        'patients': patient_response_object.get_json(), 
+        'assessment': assessment_response_object.get_json(), 
+        'screeningDetails': screening_response_object.get_json() 
+    }
 
-    start_time = []
-    finish_time = []
+    # user = get_current_user()
+    # user_id = user.get_json(force=True)['id']
 
-    cursor = connection.cursor()
-    cursor.execute('SELECT TIME(date_taken) as start_time FROM assessments')
-    result_time = cursor.fetchall()
-    for time in result_time:
-        start_time.append(time['start_time'])
+    # start_time = []
+    # finish_time = []
 
-    cursor = connection.cursor()
-    cursor.execute('SELECT TIME(date_finished) as finished_time FROM assessments')
-    result_time = cursor.fetchall()
-    for time in result_time:
-        finish_time.append(time['finished_time'])
+    # cursor = connection.cursor()
+    # cursor.execute('SELECT TIME(date_taken) as start_time FROM assessments')
+    # result_time = cursor.fetchall()
+    # for time in result_time:
+    #     start_time.append(time['start_time'])
 
-    timeStamps = []
+    # cursor = connection.cursor()
+    # cursor.execute('SELECT TIME(date_finished) as finished_time FROM assessments')
+    # result_time = cursor.fetchall()
+    # for time in result_time:
+    #     finish_time.append(time['finished_time'])
 
-    for i in range(len(start_time)):
-        timeStamps.append(finish_time[i] - start_time[i])
+    # timeStamps = []
+
+    # for i in range(len(start_time)):
+        # timeStamps.append(finish_time[i] - start_time[i])
     # timeStamps.sort()
 
-    print(timeStamps)
+    # print(timeStamps)
     # avg_time_duration = str((timeStamps[len(timeStamps) - 1] + timeStamps[0] / 2))
     
     patients = []

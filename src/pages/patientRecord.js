@@ -70,6 +70,7 @@ const PatientRecord = () => {
   ];
 
   const updatePatientRecords = (data) => {
+    let patientRecord = {}
     data.patients.forEach((patient) => {
       let patientRecord = {
         id: patient.id,
