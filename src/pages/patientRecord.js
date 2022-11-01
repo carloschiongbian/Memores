@@ -56,11 +56,11 @@ const PatientRecord = () => {
             }}
           >
             <FindInPageIcon
-              style={{ color: "#8860D0", cursor: 'pointer' }}
+              style={{ color: "#8860D0", cursor: "pointer" }}
               onClick={() => handleRecordAction(cell.row, recordActions.EDIT)}
             />
             <DeleteIcon
-              style={{ color: "red", cursor: 'pointer' }}
+              style={{ color: "red", cursor: "pointer" }}
               onClick={() => handleRecordAction(cell.row, recordActions.DELETE)}
             />
           </Box>
@@ -70,16 +70,16 @@ const PatientRecord = () => {
   ];
 
   const updatePatientRecords = (data) => {
-    data.forEach((data) => {
+    data.patients.forEach((patient) => {
       let patientRecord = {
-        id: data.patient_id,
-        firstName: data.fname,
-        lastName: data.lname,
-        age: data.age,
-        is_screened: data.is_screened === false ? 'No' : 'Yes',
+        id: patient.id,
+        firstName: patient.fname,
+        lastName: patient.lname,
+        age: patient.age,
+        is_screened: (data.assessment.find(assessment => assessment.patient_id === patient.id)) ? 'Yes' : 'No',
         action: DeleteIcon,
       };
-      
+
       setPatientRecords((patientRecords) => [...patientRecords, patientRecord]);
     });
   };
@@ -116,18 +116,18 @@ const PatientRecord = () => {
   const handleDelete = () => {
     fetch("/patient-records/delete/id=" + parseInt(getRecord.original.id), {
       method: "DELETE",
-    })
+    });
 
     const newArr = patientRecords.filter(
       (record) => record.id !== getRecord.original.id
     );
-    
+
     setPatientRecords(newArr);
     setOpenModal(false);
   };
 
   useEffect(() => {
-    retrieveRecords();    
+    retrieveRecords();
   }, []);
 
   return (
