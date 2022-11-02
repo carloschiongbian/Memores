@@ -24,11 +24,8 @@ const PatientDetails = () => {
     setPatientDetails(data.patients[0]);
     setScreeningDetails(data.screeningDetails[0]);
     setAssessmentDetails(data.assessment.length > 0 ? data.assessment[0] : []);
-    setIsScreened((data.assessment.length > 0) ? true : false);
-  };
 
-  const checkIfScreened = () => {
-    return assessmentDetails !== undefined ? true : false;
+    setIsScreened((data.assessment.length > 0) ? true : false);
   };
 
   const getPatientDetails = () => {
@@ -69,7 +66,7 @@ const PatientDetails = () => {
                 className="patient-name-container"
                 style={{
                   backgroundColor: "white",
-                  padding: "20px 0px 20px 10px",
+                  padding: "20px 10px 20px 10px",
                   borderRadius: "10px",
                   display: "flex",
                   flexDirection: "column",
