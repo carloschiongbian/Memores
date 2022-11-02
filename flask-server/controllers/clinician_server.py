@@ -81,7 +81,6 @@ def retrievePatientScreeningDetails(id):
         date_finished = request.get_json()['date_finished']
         result_description = request.get_json()['result_description']
 
-        print(result_description)
         update_patient_query = (
             update(Patients).
             where(Patients.id == id).

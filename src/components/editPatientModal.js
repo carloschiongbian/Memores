@@ -26,7 +26,7 @@ let editValues = {
   patient_notes: "",
   date_taken: "",
   date_finished: "",
-  results: "",
+  result_description: "",
 };
 
 const EditPatientModal = ({
@@ -257,7 +257,7 @@ const EditPatientModal = ({
                 className="results"
                 disabled={isScreened ? false : true}
                 multiline
-                defaultValue={patientDetails.result_description}
+                defaultValue={assessmentDetails.result_description}
                 rows={4.3}
                 onChange={(e) =>
                   setEditForm({
@@ -266,7 +266,7 @@ const EditPatientModal = ({
                   })
                 }
                 label={isScreened ? "Results" : "Disabled"}
-                placeholder={patientDetails.result_description}
+                placeholder={assessmentDetails.result_description}
                 variant="outlined"
               />
             </div>

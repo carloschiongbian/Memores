@@ -22,10 +22,9 @@ const PatientDetails = () => {
 
   const setData = async (data) => {
     setPatientDetails(data.patients[0]);
-    setAssessmentDetails(data.assessment.length > 0 ? data.assessment[0] : []);
     setScreeningDetails(data.screeningDetails[0]);
-    console.log(data.assessment[0]);
-    setIsScreened(data.assessment.length > 0 ? true : false);
+    setAssessmentDetails(data.assessment.length > 0 ? data.assessment[0] : []);
+    setIsScreened((data.assessment.length > 0) ? true : false);
   };
 
   const checkIfScreened = () => {
@@ -207,8 +206,7 @@ const PatientDetails = () => {
                     getPatientDetails={getPatientDetails}
                     openModal={open}
                     setOpen={setOpen}
-                    checkIfScreened={checkIfScreened}
-                    parseDate={parseDate}
+                    isScreened={isScreened}
                   />
                 </div>
 
