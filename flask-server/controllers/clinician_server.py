@@ -81,6 +81,7 @@ def retrievePatientScreeningDetails(id):
         date_finished = request.get_json()['date_finished']
         result_description = request.get_json()['result_description']
 
+        print(result_description)
         update_patient_query = (
             update(Patients).
             where(Patients.id == id).
@@ -144,7 +145,7 @@ def retrieveDashboardContent():
     patients_query = patients_query.outerjoin(Assessments, Patients.id == Assessments.patient_id).filter(Patients.created_by == user_id).order_by(Patients.id)
     patient_response_object = patient_record_schema.jsonify(patients_query)
 
-    assessed_patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients).where(Assessments.patient_id == Patients.id)
+    assessed_patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients).where(Assessments.patient_id == Patients.id).filter(Patients.created_by == user_id).order_by(Patients.id)
     assessed_patients_response_object = patient_record_schema.jsonify(assessed_patients_query)
 
     screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails).where(Assessments.patient_id == PatientsScreeningDetails.id)
@@ -160,7 +161,7 @@ def retrieveDashboardContent():
         
 class PatientAssessmentSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'date_taken', 'date_finished', 'assessor_id', 'patient_id')
+        fields = ('id', 'date_taken', 'date_finished', 'assessor_id', 'patient_id', 'result_description')
 
 patient_assessment_schema = PatientAssessmentSchema(many = True)
 

@@ -21,11 +21,10 @@ const PatientDetails = () => {
   };
 
   const setData = async (data) => {
-
     setPatientDetails(data.patients[0]);
-    setAssessmentDetails((data.assessment.length > 0) ? data.assessment[0] : []);
+    setAssessmentDetails(data.assessment.length > 0 ? data.assessment[0] : []);
     setScreeningDetails(data.screeningDetails[0]);
-
+    console.log(data.assessment[0]);
     setIsScreened(data.assessment.length > 0 ? true : false);
   };
 
@@ -75,6 +74,7 @@ const PatientDetails = () => {
                   borderRadius: "10px",
                   display: "flex",
                   flexDirection: "column",
+                  width: "100%",
                   rowGap: "20px",
                   alignItems: "center",
                 }}
@@ -169,7 +169,9 @@ const PatientDetails = () => {
                       </span>
                     )}
                     {isScreened === true && (
-                      <h6>Description: {assessmentDetails.result_description}</h6>
+                      <h6>
+                        Description: {assessmentDetails.result_description}
+                      </h6>
                     )}
                   </div>
                 </div>

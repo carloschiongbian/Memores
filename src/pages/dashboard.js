@@ -33,6 +33,7 @@ const Dashboard = () => {
     severe: 0,
   });
   const [patients, setPatients] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [assessedPatients, setAssessedPatients] = useState([]);
   const [screeningDetails, setScreeningDetails] = useState([]);
   const [openScreenedModal, setOpenScreenedModal] = useState(false);
@@ -69,6 +70,8 @@ const Dashboard = () => {
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.log(error));
+
+    setIsLoading(false);
   };
 
   const setData = (data) => {
@@ -78,7 +81,6 @@ const Dashboard = () => {
   };
 
   const getCategoryCount = (data) => {
-
     //will fix the naming convention but the code works
 
     const countCategory = (patients, sadCategory) => {
@@ -96,11 +98,6 @@ const Dashboard = () => {
       severe: countCategory(data, SAD_CATEGORIES.SEVERE),
     });
   };
-
-  // const countScreenedPatients = (data) => {
-  //   const is_screened = data.map((data) => data.is_screened === true);
-  //   return is_screened.filter((data) => data === true);
-  // };
 
   const handleModal = () => {
     setOpenScreenedModal(!openScreenedModal ? true : false);
@@ -133,30 +130,29 @@ const Dashboard = () => {
               <CommonModal
                 dialogTitle="Your Screened Patients"
                 btnPrimaryText="Okay"
-                width="800"
+                width="300"
                 handleSubmit={handleModal}
                 openModal={openScreenedModal}
                 handleClose={handleModal}
               >
                 {assessedPatients.length !== 0 &&
                   assessedPatients.map((patient, index) => (
-                      <ListItem
-                        key={index}
-                        divider={true}
-                        button={true}
-                        onClick={() => {
-                          navigate(patientDetailsPath + patient.id);
-                        }}
-                        className="patient-information-item"
-                      >
-                        <div className="patient-name">
-                          <h5>
-                            {index + 1}) {patient.fname + " " + patient.lname}{" "}
-                          </h5>
-                        </div>
-                      </ListItem>
-                    )
-                  )}
+                    <ListItem
+                      key={index}
+                      divider={true}
+                      button={true}
+                      onClick={() => {
+                        navigate(patientDetailsPath + patient.id);
+                      }}
+                      className="patient-information-item"
+                    >
+                      <div className="patient-name">
+                        <h5>
+                          {index + 1} {patient.fname + " " + patient.lname}{" "}
+                        </h5>
+                      </div>
+                    </ListItem>
+                  ))}
                 {assessedPatients.length === 0 && (
                   <span style={{ color: "gray", fontSize: "15px" }}>
                     "No patients were screened yet"
@@ -189,7 +185,7 @@ const Dashboard = () => {
                     </Link>
                   </h6>
                 </ListItem>
-                {assessedPatients.length === 0 && (
+                {isLoading && (
                   <ListItem
                     style={{
                       margin: 0,
@@ -203,7 +199,7 @@ const Dashboard = () => {
                     <Skeleton height={100} width={"100%"} />
                   </ListItem>
                 )}
-                {assessedPatients.length !== 0 &&
+                {!isLoading &&
                   assessedPatients.slice(0, 3).map((patient, index) => (
                     <ListItem
                       key={index}
@@ -222,7 +218,7 @@ const Dashboard = () => {
                     </ListItem>
                   ))}
 
-                {patients.length !== 0 && assessedPatients.length === 0 && (
+                {!isLoading && assessedPatients.length === 0 && (
                   <div
                     className="no-data"
                     style={{
