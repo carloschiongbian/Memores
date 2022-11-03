@@ -7,6 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import MaterialReactTable from "material-react-table";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 
+import axios from "axios";
 import Layout from "../components/Layout";
 import "../public/css/pages/PatientRecord/patientRecord.scss";
 import "../public/css/components/PatientManagementModal/Modal.scss";
@@ -76,7 +77,11 @@ const PatientRecord = () => {
         firstName: patient.fname,
         lastName: patient.lname,
         age: patient.age,
-        is_screened: (data.assessment.find(assessment => assessment.patient_id === patient.id)) ? 'Yes' : 'No',
+        is_screened: data.assessment.find(
+          (assessment) => assessment.patient_id === patient.id
+        )
+          ? "Yes"
+          : "No",
         action: DeleteIcon,
       };
 
@@ -85,15 +90,11 @@ const PatientRecord = () => {
   };
 
   const retrieveRecords = () => {
-    fetch("/patient-records", {
-      methods: "GET",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => updatePatientRecords(response))
+    axios
+      .get("/patient-records")
+      .then((res) => {
+        updatePatientRecords(res.data);
+      })
       .catch((error) => console.log(error));
   };
 
@@ -114,9 +115,10 @@ const PatientRecord = () => {
   };
 
   const handleDelete = () => {
-    fetch("/patient-records/delete/id=" + parseInt(getRecord.original.id), {
-      method: "DELETE",
-    });
+    axios.delete('/patient-records/delete/id=' + + parseInt(getRecord.original.id))
+    .then(res => {
+      console.log(res)
+    })
 
     const newArr = patientRecords.filter(
       (record) => record.id !== getRecord.original.id

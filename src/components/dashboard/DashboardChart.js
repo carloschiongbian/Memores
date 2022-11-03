@@ -6,7 +6,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const DashboardChart = ({ normal, mild, moderate, severe }) => {
   
   const data = {
-    labels: ["Normal", "Mild", "Moderate", "Severe"],
+    labels: ["Normal SAD", "Mild SAD", "Moderate SAD", "Severe SAD"],
     datasets: [
       {
         data: [
