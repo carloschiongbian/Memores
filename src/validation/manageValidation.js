@@ -66,6 +66,49 @@ export const createUserSchemaValidation = yup.object({
   zipcode: yup.string().required(),
 });
 
+export const createPatientSchemaValidation = yup.object({
+  firstname: yup
+    .string()
+    .min(2)
+    .max(25)
+    .matches("^[A-Za-z ]*$", {
+      message: "Special characters is not allowed",
+      excludeEmptyString: true,
+    })
+    .required(),
+  lastname: yup
+    .string()
+    .min(2)
+    .max(25)
+    .matches("^[A-Za-z ]*$", {
+      message: "Special characters is not allowed",
+      excludeEmptyString: true,
+    })
+    .required(),
+  email: yup.string().email().required(),
+  contact: yup
+    .string()
+    .matches("^[0-9 -]*$", {
+      message: "number, dash and spaces only",
+      excludeEmptyString: true,
+    })
+    .required(),
+  birthday: yup.date().required(),
+  gender: yup.string().required(),
+  username: yup.string().required(),
+  password: yup.string().min(4).max(12).required(),
+  confirm: yup
+    .string()
+    .min(4)
+    .max(12)
+    .oneOf([yup.ref("password")], "Passwords do not match")
+    .required(),
+  address: yup.string().required(),
+  city: yup.string().required(),
+  country: yup.string().required(),
+  zipcode: yup.string().required(),
+});
+
 export const updateAccountSchemaValidation = yup.object({
   id: yup.number().required(),
   uname: yup.string().required(),
