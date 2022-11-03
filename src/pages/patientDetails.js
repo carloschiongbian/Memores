@@ -2,6 +2,7 @@ import Layout from "../components/Layout";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
+import axios from "axios";
 
 import BreadCrumbs from "../components/BreadCrumbs";
 import EditPatientModal from "../components/editPatientModal";
@@ -25,19 +26,13 @@ const PatientDetails = () => {
     setScreeningDetails(data.screeningDetails[0]);
     setAssessmentDetails(data.assessment.length > 0 ? data.assessment[0] : []);
 
-    setIsScreened((data.assessment.length > 0) ? true : false);
+    setIsScreened(data.assessment.length > 0 ? true : false);
   };
 
   const getPatientDetails = () => {
-    fetch("/patient-details/id=" + id, {
-      methods: "GET",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => setData(response))
+    axios
+      .get("/patient-details/id=" + id)
+      .then((response) => setData(response.data))
       .catch((error) => console.log(error));
   };
 
@@ -82,7 +77,15 @@ const PatientDetails = () => {
                   )}
                 />
 
-                <div className="patient-name" style={{display: 'flex', flexDirection: 'column', rowGap: '10px', padding: '10px 0'}}>
+                <div
+                  className="patient-name"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    rowGap: "10px",
+                    padding: "10px 0",
+                  }}
+                >
                   First Name: <h4>{patientDetails.fname}</h4>
                   Last Name: <h4>{patientDetails.lname}</h4>
                   Country: {patientDetails.country}
@@ -183,7 +186,7 @@ const PatientDetails = () => {
                 <label htmlFor="patient-notes-label">Notes</label>
 
                 <div className="patient-notes">
-                    <span>{screeningDetails.patient_notes}</span>
+                  <span>{screeningDetails.patient_notes}</span>
                 </div>
 
                 <div className="patient-notes-actions">
@@ -208,7 +211,7 @@ const PatientDetails = () => {
                   {/* I decided to comment this out for the meantime since it */}
                   {/* wouldn't make sense if a record were to be edited by any other */}
                   {/* person since only this clinician can see this record */}
-                  
+
                   {/* <div className="patient-notes-editor">
                     <label htmlFor="notes-edited-by">Last Edited By:</label>
                     {isScreened === true && (
@@ -218,9 +221,8 @@ const PatientDetails = () => {
 
                   <div className="patient-notes-edited-date">
                     <label htmlFor="date-edited-on">Last Edited On:</label>
-                    
-                      <p>{parseDate(screeningDetails.last_edited_on)}</p>
-                    
+
+                    <p>{parseDate(screeningDetails.last_edited_on)}</p>
                   </div>
                 </div>
               </div>

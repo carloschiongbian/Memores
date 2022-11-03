@@ -15,6 +15,7 @@ import CommonModal from "../components/modal/CommonModal";
 import DashboardChart from "../components/dashboard/DashboardChart.js";
 import { useContext } from "react";
 import AuthContext from "../auth/AuthContext";
+import axios from 'axios';
 import Api from "../services/api";
 
 const SAD_CATEGORIES = {
@@ -61,16 +62,10 @@ const Dashboard = () => {
   let patientDetailsPath = "../patient-details/id=";
 
   const getDashboardData = () => {
-    fetch("/dashboard", {
-      methods: "GET",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setData(data))
-      .catch((error) => console.log(error));
+      axios.get('/dashboard')
+      .then(res => {
+        setData(res.data)
+      }).catch((error) => console.log(error));
 
     setIsLoading(false);
   };

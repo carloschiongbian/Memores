@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 
 import countriesSelect from "./countriesSelect";
 import "../public/css/components/editModal/editModal.scss";
+import axios from "axios";
 
 const genders = [
   { value: "Male", label: "Male" },
@@ -58,7 +59,7 @@ const EditPatientModal = ({
       date_taken: "",
       date_finished: "",
       result_description: "",
-      last_edited_on: ""
+      last_edited_on: "",
     };
 
     for (let key in formValues) {
@@ -77,13 +78,9 @@ const EditPatientModal = ({
       }
     }
 
-    await fetch("/patient-details/id=" + patientDetails.id, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    }).then((response) => response.json());
+    await axios
+      .put("/patient-details/id=" + patientDetails.id, values)
+      .then((response) => console.log(response));
 
     getPatientDetails();
     setOpen(false);
