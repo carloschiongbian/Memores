@@ -1,7 +1,9 @@
 import "../public/css/pages/PatientRecord/patientRecord.css";
 import DataTable from "../components/DataTable";
+
 import Layout from "../components/Layout";
 import { useState, useEffect, useMemo } from "react";
+
 import Api from "../services/api";
 import dayjs from "dayjs";
 import DeleteIcon from "@mui/icons-material/Delete";
