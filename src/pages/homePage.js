@@ -78,10 +78,10 @@ const HomePage = () => {
           </div>
         </div>
 
-        <div className="homepage-right-section">
+        <div className="homepage-right-sectio n">
           <div className="homepage-user-login">
             <div className="login-modal">
-              <p className="login-modal-header">Login here</p>
+              <h3 className="login-modal-header">Sign In Here</h3>
 
               <div className="login-modal-inputs">
                 <form
