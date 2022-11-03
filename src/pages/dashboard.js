@@ -110,6 +110,7 @@ const Dashboard = () => {
     let hoursSum = 0;
     let minutesSum = 0;
     let secondsSum = 0;
+
     for (const i in hours) {
       hoursSum += hours[i];
       minutesSum += minutes[i];
@@ -122,7 +123,12 @@ const Dashboard = () => {
     );
     let secondsAvg = Math.floor(secondsSum / assessments.length);
 
-    setRecentDuration(hoursAvg + ":" + minutesAvg + ":" + secondsAvg);
+    setRecentDuration(
+      isNaN(hoursAvg)
+        ? "None of your patients have been screened yet"
+        : hoursAvg + ":" + minutesAvg + ":" + secondsAvg
+    );
+    // setRecentDuration(hoursAvg + ":" + minutesAvg + ":" + secondsAvg);
   };
 
   const getCategoryCount = (data) => {
@@ -205,11 +211,10 @@ const Dashboard = () => {
             </div>
 
             <div className="average-time-duration-of-screening-container">
-              <h3>
-                <HourglassBottomIcon />{" "}
-                <span>Average screening time duration</span>
-              </h3>
-              <h2 style={{ float: "left" }}>{recentDuration}</h2>
+              <h4>
+                <HourglassBottomIcon /> Average screening time duration
+              </h4>
+              <h5 style={{ float: "left" }}>{recentDuration}</h5>
               <span style={{ fontSize: "14px" }}>
                 Hours / minutes / seconds
               </span>
