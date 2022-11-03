@@ -34,23 +34,25 @@ const Dashboard = () => {
   });
   const [patients, setPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [assessedPatients, setAssessedPatients] = useState([]);
+  const [screenedPatients, setScreenedPatients] = useState([]);
+  const [recentDuration, setRecentDuration] = useState();
   const [screeningDetails, setScreeningDetails] = useState([]);
   const [openScreenedModal, setOpenScreenedModal] = useState(false);
   const authUser = useContext(AuthContext);
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await Api().get("/@me");
-        if (response.status === 200) {
-          authUser.setUser(response.data);
-          localStorage.setItem("isLogin", true);
-        }
-      } catch (error) {
-        console.log(error);
+  const getUser = async () => {
+    try {
+      const response = await Api().get("/@me");
+      if (response.status === 200) {
+        authUser.setUser(response.data);
+        localStorage.setItem("isLogin", true);
       }
-    };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
     getUser();
     getDashboardData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,13 +78,54 @@ const Dashboard = () => {
 
   const setData = (data) => {
     setPatients(data.patients);
-    setAssessedPatients(data.assessed_patients);
-    getCategoryCount(data.screeningDetails);
+    setScreenedPatients(data.screened_patients);
+    setScreeningDetails(data.screening_details);
+
+    setAverageDuration(data.assessments);
+    getCategoryCount(data.screening_details);
+  };
+
+  const setAverageDuration = (assessments) => {
+    let hours = assessments.map((assessment) => {
+      return (
+        new Date(assessment.date_finished).getHours() -
+        new Date(assessment.date_taken).getHours()
+      );
+    });
+
+    let minutes = assessments.map((assessment) => {
+      return (
+        new Date(assessment.date_finished).getMinutes() -
+        new Date(assessment.date_taken).getMinutes()
+      );
+    });
+
+    let seconds = assessments.map((assessment) => {
+      return (
+        new Date(assessment.date_finished).getSeconds() -
+        new Date(assessment.date_taken).getSeconds()
+      );
+    });
+
+    let hoursSum = 0;
+    let minutesSum = 0;
+    let secondsSum = 0;
+    for (const i in hours) {
+      hoursSum += hours[i];
+      minutesSum += minutes[i];
+      secondsSum += seconds[i];
+    }
+
+    let hoursAvg = Math.floor((hoursSum / assessments.length / 60) % 60);
+    let minutesAvg = Math.abs(
+      Math.floor((minutesSum / assessments.length) % 60)
+    );
+    let secondsAvg = Math.floor(secondsSum / assessments.length);
+
+    setRecentDuration(hoursAvg + ":" + minutesAvg + ":" + secondsAvg);
   };
 
   const getCategoryCount = (data) => {
-    //will fix the naming convention but the code works
-
     const countCategory = (patients, sadCategory) => {
       const categories = patients.filter((data) => {
         return data.sad_category === sadCategory;
@@ -125,7 +168,7 @@ const Dashboard = () => {
               <h4>
                 <MedicalServicesIcon /> Screened
               </h4>
-              <h1>{assessedPatients.length}</h1>
+              <h1>{screenedPatients.length}</h1>
 
               <CommonModal
                 dialogTitle="Your Screened Patients"
@@ -135,8 +178,8 @@ const Dashboard = () => {
                 openModal={openScreenedModal}
                 handleClose={handleModal}
               >
-                {assessedPatients.length !== 0 &&
-                  assessedPatients.map((patient, index) => (
+                {screenedPatients.length !== 0 &&
+                  screenedPatients.map((patient, index) => (
                     <ListItem
                       key={index}
                       divider={true}
@@ -153,7 +196,7 @@ const Dashboard = () => {
                       </div>
                     </ListItem>
                   ))}
-                {assessedPatients.length === 0 && (
+                {screenedPatients.length === 0 && (
                   <span style={{ color: "gray", fontSize: "15px" }}>
                     "No patients were screened yet"
                   </span>
@@ -163,11 +206,13 @@ const Dashboard = () => {
 
             <div className="average-time-duration-of-screening-container">
               <h3>
-                {" "}
-                <HourglassBottomIcon /> Average screening time duration:{" "}
+                <HourglassBottomIcon />{" "}
+                <span>Average screening time duration</span>
               </h3>
-              {/* <h2 style={{float: 'left'}}>{patients.length !== 0 && patients[patients.length - 1].avg_time_duration}</h2>
-              <span style={{fontSize: '14px'}}>Hours / minutes / seconds</span> */}
+              <h2 style={{ float: "left" }}>{recentDuration}</h2>
+              <span style={{ fontSize: "14px" }}>
+                Hours / minutes / seconds
+              </span>
             </div>
           </div>
 
@@ -200,7 +245,7 @@ const Dashboard = () => {
                   </ListItem>
                 )}
                 {!isLoading &&
-                  assessedPatients.slice(0, 3).map((patient, index) => (
+                  screenedPatients.slice(0, 3).map((patient, index) => (
                     <ListItem
                       key={index}
                       divider={true}
@@ -218,7 +263,7 @@ const Dashboard = () => {
                     </ListItem>
                   ))}
 
-                {!isLoading && assessedPatients.length === 0 && (
+                {!isLoading && screenedPatients.length === 0 && (
                   <div
                     className="no-data"
                     style={{

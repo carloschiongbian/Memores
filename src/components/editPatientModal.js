@@ -58,6 +58,7 @@ const EditPatientModal = ({
       date_taken: "",
       date_finished: "",
       result_description: "",
+      last_edited_on: ""
     };
 
     for (let key in formValues) {
@@ -72,6 +73,7 @@ const EditPatientModal = ({
       } else {
         values[key] = editForm[key];
         values["fullname"] = values["fname"] + " " + values["lname"];
+        values["last_edited_on"] = new Date();
       }
     }
 

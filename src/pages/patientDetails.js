@@ -82,10 +82,14 @@ const PatientDetails = () => {
                   )}
                 />
 
-                <div className="patient-name">
+                <div className="patient-name" style={{display: 'flex', flexDirection: 'column', rowGap: '10px', padding: '10px 0'}}>
                   First Name: <h4>{patientDetails.fname}</h4>
                   Last Name: <h4>{patientDetails.lname}</h4>
+                  Country: {patientDetails.country}
                 </div>
+
+                {/* <div className="country">
+                </div> */}
               </div>
 
               <div className="patient-information">
@@ -179,14 +183,7 @@ const PatientDetails = () => {
                 <label htmlFor="patient-notes-label">Notes</label>
 
                 <div className="patient-notes">
-                  {isScreened === false && (
-                    <span style={{ color: "gray", fontSize: "15px" }}>
-                      Not available. Patient must be screened first
-                    </span>
-                  )}
-                  {isScreened === true && (
                     <span>{screeningDetails.patient_notes}</span>
-                  )}
                 </div>
 
                 <div className="patient-notes-actions">
@@ -208,18 +205,22 @@ const PatientDetails = () => {
                 </div>
 
                 <div className="patient-notes-status">
-                  <div className="patient-notes-editor">
+                  {/* I decided to comment this out for the meantime since it */}
+                  {/* wouldn't make sense if a record were to be edited by any other */}
+                  {/* person since only this clinician can see this record */}
+                  
+                  {/* <div className="patient-notes-editor">
                     <label htmlFor="notes-edited-by">Last Edited By:</label>
                     {isScreened === true && (
                       <p>{screeningDetails.last_edited_by}</p>
                     )}
-                  </div>
+                  </div> */}
 
                   <div className="patient-notes-edited-date">
                     <label htmlFor="date-edited-on">Last Edited On:</label>
-                    {isScreened === true && (
+                    
                       <p>{parseDate(screeningDetails.last_edited_on)}</p>
-                    )}
+                    
                   </div>
                 </div>
               </div>
