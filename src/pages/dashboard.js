@@ -34,9 +34,8 @@ const Dashboard = () => {
   });
   const [patients, setPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [screenedPatients, setScreenedPatients] = useState([]);
   const [recentDuration, setRecentDuration] = useState();
-  const [screeningDetails, setScreeningDetails] = useState([]);
+  const [screenedPatients, setScreenedPatients] = useState([]);
   const [openScreenedModal, setOpenScreenedModal] = useState(false);
   const authUser = useContext(AuthContext);
 
@@ -79,8 +78,7 @@ const Dashboard = () => {
   const setData = (data) => {
     setPatients(data.patients);
     setScreenedPatients(data.screened_patients);
-    setScreeningDetails(data.screening_details);
-
+    
     setAverageDuration(data.assessments);
     getCategoryCount(data.screening_details);
   };
@@ -117,18 +115,19 @@ const Dashboard = () => {
       secondsSum += seconds[i];
     }
 
-    let hoursAvg = Math.floor((hoursSum / assessments.length / 60) % 60);
+    let hoursAvg = Math.abs(
+      Math.floor((hoursSum / assessments.length / 60) % 60)
+    );
     let minutesAvg = Math.abs(
       Math.floor((minutesSum / assessments.length) % 60)
     );
-    let secondsAvg = Math.floor(secondsSum / assessments.length);
+    let secondsAvg = Math.abs(Math.floor(secondsSum / assessments.length));
 
     setRecentDuration(
       isNaN(hoursAvg)
         ? "None of your patients have been screened yet"
         : hoursAvg + ":" + minutesAvg + ":" + secondsAvg
     );
-    // setRecentDuration(hoursAvg + ":" + minutesAvg + ":" + secondsAvg);
   };
 
   const getCategoryCount = (data) => {

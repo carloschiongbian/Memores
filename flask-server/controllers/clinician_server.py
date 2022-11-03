@@ -150,7 +150,13 @@ def retrieveDashboardContent():
     screened_patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients).where(Assessments.patient_id == Patients.id).filter(Patients.created_by == user_id).order_by(Patients.id)
     screened_patients_response_object = patient_record_schema.jsonify(screened_patients_query)
 
-    screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails).where(Assessments.patient_id == PatientsScreeningDetails.id)
+    # screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).\
+    # select_from(PatientsScreeningDetails).\
+    # filter(PatientsScreeningDetails.id == Assessments.patient_id)
+
+    # fix condition for dashboard chart
+    screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails)
+    screening_query = screening_query.outerjoin(Assessments, PatientsScreeningDetails.id == Assessments.patient_id).filter(Assessments.assessor_id == user_id)
     screening_response_object = patient_screening_details_schema.jsonify(screening_query)
 
     assessments_query = db.session.query(*Assessments.__table__.columns).select_from(Assessments).where(Assessments.patient_id == Patients.id).filter(Patients.created_by == user_id).order_by(Assessments.date_finished.desc())
