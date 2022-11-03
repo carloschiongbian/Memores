@@ -20,7 +20,7 @@
   padding-block: 30px;
   padding-inline: 30px;
   border-radius: 7px;
-  background-color: #f0e0e0;
+  background-color: #8866E9;
 }
 .App .homepage-content .homepage-left-section .homepage-memores-introduction .homepage-introduction .homepage-introduction-content {
   font-size: 17px;
@@ -40,7 +40,7 @@
   margin-inline: 10px;
   padding-block: 50px;
   padding-inline: 50px;
-  background-color: #f0e0e0;
+  background-color: #8866E9;
 }
 .App .homepage-content .homepage-right-section .homepage-user-login .login-modal .login-modal-header {
   color: black;
@@ -63,7 +63,7 @@
 }
 .App .homepage-content .homepage-right-section .homepage-user-login .login-modal .login-modal-inputs .login-form input[type=submit] {
   height: 35px;
-  color: white;
+  color: #6b5b95;
   cursor: pointer;
   transition: 0.2s;
   font-weight: bold;
