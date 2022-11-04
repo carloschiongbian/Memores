@@ -1,4 +1,5 @@
 import pymysql.cursors
+import time
 from connection.connection import db, ma
 from flask import Flask, jsonify, request, session
 
@@ -105,6 +106,7 @@ def retrievePatientScreeningDetails(id):
 
         # #screening details
         patient_notes = request.get_json()['patient_notes']
+        last_edited_on = request.get_json()['last_edited_on']
 
         # #assessment details
         date_taken = request.get_json()['date_taken']
@@ -137,12 +139,13 @@ def retrievePatientScreeningDetails(id):
                 result_description=result_description
             )
         )
-
+    # include last edited on update
         update_screening_query = (
             update(PatientsScreeningDetails).
             where(PatientsScreeningDetails.id == id).
             values(
-                patient_notes=patient_notes
+                patient_notes=patient_notes,
+                last_edited_on=last_edited_on
             )
         )
 
@@ -191,20 +194,33 @@ def retrieveDashboardContent():
         Patients.created_by == user_id).order_by(Patients.id)
     patient_response_object = patient_record_schema.jsonify(patients_query)
 
-    assessed_patients_query = db.session.query(
-        *Patients.__table__.columns).select_from(Patients).where(Assessments.patient_id == Patients.id)
-    assessed_patients_response_object = patient_record_schema.jsonify(
-        assessed_patients_query)
+    screened_patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients).where(
+        Assessments.patient_id == Patients.id).filter(Patients.created_by == user_id).order_by(Patients.id)
+    screened_patients_response_object = patient_record_schema.jsonify(
+        screened_patients_query)
 
-    screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(
-        PatientsScreeningDetails).where(Assessments.patient_id == PatientsScreeningDetails.id)
+    # screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).\
+    # select_from(PatientsScreeningDetails).\
+    # filter(PatientsScreeningDetails.id == Assessments.patient_id)
+
+    # fix condition for dashboard chart
+    screening_query = db.session.query(
+        *PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails)
+    screening_query = screening_query.outerjoin(
+        Assessments, PatientsScreeningDetails.id == Assessments.patient_id).filter(Assessments.assessor_id == user_id)
     screening_response_object = patient_screening_details_schema.jsonify(
         screening_query)
 
+    assessments_query = db.session.query(*Assessments.__table__.columns).select_from(Assessments).where(
+        Assessments.patient_id == Patients.id).filter(Patients.created_by == user_id).order_by(Assessments.date_finished.desc())
+    assessment_response_object = patient_assessment_schema.jsonify(
+        assessments_query)
+
     records = {
         'patients': patient_response_object.get_json(),
-        'assessed_patients': assessed_patients_response_object.get_json(),
-        'screeningDetails': screening_response_object.get_json()
+        'screened_patients': screened_patients_response_object.get_json(),
+        'screening_details': screening_response_object.get_json(),
+        'assessments': assessment_response_object.get_json()
     }
 
     return records
@@ -213,10 +229,7 @@ def retrieveDashboardContent():
 class PatientAssessmentSchema(ma.Schema):
     class Meta:
         fields = ('id', 'date_taken', 'date_finished',
-                  'assessor_id', 'patient_id')
-
-
-patient_assessment_schema = PatientAssessmentSchema(many=True)
+                  'assessor_id', 'patient_id', 'result_description')
 
 
 class PatientScreeningDetailsSchema(ma.Schema):

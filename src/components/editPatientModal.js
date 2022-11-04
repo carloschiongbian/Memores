@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 
 import countriesSelect from "./countriesSelect";
 import "../public/css/components/editModal/editModal.scss";
+import axios from "axios";
 
 const genders = [
   { value: "Male", label: "Male" },
@@ -26,7 +27,7 @@ let editValues = {
   patient_notes: "",
   date_taken: "",
   date_finished: "",
-  results: "",
+  result_description: "",
 };
 
 const EditPatientModal = ({
@@ -58,6 +59,7 @@ const EditPatientModal = ({
       date_taken: "",
       date_finished: "",
       result_description: "",
+      last_edited_on: "",
     };
 
     for (let key in formValues) {
@@ -72,16 +74,13 @@ const EditPatientModal = ({
       } else {
         values[key] = editForm[key];
         values["fullname"] = values["fname"] + " " + values["lname"];
+        values["last_edited_on"] = new Date();
       }
     }
 
-    await fetch("/patient-details/id=" + patientDetails.id, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    }).then((response) => response.json());
+    await axios
+      .put("/patient-details/id=" + patientDetails.id, values)
+      .then((response) => console.log(response));
 
     getPatientDetails();
     setOpen(false);
@@ -257,7 +256,7 @@ const EditPatientModal = ({
                 className="results"
                 disabled={isScreened ? false : true}
                 multiline
-                defaultValue={patientDetails.result_description}
+                defaultValue={assessmentDetails.result_description}
                 rows={4.3}
                 onChange={(e) =>
                   setEditForm({
@@ -266,7 +265,7 @@ const EditPatientModal = ({
                   })
                 }
                 label={isScreened ? "Results" : "Disabled"}
-                placeholder={patientDetails.result_description}
+                placeholder={assessmentDetails.result_description}
                 variant="outlined"
               />
             </div>

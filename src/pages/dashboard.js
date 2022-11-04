@@ -15,6 +15,7 @@ import CommonModal from "../components/modal/CommonModal";
 import DashboardChart from "../components/dashboard/DashboardChart.js";
 import { useContext } from "react";
 import AuthContext from "../auth/AuthContext";
+import axios from 'axios';
 import Api from "../services/api";
 
 const SAD_CATEGORIES = {
@@ -33,23 +34,25 @@ const Dashboard = () => {
     severe: 0,
   });
   const [patients, setPatients] = useState([]);
-  const [assessedPatients, setAssessedPatients] = useState([]);
-  const [screeningDetails, setScreeningDetails] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [recentDuration, setRecentDuration] = useState();
+  const [screenedPatients, setScreenedPatients] = useState([]);
   const [openScreenedModal, setOpenScreenedModal] = useState(false);
   const authUser = useContext(AuthContext);
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await Api().get("/@me");
-        if (response.status === 200) {
-          authUser.setUser(response.data);
-          localStorage.setItem("isLogin", true);
-        }
-      } catch (error) {
-        console.log(error);
+  const getUser = async () => {
+    try {
+      const response = await Api().get("/@me");
+      if (response.status === 200) {
+        authUser.setUser(response.data);
+        localStorage.setItem("isLogin", true);
       }
-    };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
     getUser();
     getDashboardData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -59,28 +62,70 @@ const Dashboard = () => {
   let patientDetailsPath = "../patient-details/id=";
 
   const getDashboardData = () => {
-    fetch("/dashboard", {
-      methods: "GET",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setData(data))
-      .catch((error) => console.log(error));
+      axios.get('/dashboard')
+      .then(res => {
+        setData(res.data)
+      }).catch((error) => console.log(error));
+
+    setIsLoading(false);
   };
 
   const setData = (data) => {
     setPatients(data.patients);
-    setAssessedPatients(data.assessed_patients);
-    getCategoryCount(data.screeningDetails);
+    setScreenedPatients(data.screened_patients);
+    
+    setAverageDuration(data.assessments);
+    getCategoryCount(data.screening_details);
+  };
+
+  const setAverageDuration = (assessments) => {
+    let hours = assessments.map((assessment) => {
+      return (
+        new Date(assessment.date_finished).getHours() -
+        new Date(assessment.date_taken).getHours()
+      );
+    });
+
+    let minutes = assessments.map((assessment) => {
+      return (
+        new Date(assessment.date_finished).getMinutes() -
+        new Date(assessment.date_taken).getMinutes()
+      );
+    });
+
+    let seconds = assessments.map((assessment) => {
+      return (
+        new Date(assessment.date_finished).getSeconds() -
+        new Date(assessment.date_taken).getSeconds()
+      );
+    });
+
+    let hoursSum = 0;
+    let minutesSum = 0;
+    let secondsSum = 0;
+
+    for (const i in hours) {
+      hoursSum += hours[i];
+      minutesSum += minutes[i];
+      secondsSum += seconds[i];
+    }
+
+    let hoursAvg = Math.abs(
+      Math.floor((hoursSum / assessments.length / 60) % 60)
+    );
+    let minutesAvg = Math.abs(
+      Math.floor((minutesSum / assessments.length) % 60)
+    );
+    let secondsAvg = Math.abs(Math.floor(secondsSum / assessments.length));
+
+    setRecentDuration(
+      isNaN(hoursAvg)
+        ? "None of your patients have been screened yet"
+        : hoursAvg + ":" + minutesAvg + ":" + secondsAvg
+    );
   };
 
   const getCategoryCount = (data) => {
-
-    //will fix the naming convention but the code works
-
     const countCategory = (patients, sadCategory) => {
       const categories = patients.filter((data) => {
         return data.sad_category === sadCategory;
@@ -96,11 +141,6 @@ const Dashboard = () => {
       severe: countCategory(data, SAD_CATEGORIES.SEVERE),
     });
   };
-
-  // const countScreenedPatients = (data) => {
-  //   const is_screened = data.map((data) => data.is_screened === true);
-  //   return is_screened.filter((data) => data === true);
-  // };
 
   const handleModal = () => {
     setOpenScreenedModal(!openScreenedModal ? true : false);
@@ -128,36 +168,35 @@ const Dashboard = () => {
               <h4>
                 <MedicalServicesIcon /> Screened
               </h4>
-              <h1>{assessedPatients.length}</h1>
+              <h1>{screenedPatients.length}</h1>
 
               <CommonModal
                 dialogTitle="Your Screened Patients"
                 btnPrimaryText="Okay"
-                width="800"
+                width="300"
                 handleSubmit={handleModal}
                 openModal={openScreenedModal}
                 handleClose={handleModal}
               >
-                {assessedPatients.length !== 0 &&
-                  assessedPatients.map((patient, index) => (
-                      <ListItem
-                        key={index}
-                        divider={true}
-                        button={true}
-                        onClick={() => {
-                          navigate(patientDetailsPath + patient.id);
-                        }}
-                        className="patient-information-item"
-                      >
-                        <div className="patient-name">
-                          <h5>
-                            {index + 1}) {patient.fname + " " + patient.lname}{" "}
-                          </h5>
-                        </div>
-                      </ListItem>
-                    )
-                  )}
-                {assessedPatients.length === 0 && (
+                {screenedPatients.length !== 0 &&
+                  screenedPatients.map((patient, index) => (
+                    <ListItem
+                      key={index}
+                      divider={true}
+                      button={true}
+                      onClick={() => {
+                        navigate(patientDetailsPath + patient.id);
+                      }}
+                      className="patient-information-item"
+                    >
+                      <div className="patient-name">
+                        <h5>
+                          {index + 1} {patient.fname + " " + patient.lname}{" "}
+                        </h5>
+                      </div>
+                    </ListItem>
+                  ))}
+                {screenedPatients.length === 0 && (
                   <span style={{ color: "gray", fontSize: "15px" }}>
                     "No patients were screened yet"
                   </span>
@@ -166,12 +205,13 @@ const Dashboard = () => {
             </div>
 
             <div className="average-time-duration-of-screening-container">
-              <h3>
-                {" "}
-                <HourglassBottomIcon /> Average screening time duration:{" "}
-              </h3>
-              {/* <h2 style={{float: 'left'}}>{patients.length !== 0 && patients[patients.length - 1].avg_time_duration}</h2>
-              <span style={{fontSize: '14px'}}>Hours / minutes / seconds</span> */}
+              <h4>
+                <HourglassBottomIcon /> Average screening time duration
+              </h4>
+              <h5 style={{ float: "left" }}>{recentDuration}</h5>
+              <span style={{ fontSize: "14px" }}>
+                Hours / minutes / seconds
+              </span>
             </div>
           </div>
 
@@ -189,7 +229,7 @@ const Dashboard = () => {
                     </Link>
                   </h6>
                 </ListItem>
-                {assessedPatients.length === 0 && (
+                {isLoading && (
                   <ListItem
                     style={{
                       margin: 0,
@@ -203,8 +243,8 @@ const Dashboard = () => {
                     <Skeleton height={100} width={"100%"} />
                   </ListItem>
                 )}
-                {assessedPatients.length !== 0 &&
-                  assessedPatients.slice(0, 3).map((patient, index) => (
+                {!isLoading &&
+                  screenedPatients.slice(0, 3).map((patient, index) => (
                     <ListItem
                       key={index}
                       divider={true}
@@ -222,7 +262,7 @@ const Dashboard = () => {
                     </ListItem>
                   ))}
 
-                {patients.length !== 0 && assessedPatients.length === 0 && (
+                {!isLoading && screenedPatients.length === 0 && (
                   <div
                     className="no-data"
                     style={{

@@ -2,6 +2,7 @@ import Layout from "../components/Layout";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
+import axios from "axios";
 
 import BreadCrumbs from "../components/BreadCrumbs";
 import EditPatientModal from "../components/editPatientModal";
@@ -21,28 +22,17 @@ const PatientDetails = () => {
   };
 
   const setData = async (data) => {
-
     setPatientDetails(data.patients[0]);
-    setAssessmentDetails((data.assessment.length > 0) ? data.assessment[0] : []);
     setScreeningDetails(data.screeningDetails[0]);
+    setAssessmentDetails(data.assessment.length > 0 ? data.assessment[0] : []);
 
     setIsScreened(data.assessment.length > 0 ? true : false);
   };
 
-  const checkIfScreened = () => {
-    return assessmentDetails !== undefined ? true : false;
-  };
-
   const getPatientDetails = () => {
-    fetch("/patient-details/id=" + id, {
-      methods: "GET",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => setData(response))
+    axios
+      .get("/patient-details/id=" + id)
+      .then((response) => setData(response.data))
       .catch((error) => console.log(error));
   };
 
@@ -71,10 +61,11 @@ const PatientDetails = () => {
                 className="patient-name-container"
                 style={{
                   backgroundColor: "white",
-                  padding: "20px 0px 20px 10px",
+                  padding: "20px 10px 20px 10px",
                   borderRadius: "10px",
                   display: "flex",
                   flexDirection: "column",
+                  width: "100%",
                   rowGap: "20px",
                   alignItems: "center",
                 }}
@@ -86,10 +77,22 @@ const PatientDetails = () => {
                   )}
                 />
 
-                <div className="patient-name">
+                <div
+                  className="patient-name"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    rowGap: "10px",
+                    padding: "10px 0",
+                  }}
+                >
                   First Name: <h4>{patientDetails.fname}</h4>
                   Last Name: <h4>{patientDetails.lname}</h4>
+                  Country: {patientDetails.country}
                 </div>
+
+                {/* <div className="country">
+                </div> */}
               </div>
 
               <div className="patient-information">
@@ -169,7 +172,9 @@ const PatientDetails = () => {
                       </span>
                     )}
                     {isScreened === true && (
-                      <h6>Description: {assessmentDetails.result_description}</h6>
+                      <h6>
+                        Description: {assessmentDetails.result_description}
+                      </h6>
                     )}
                   </div>
                 </div>
@@ -181,14 +186,7 @@ const PatientDetails = () => {
                 <label htmlFor="patient-notes-label">Notes</label>
 
                 <div className="patient-notes">
-                  {isScreened === false && (
-                    <span style={{ color: "gray", fontSize: "15px" }}>
-                      Not available. Patient must be screened first
-                    </span>
-                  )}
-                  {isScreened === true && (
-                    <span>{screeningDetails.patient_notes}</span>
-                  )}
+                  <span>{screeningDetails.patient_notes}</span>
                 </div>
 
                 <div className="patient-notes-actions">
@@ -205,24 +203,26 @@ const PatientDetails = () => {
                     getPatientDetails={getPatientDetails}
                     openModal={open}
                     setOpen={setOpen}
-                    checkIfScreened={checkIfScreened}
-                    parseDate={parseDate}
+                    isScreened={isScreened}
                   />
                 </div>
 
                 <div className="patient-notes-status">
-                  <div className="patient-notes-editor">
+                  {/* I decided to comment this out for the meantime since it */}
+                  {/* wouldn't make sense if a record were to be edited by any other */}
+                  {/* person since only this clinician can see this record */}
+
+                  {/* <div className="patient-notes-editor">
                     <label htmlFor="notes-edited-by">Last Edited By:</label>
                     {isScreened === true && (
                       <p>{screeningDetails.last_edited_by}</p>
                     )}
-                  </div>
+                  </div> */}
 
                   <div className="patient-notes-edited-date">
                     <label htmlFor="date-edited-on">Last Edited On:</label>
-                    {isScreened === true && (
-                      <p>{parseDate(screeningDetails.last_edited_on)}</p>
-                    )}
+
+                    <p>{parseDate(screeningDetails.last_edited_on)}</p>
                   </div>
                 </div>
               </div>
