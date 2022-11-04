@@ -148,8 +148,6 @@ const PatientRecord = () => {
           : "No",
         action: DeleteIcon,
       };
-
-      console.log(patientRecord);
       setPatientRecords((patientRecords) => [...patientRecords, patientRecord]);
     });
   };

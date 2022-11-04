@@ -232,6 +232,9 @@ class PatientAssessmentSchema(ma.Schema):
                   'assessor_id', 'patient_id', 'result_description')
 
 
+patient_assessment_schema = PatientAssessmentSchema(many=True)
+
+
 class PatientScreeningDetailsSchema(ma.Schema):
     class Meta:
         fields = ('id', 'assessment_id', 'patient_notes',
