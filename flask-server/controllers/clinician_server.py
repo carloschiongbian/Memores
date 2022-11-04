@@ -150,9 +150,11 @@ def retrieveDashboardContent():
     screened_patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients).where(Assessments.patient_id == Patients.id).filter(Patients.created_by == user_id).order_by(Patients.id)
     screened_patients_response_object = patient_record_schema.jsonify(screened_patients_query)
 
-    # screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).\
-    # select_from(PatientsScreeningDetails).\
-    # filter(PatientsScreeningDetails.id == Assessments.patient_id)
+    # non_screened_patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients)
+    # non_screened_patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients).where(Patients.created_by == user_id).filter(Assessments.patient_id != Patients.id).order_by(Patients.id)
+    non_screened_patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients).where(Assessments.patient_id != Patients.id).filter(Patients.created_by == user_id)
+    # non_screened_patients_query = non_screened_patients_query.outerjoin(Assessments, Patients.id != Assessments.patient_id).filter(Patients.created_by == user_id)
+    non_screened_patients_response_object = patient_record_schema.jsonify(non_screened_patients_query)
 
     # fix condition for dashboard chart
     screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails)
@@ -162,8 +164,11 @@ def retrieveDashboardContent():
     assessments_query = db.session.query(*Assessments.__table__.columns).select_from(Assessments).where(Assessments.patient_id == Patients.id).filter(Patients.created_by == user_id).order_by(Assessments.date_finished.desc())
     assessment_response_object = patient_assessment_schema.jsonify(assessments_query)
 
+    # print(non_screened_patients_response_object.get_json())
+
     records = { 
         'patients': patient_response_object.get_json(), 
+        'non_screened_patients': non_screened_patients_response_object.get_json(),
         'screened_patients': screened_patients_response_object.get_json(), 
         'screening_details': screening_response_object.get_json(),
         'assessments': assessment_response_object.get_json() 
