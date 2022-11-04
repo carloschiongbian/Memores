@@ -131,3 +131,39 @@ export const updateClinicianSchemaValidation = yup.object({
   country: yup.string().required(),
   zipcode: yup.string().required(),
 });
+
+export const createPatientSchemaValidation = yup.object({
+  fname: yup
+    .string()
+    .min(2)
+    .max(25)
+    .matches("^[A-Za-z ]*$", {
+      message: "Special characters is not allowed",
+      excludeEmptyString: true,
+    })
+    .required(),
+  lname: yup
+    .string()
+    .min(2)
+    .max(25)
+    .matches("^[A-Za-z ]*$", {
+      message: "Special characters is not allowed",
+      excludeEmptyString: true,
+    })
+    .required(),
+  email: yup.string().email().required(),
+  phone: yup
+    .string()
+    .matches("^[0-9 -]*$", {
+      message: "number, dash and spaces only",
+      excludeEmptyString: true,
+    })
+    .required(),
+  age: yup.number().required(),
+  bday: yup.date().required(),
+  gender: yup.string().required(),
+  street: yup.string().required(),
+  city: yup.string().required(),
+  country: yup.string().required(),
+  zip: yup.string().required(),
+});
