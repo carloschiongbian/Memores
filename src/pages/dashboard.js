@@ -231,17 +231,9 @@ const Dashboard = () => {
 
           <div className="bottom-section">
             <div className="recently-screened-patients-body">
-              <List className="patients-list-container">
+              <List className="patients-list-container" style={{maxHeight: '300px', overflow: 'scroll', overflowX: 'hidden'}}>
                 <ListItem divider={true} className="patient-list-header">
                   <h5>Recently Screened Patients</h5>
-                  <h6>
-                    <Link
-                      to="/patient-records"
-                      style={{maxHeight: '290px', overflow: 'scroll', overflowX: 'hidden', textDecoration: 'none'}}
-                    >
-                      View All
-                    </Link>
-                  </h6>
                 </ListItem>
                 {isLoading && (
                   <ListItem
@@ -258,7 +250,7 @@ const Dashboard = () => {
                   </ListItem>
                 )}
                 {!isLoading &&
-                  screenedPatients.slice(0, 3).map((patient, index) => (
+                  screenedPatients.map((patient, index) => (
                     <ListItem
                       key={index}
                       divider={true}
@@ -297,17 +289,9 @@ const Dashboard = () => {
               </List>
             </div>
 
-              <List className="patients-list-container" style={{maxHeight: '290px', overflow: 'scroll', overflowX: 'hidden'}}>
+              <List className="patients-list-container" style={{maxHeight: '300px', overflow: 'scroll', overflowX: 'hidden'}}>
                 <ListItem divider={true} className="patient-list-header">
                   <h5>Patients To Be Screened</h5>
-                  <h6>
-                    <Link
-                      to="/patient-records"
-                      style={{ textDecoration: "none" }}
-                    >
-                      View All
-                    </Link>
-                  </h6>
                 </ListItem>
                 {isLoading && (
                   <ListItem
