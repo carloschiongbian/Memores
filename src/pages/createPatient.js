@@ -1,429 +1,305 @@
 import "../public/css/pages/PatientRecord/patientRecord.css";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import Select from "react-select";
+import { Controller } from "react-hook-form";
 import SelectCountries from "../components/countriesSelect";
 // const FILE_SIZE = 720 * 720;
-const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
+import {
+  TextField,
+  Grid,
+  Divider,
+  MenuItem,
+  Card,
+  CardContent,
+} from "@mui/material";
 
 const options = [
-    { value: "male", label: "Male" },
-    { value: "female", label: "Female" },
-    { value: "other", label: "other" },
+  { value: "male", label: "Male" },
+  { value: "female", label: "Female" },
 ];
-const schema = yup
-    .object({
-      img: yup.mixed(),
-      firstname: yup
-        .string()
-        .min(2)
-        .max(25)
-        .matches("^[A-Za-z ]*$", {
-          message: "Special characters is not allowed",
-          excludeEmptyString: true,
-        })
-        .required(),
-      lastname: yup
-        .string()
-        .min(2)
-        .max(25)
-        .matches("^[A-Za-z ]*$", {
-          message: "Special characters is not allowed",
-          excludeEmptyString: true,
-        })
-        .required(),
-      email: yup.string().email().required(),
-      contact: yup
-        .string()
-        .matches("^[0-9 -]*$", {
-          message: "Number, dash and spaces only",
-          excludeEmptyString: true,
-        })
-        .required(),
-      birthday: yup.date().required(),
-      gender: yup
-        .object()
-        .shape({
-          label: yup.string().required("Gender is required"),
-          value: yup.string().required("Gender is required"),
-        })
-        .nullable()
-        .required("Gender is required"),
-      username: yup.string().required(),
-      password: yup.string().min(4).max(12).required(),
-      confirm: yup
-        .string()
-        .min(4)
-        .max(12)
-        .oneOf([yup.ref("password")], "Passwords do not match")
-        .required(),
-      address: yup.string().required(),
-      city: yup.string().required(),
-      country: yup
-        .object()
-        .shape({
-          label: yup.string().required("Country is required"),
-          value: yup.string().required("Country is required"),
-        })
-        .nullable()
-        .required("country is required"),
-      zipcode: yup.string().required(),
-    })
-    .required();
-  
-  const CreatePatient = () => {
-    const {
-      register,
-      handleSubmit,
-      control,
-      formState: { errors },
-    } = useForm({
-      resolver: yupResolver(schema),
-    });
-  
-    const onSubmit = async (data) => {
-      let formData = new FormData();
-      formData.append("img", data.img[0]);
-      for (let key in data) {
-        if (key === "gender") {
-          formData.append(key, data[key].label);
-        } else if (key === "country") {
-          formData.append(key, data[key].label);
-        } else if (key === "img") {
-        } else {
-          formData.append(key, data[key]);
-        }
-      }
-  
-      const response = await fetch("/register", {
-        method: "POST",
-        body: formData,
-      });
-  
-      if (response.ok) {
-        console.log("Registered Successfully!");
-      }
-    };
-  
-    return (
-      <div className="patient-records-container">
-        <form
-          method="post"
-          onSubmit={handleSubmit(onSubmit)}
-          enctype="multipart/form-data"
-        >
-          <div className="container">
-            <div className="row">
-              <div className="col">
-                <h3>Setup Personal Information</h3>
-                <hr />
-                <div className="form-group">
-                  <label htmlFor="img" className="form-label">
-                    Please upload a clear image of the Patient.
-                  </label>
-                  <input
-                    {...register("img")}
-                    type="file"
-                    name="img"
-                    id="img"
-                    className="form-control"
-                    onChange={(e) => console.log(e.target.files[0])}
-                  />
-                  {errors.img && (
-                    <span
-                      className="text-danger"
-                      style={{ fontSize: "12px", marginBottom: "0px" }}
-                    >
-                      {errors.img.message}
-                    </span>
+
+const CreatePatient = ({ register, errors, control }) => {
+  const { inputRefForFname, ...inputPropsForFname } = register("fname");
+  const { inputRefForLname, ...inputPropsForLname } = register("lname");
+  const { inputRefForEmail, ...inputPropsForEmail } = register("email");
+  const { inputRefForPhone, ...inputPropsForPhone } = register("phone");
+  const { inputRefForAge, ...inputPropsForAge } = register("phone");
+  const { inputRefForBday, ...inputPropsForBday } = register("bday");
+  const { inputRefForGender, ...inputPropsForGender } = register("gender");
+  const { inputRefForStreet, ...inputPropsForStreet } = register("street");
+  const { inputRefForCity, ...inputPropsForCity } = register("city");
+  const { inputRefForCountry, ...inputPropsForCountry } = register("country");
+  const { inputRefForZip, ...inputPropsForZip } = register("zip");
+
+  return (
+    <form>
+      <Grid container spacing={2} columns={16}>
+        <Grid item xs={8}>
+          <Card variant="outlined">
+            <Divider>Personal Information</Divider>
+            <CardContent>
+              <Grid item>
+                <Controller
+                  name={"fname"}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      inputRef={inputRefForFname}
+                      {...inputPropsForFname}
+                      {...field}
+                      autoFocus
+                      margin="dense"
+                      label={"First Name"}
+                      type="input"
+                      fullWidth
+                      variant="standard"
+                      autoComplete="off"
+                      error={!!errors.fname}
+                      helperText={errors?.fname?.message}
+                    />
                   )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="firstname" className="form-label">
-                    Firstname
-                  </label>
-                  <input
-                    {...register("firstname")}
-                    type="text"
-                    name="firstname"
-                    placeholder="Enter Firstname"
-                    className="form-control"
-                    autoComplete="off"
-                  />
-                  {errors.firstname && (
-                    <span
-                      className="text-danger"
-                      style={{ fontSize: "12px", marginBottom: "0px" }}
-                    >
-                      {errors.firstname.message}
-                    </span>
+                />
+              </Grid>
+              <Grid item>
+                <Controller
+                  name={"lname"}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      inputRef={inputRefForLname}
+                      {...inputPropsForLname}
+                      {...field}
+                      autoFocus
+                      margin="dense"
+                      label={"Last name"}
+                      type="input"
+                      fullWidth
+                      variant="standard"
+                      autoComplete="off"
+                      error={!!errors.lname}
+                      helperText={errors?.lname?.message}
+                    />
                   )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="lastname" className="form-label">
-                    Lastname
-                  </label>
-                  <input
-                    {...register("lastname")}
-                    type="text"
-                    id="lastname"
-                    placeholder="Enter Lastname"
-                    className="form-control"
-                  />
-                  {errors.lastname && (
-                    <span
-                      className="text-danger"
-                      style={{ fontSize: "12px", marginBottom: "0px" }}
-                    >
-                      {errors.lastname.message}
-                    </span>
+                />
+              </Grid>
+              <Grid item>
+                <Controller
+                  name={"email"}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      inputRef={inputRefForEmail}
+                      {...inputPropsForEmail}
+                      {...field}
+                      autoFocus
+                      margin="dense"
+                      label={"Email"}
+                      type="email"
+                      fullWidth
+                      variant="standard"
+                      autoComplete="off"
+                      error={!!errors.email}
+                      helperText={errors?.email?.message}
+                    />
                   )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="email" className="form-label">
-                    Email
-                  </label>
-                  <input
-                    {...register("email")}
-                    type="email"
-                    id="email"
-                    placeholder="Enter Email Address"
-                    className="form-control"
-                  />
-                  {errors.email && (
-                    <span
-                      className="text-danger"
-                      style={{ fontSize: "12px", marginBottom: "0px" }}
-                    >
-                      {errors.email.message}
-                    </span>
+                />
+              </Grid>
+              <Grid item>
+                <Controller
+                  name={"phone"}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      inputRef={inputPropsForPhone}
+                      {...inputRefForPhone}
+                      {...field}
+                      autoFocus
+                      margin="dense"
+                      label={"Contact"}
+                      type="input"
+                      fullWidth
+                      variant="standard"
+                      autoComplete="off"
+                      error={!!errors.phone}
+                      helperText={errors?.phone?.message}
+                    />
                   )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="contact" className="form-label">
-                    Contact Number
-                  </label>
-                  <input
-                    {...register("contact")}
-                    type="text"
-                    id="contact"
-                    placeholder="Enter Contact Number"
-                    className="form-control"
-                  />
-                  {errors.contact && (
-                    <span
-                      className="text-danger"
-                      style={{ fontSize: "12px", marginBottom: "0px" }}
-                    >
-                      {errors.contact.message}
-                    </span>
+                />
+              </Grid>
+              <Grid item>
+                <Controller
+                  name={"age"}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      inputRef={inputRefForAge}
+                      {...inputPropsForAge}
+                      {...field}
+                      autoFocus
+                      margin="dense"
+                      label={"Age"}
+                      type="number"
+                      fullWidth
+                      variant="standard"
+                      autoComplete="off"
+                      error={!!errors.age}
+                      helperText={errors?.age?.message}
+                    />
                   )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="birthday" className="form-label">
-                    Date of Birth
-                  </label>
-                  <input
-                    {...register("birthday")}
-                    type="date"
-                    id="birthday"
-                    placeholder="Enter Birthday"
-                    className="form-control"
-                  />
-                  {errors.birthday && (
-                    <span
-                      className="text-danger"
-                      style={{ fontSize: "12px", marginBottom: "0px" }}
-                    >
-                      {errors.birthday.message}
-                    </span>
+                />
+              </Grid>
+              <Grid item>
+                <Controller
+                  name={"bday"}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      inputRef={inputRefForBday}
+                      {...inputPropsForBday}
+                      {...field}
+                      autoFocus
+                      margin="dense"
+                      label={"Birthday"}
+                      type="date"
+                      fullWidth
+                      variant="standard"
+                      autoComplete="off"
+                      error={!!errors.bday}
+                      helperText={errors?.bday?.message}
+                    />
                   )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="gender" className="form-label">
-                    Gender
-                  </label>
-                  <Controller
-                    name="gender"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        isClearable
-                        isSearchable={false}
-                        className="form-control"
-                        options={options}
-                      />
-                    )}
-                  />
-                  <span
-                    className="text-danger"
-                    style={{ fontSize: "12px", marginBottom: "0px" }}
-                  >
-                    {errors.gender?.message || errors.gender?.label.message}
-                  </span>
-                </div>
-              </div>
-              <div className="col">
-                <h3>Setup Account Information</h3>
-                <hr />
-                <div className="form-group">
-                  <label htmlFor="username" className="form-label">
-                    Username
-                  </label>
-                  <input
-                    {...register("username")}
-                    type="text"
-                    id="username"
-                    placeholder="Enter Username"
-                    className="form-control"
-                  />
-                  {errors.username && (
-                    <span
-                      className="text-danger"
-                      style={{ fontSize: "12px", marginBottom: "0px" }}
+                />
+              </Grid>
+              <Grid item>
+                <Controller
+                  name={"gender"}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      variant="standard"
+                      inputRef={inputRefForGender}
+                      {...inputPropsForGender}
+                      {...field}
+                      select
+                      fullWidth
+                      margin="dense"
+                      label="Gender"
+                      defaultValue=""
+                      error={!!errors.gender}
+                      helperText={errors?.gender?.message}
                     >
-                      {errors.username.message}
-                    </span>
+                      {options.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
                   )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="password" className="form-label">
-                    Password
-                  </label>
-                  <input
-                    {...register("password")}
-                    type="password"
-                    id="password"
-                    placeholder="Enter Password"
-                    className="form-control"
-                  />
-                  {errors.password && (
-                    <span
-                      className="text-danger"
-                      style={{ fontSize: "12px", marginBottom: "0px" }}
+                />
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={8}>
+          <Card variant="outlined">
+            <Divider>Address Information</Divider>
+            <CardContent>
+              <Grid item>
+                <Controller
+                  name={"street"}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      inputRef={inputRefForStreet}
+                      {...inputPropsForStreet}
+                      {...field}
+                      autoFocus
+                      margin="dense"
+                      label={"Street Address"}
+                      type="input"
+                      fullWidth
+                      variant="standard"
+                      autoComplete="off"
+                      error={!!errors.street}
+                      helperText={errors?.street?.message}
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid item>
+                <Controller
+                  name={"city"}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      inputRef={inputRefForCity}
+                      {...inputPropsForCity}
+                      {...field}
+                      autoFocus
+                      margin="dense"
+                      label={"City"}
+                      type="input"
+                      fullWidth
+                      variant="standard"
+                      autoComplete="off"
+                      error={!!errors.city}
+                      helperText={errors?.city?.message}
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid item>
+                <Controller
+                  name={"country"}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      variant="standard"
+                      inputRef={inputRefForCountry}
+                      {...inputPropsForCountry}
+                      {...field}
+                      select
+                      margin="dense"
+                      fullWidth
+                      label="Country"
+                      defaultValue=""
+                      error={!!errors.country}
+                      helperText={errors?.country?.message}
                     >
-                      {errors.password.message}
-                    </span>
+                      {SelectCountries.map((option) => (
+                        <MenuItem key={option.value} value={option.label}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
                   )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="confirm" className="form-label">
-                    Confirm Password
-                  </label>
-                  <input
-                    {...register("confirm")}
-                    type="password"
-                    id="confirm"
-                    placeholder="Re-Enter Confirm Password"
-                    className="form-control"
-                  />
-                  {errors.confirm && (
-                    <span
-                      className="text-danger"
-                      style={{ fontSize: "12px", marginBottom: "0px" }}
-                    >
-                      {errors.confirm.message}
-                    </span>
+                />
+              </Grid>
+              <Grid item>
+                <Controller
+                  name={"zip"}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      inputRef={inputRefForZip}
+                      {...inputPropsForZip}
+                      {...field}
+                      autoFocus
+                      margin="dense"
+                      label={"Zip Code"}
+                      type="input"
+                      fullWidth
+                      variant="standard"
+                      autoComplete="off"
+                      error={!!errors.zip}
+                      helperText={errors?.zip?.message}
+                    />
                   )}
-                </div>
-                <h3>Setup Address Information</h3>
-                <hr />
-                <div className="form-group">
-                  <label htmlFor="address" className="form-label">
-                    Street Address
-                  </label>
-                  <input
-                    {...register("address")}
-                    type="text"
-                    id="address"
-                    placeholder="Enter Street Address"
-                    className="form-control"
-                  />
-                  {errors.address && (
-                    <span
-                      className="text-danger"
-                      style={{ fontSize: "12px", marginBottom: "0px" }}
-                    >
-                      {errors.address.message}
-                    </span>
-                  )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="city" className="form-label">
-                    City
-                  </label>
-                  <input
-                    {...register("city")}
-                    type="text"
-                    id="city"
-                    placeholder="Enter City"
-                    className="form-control"
-                  />
-                  {errors.city && (
-                    <span
-                      className="text-danger"
-                      style={{ fontSize: "12px", marginBottom: "0px" }}
-                    >
-                      {errors.city.message}
-                    </span>
-                  )}
-                </div>
-                <div className="form-group">
-                  <label htmlFor="country" className="form-label">
-                    Country
-                  </label>
-                  <Controller
-                    name="country"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        isClearable
-                        className="form-control"
-                        options={SelectCountries}
-                      />
-                    )}
-                  />
-                  <span
-                    className="text-danger"
-                    style={{ fontSize: "12px", marginBottom: "0px" }}
-                  >
-                    {errors.country?.message || errors.country?.label.message}
-                  </span>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="zipcode" className="form-label">
-                    ZIP Code
-                  </label>
-                  <input
-                    {...register("zipcode")}
-                    type="text"
-                    id="zipcode"
-                    placeholder="Enter ZIP Code"
-                    className="form-control"
-                  />
-                  {errors.zipcode && (
-                    <span
-                      className="text-danger"
-                      style={{ fontSize: "12px", marginBottom: "0px" }}
-                    >
-                      {errors.zipcode.message}
-                    </span>
-                  )}
-                </div>
-                <hr />
-                <button type="submit" className="btn btn-primary form-control">
-                  Create Patient
-                </button>
-                <hr />
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-    );
-  };
-  export default CreatePatient;
-  
+                />
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </form>
+  );
+};
+export default CreatePatient;

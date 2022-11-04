@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Modal, Button } from "@mui/material";
+import CommonModal from "../components/modal/CommonModal";
+import CreatePatient from "./createPatient";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import MaterialReactTable from "material-react-table";
@@ -11,6 +13,12 @@ import axios from "axios";
 import Layout from "../components/Layout";
 import "../public/css/pages/PatientRecord/patientRecord.scss";
 import "../public/css/components/PatientManagementModal/Modal.scss";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { createPatientSchemaValidation } from "../validation/manageValidation";
+import Api from "../services/api";
+import dayjs from "dayjs";
 
 const recordActions = {
   EDIT: "EDIT",
@@ -22,6 +30,59 @@ const PatientRecord = () => {
   const [getRecord, setGetRecord] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [patientRecords, setPatientRecords] = useState([]);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(createPatientSchemaValidation),
+    defaultValues: {
+      fname: "",
+      lname: "",
+      email: "",
+      phone: "",
+      age: "",
+      bday: "",
+      gender: "",
+      street: "",
+      city: "",
+      country: "",
+      zip: "",
+    },
+  });
+
+  const createPatient = async (data) => {
+    data.bday = dayjs(data.bday).format("YYYY-MM-DD");
+
+    try {
+      const response = await Api().post("/create-patient", data);
+
+      if (response.status === 200) {
+        const updatedRecord = response.data.patients.map((data) => {
+          return {
+            id: data.id,
+            firstName: data.fname,
+            lastName: data.lname,
+            age: data.age,
+            is_screened: response.data.assessment.find(
+              (assessment) => assessment.patient_id === data.id
+            )
+              ? "Yes"
+              : "No",
+            action: DeleteIcon,
+          };
+        });
+        setPatientRecords(updatedRecord);
+        setIsCreateModalOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const columns = [
     { accessorKey: "id", header: "Patient ID" },
@@ -58,7 +119,10 @@ const PatientRecord = () => {
           >
             <FindInPageIcon
               style={{ color: "#8860D0", cursor: "pointer" }}
-              onClick={() => handleRecordAction(cell.row, recordActions.EDIT)}
+              onClick={() => {
+                console.log(cell.row);
+                handleRecordAction(cell.row, recordActions.EDIT);
+              }}
             />
             <DeleteIcon
               style={{ color: "red", cursor: "pointer" }}
@@ -84,7 +148,6 @@ const PatientRecord = () => {
           : "No",
         action: DeleteIcon,
       };
-
       setPatientRecords((patientRecords) => [...patientRecords, patientRecord]);
     });
   };
@@ -115,10 +178,11 @@ const PatientRecord = () => {
   };
 
   const handleDelete = () => {
-    axios.delete('/patient-records/delete/id=' + + parseInt(getRecord.original.id))
-    .then(res => {
-      console.log(res)
-    })
+    axios
+      .delete("/patient-records/delete/id=" + +parseInt(getRecord.original.id))
+      .then((res) => {
+        console.log(res);
+      });
 
     const newArr = patientRecords.filter(
       (record) => record.id !== getRecord.original.id
@@ -146,7 +210,7 @@ const PatientRecord = () => {
                   variant="contained"
                   color="primary"
                   size="large"
-                  onClick={() => navigate("/createPatient")}
+                  onClick={() => setIsCreateModalOpen(true)}
                 >
                   Create New Patient
                 </Button>
@@ -197,6 +261,19 @@ const PatientRecord = () => {
           </div>
         </div>
       </div>
+      <CommonModal
+        dialogTitle={"Create New Patient"}
+        width={"lg"}
+        openModal={isCreateModalOpen}
+        handleSubmit={handleSubmit(createPatient)}
+        handleClose={() => {
+          reset();
+          setIsCreateModalOpen(false);
+        }}
+        btnPrimaryTxt={"Create"}
+      >
+        <CreatePatient register={register} errors={errors} control={control} />
+      </CommonModal>
     </Layout>
   );
 };

@@ -25,7 +25,6 @@ const UserRecord = () => {
   const [data, setData] = useState([]);
   const [imagePreview, setImagePreview] = useState({});
   const [loading, setLoading] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [userDataForEdit, setUserDataForEdit] = useState({
     id: "",
     uname: "",
@@ -96,7 +95,6 @@ const UserRecord = () => {
   const {
     register: registerForm2,
     handleSubmit: handleSubmitForm2,
-    control: controlForm2,
     reset: resetForm2,
     formState: { errors: errorsForm2 },
   } = useForm({
@@ -301,7 +299,6 @@ const UserRecord = () => {
       params: { id: id },
     });
     setUserDataForView(response.data);
-    setIsLoaded(true);
     // const url = URL.createObjectURL(response.data.img);
     // console.log(dayjs(response.data.birthday).toISOString());
     setImagePreview({ profile: response.data.profile, img: response.data.img });
@@ -322,7 +319,6 @@ const UserRecord = () => {
   };
 
   const handleClose = () => {
-    setIsLoaded(false);
     setIsEditModalOpen(false);
   };
 
@@ -337,7 +333,6 @@ const UserRecord = () => {
       params: { id: id },
     });
     setUserDataForEdit({ ...response.data[0], ...emptyField });
-    setIsLoaded(true);
     reset({ ...response.data[0], ...emptyField });
   };
 
@@ -435,6 +430,7 @@ const UserRecord = () => {
         },
       },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 

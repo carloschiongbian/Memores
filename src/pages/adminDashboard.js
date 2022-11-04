@@ -20,25 +20,15 @@ import {
   ListItemAvatar,
   ListItemButton,
   ListItemText,
-  Paper,
   Avatar,
   Skeleton,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import UserDialog from "../components/modal/UserDialog";
 import BlockIcon from "@mui/icons-material/Block";
 import { useContext } from "react";
 import AuthContext from "../auth/AuthContext";
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
 
 const capitalize = (s) => (s && s[0].toUpperCase() + s.slice(1)) || "";
 
