@@ -2,7 +2,7 @@ $p: hsl(213deg 85% 97%);
 $s: hsl(233deg 36% 38%);
 * { font-family: 'Poppins' }
 @mixin screen {
-	background: $p;
+	background: linear-gradient(90deg, #b591f0, #8866E9);	
 	padding: 2em;
 	display: flex;
 	flex-direction: column;
@@ -15,7 +15,7 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background: hsl(218deg 50% 91%);
+	background: linear-gradient(90deg, #b591f0, #8866E9);	
 	height: 100vh;
 }
 .screen-1 {
@@ -23,7 +23,7 @@ body {
 	gap: 2em;
 	.logo { margin-top: -3em }
 	.email {
-		background: hsl(0deg 0% 100%);
+		background: linear-gradient(90deg, #b591f0, #8866E9);	
 		box-shadow: 0 0 2em hsl(231deg 62% 94%);
 		padding: 1em;
 		display: flex;
@@ -76,16 +76,43 @@ body {
 		color: hsl(0 0 100);
 		border: none;
 		border-radius: 30px;
-		font-weight: 600;
+		font-weight: 100;
 	}
-	.footer {
-		display: flex;
-		font-size: 0.7em;
-		color: hsl(0deg 0% 37%);
-		gap: 14em;
-		padding-bottom: 10em;
-		span { cursor: pointer }
+	.login-modal{
+		border-radius: 7px;
+		margin-inline: 10px;
+		padding-block: 50px;
+		padding-inline: 50px;
+		background-color: hsl(0 0 100);
+		.login-modal-header{
+			color: black;
+			font-size: 30px;
+			font-weight: 500;
+			padding-bottom: 10px;
+			border-bottom: 1px solid grey;
+		}
+		.login-modal-inputs{
+			.login-form{
+				display: flex;
+				flex-direction: column; 
+				input[id="login-username"], input[id="login-password"]{
+					height: 35px;
+					outline: none;
+					border-radius: 7px;
+					margin-bottom: 7px;
+					padding-inline: 20px;
+					border: 1px solid #a0a0a0;
+				}
+				input[type="submit"]{
+					padding: 1em;
+                    background: hsl(233deg 36% 38%);
+					color: hsl(0 0 100);
+					border: none;
+					border-radius: 30px;
+					font-weight: 600;
+					}
+				}
+			}
+		}
 	}
-}
-
 button { cursor: pointer; }

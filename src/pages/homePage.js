@@ -39,42 +39,53 @@ const HomePage = () => {
   };
 
   return (
-    <div class="screen-1">
-    <input
-     {...register("user")}
-     type="text"
-     name="user"
-     id="login-username"
-     placeholder="Enter Username"
-   />
-   {errors.user && (
-     <span
-       className="text-danger"
-       style={{ fontSize: "12px", marginBottom: "0px" }}
-     >
-       {errors.user.message}
-     </span>
-   )}
-   <input
-     {...register("password")}
-     type="password"
-     name="password"
-     id="login-password"
-     placeholder="Enter Password"
-   />
-   {errors.password && (
-     <span
-       className="text-danger"
-       style={{ fontSize: "12px", marginBottom: "0px" }}
-     >
-       {errors.password.message}
-     </span>
-   )}
-  <button class="login"
-     method="POST"
-     onSubmit={handleSubmit(onSubmit)}
-   > Login </button>
-   </div> 
+    <div className="screen-1">
+          <div className="homepage-user-login">
+            <div className="login-modal">
+              <h3 className="login-modal-header">Sign In to Memores</h3>
+
+              <div className="login-modal-inputs">
+                <form
+                  className="login-form"
+                  method="POST"
+                  onSubmit={handleSubmit(onSubmit)}
+                >
+                  <input
+                    {...register("user")}
+                    type="text"
+                    name="user"
+                    id="login-username"
+                    placeholder="Enter Username"
+                  />
+                  {errors.user && (
+                    <span
+                      className="text-danger"
+                      style={{ fontSize: "12px", marginBottom: "0px" }}
+                    >
+                      {errors.user.message}
+                    </span>
+                  )}
+                  <input
+                    {...register("password")}
+                    type="password"
+                    name="password"
+                    id="login-password"
+                    placeholder="Enter Password"
+                  />
+                  {errors.password && (
+                    <span
+                      className="text-danger"
+                      style={{ fontSize: "12px", marginBottom: "0px" }}
+                    >
+                      {errors.password.message}
+                    </span>
+                  )}
+                  <button class="login">Login </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
   );
 };
 
