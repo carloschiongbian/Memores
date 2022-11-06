@@ -11,13 +11,13 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #dde5f4;
+  background: linear-gradient(90deg, #b591f0, #8866E9);	
   height: 100vh;
 }
 
 .screen-1 {
   background: #f1f7fe;
-  padding: 2em;
+  padding: 4em;
   display: flex;
   flex-direction: column;
   border-radius: 30px;
@@ -104,7 +104,7 @@ body {
   font-size: 0.7em;
   color: #5e5e5e;
   gap: 14em;
-  padding-bottom: 10em;
+  padding-bottom: 0em;
 }
 .screen-1 .footer span {
   cursor: pointer;
