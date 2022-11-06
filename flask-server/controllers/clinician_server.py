@@ -43,13 +43,18 @@ def retrieveData():
     patient_response_object = patient_record_schema.jsonify(
         patients_query_response)
 
+    screening_details_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails)
+    screening_details_response = patient_screening_details_schema.jsonify(screening_details_query)
+
+    print(screening_details_response)
+
     assessments_query = db.session.query(*Assessments.__table__.columns).select_from(
         Assessments).where(Assessments.patient_id == Patients.id)
     assessment_response_object = patient_assessment_schema.jsonify(
         assessments_query)
 
     records = {'patients': patient_response_object.get_json(
-    ), 'assessment': assessment_response_object.get_json()}
+    ), 'assessment': assessment_response_object.get_json(), 'screening_details': screening_details_response.get_json()}
     return records
 
 
@@ -139,7 +144,7 @@ def retrievePatientScreeningDetails(id):
                 result_description=result_description
             )
         )
-    # include last edited on update
+    
         update_screening_query = (
             update(PatientsScreeningDetails).
             where(PatientsScreeningDetails.id == id).
@@ -162,9 +167,6 @@ def deletePatientRecord(id):
     # Check if session exist
     if not is_authenticated(user_id):
         return jsonify({"error": "Unauthorized"}), 401
-
-    # deletion wont reflect right away on the table
-    # table component for patient records needs to be re-rendered
 
     delete_patients_query = delete(Patients).where(Patients.id == id)
     delete_assessment_query = delete(
@@ -199,11 +201,6 @@ def retrieveDashboardContent():
     screened_patients_response_object = patient_record_schema.jsonify(
         screened_patients_query)
 
-    # screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).\
-    # select_from(PatientsScreeningDetails).\
-    # filter(PatientsScreeningDetails.id == Assessments.patient_id)
-
-    # fix condition for dashboard chart
     screening_query = db.session.query(
         *PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails)
     screening_query = screening_query.outerjoin(
@@ -237,8 +234,7 @@ patient_assessment_schema = PatientAssessmentSchema(many=True)
 
 class PatientScreeningDetailsSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'assessment_id', 'patient_notes',
-                  'sad_category', 'last_edited_on', 'last_edited_by')
+        fields = ('id', 'assessment_id', 'patient_notes', 'last_edited_on')
 
 
 patient_screening_details_schema = PatientScreeningDetailsSchema(many=True)

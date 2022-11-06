@@ -1,7 +1,10 @@
 from flask import request, jsonify, session
 from machine_learning_model.parser import SVM_Model
 from connection.connection import db, ma
+from sqlalchemy import update
 from models.assessments import Assessments
+from models.patient_screening_details import PatientsScreeningDetails
+from controllers.clinician_server import connect
 
 # https://stackoverflow.com/a/16664376/15440045
 # request.json: parsed JSON data
@@ -40,10 +43,18 @@ def submit_answers():
                 assessor_id = assessor['id'], \
                 responses = request_obj['data'])
     
+    update_screening_query = (
+        update(PatientsScreeningDetails).
+        where(PatientsScreeningDetails.id == patient['id']).
+        values(
+            assessment_id=patient['id']
+        )
+    )
+
+    connect.engine(update_screening_query)
+
     db.session.add(assessment)
     db.session.commit()
-
-
 
     # print(classification, prob)
     return jsonify({"classification": str(classification), "probability": str(prob)})

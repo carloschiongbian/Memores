@@ -15,7 +15,7 @@ import CommonModal from "../components/modal/CommonModal";
 import DashboardChart from "../components/dashboard/DashboardChart.js";
 import { useContext } from "react";
 import AuthContext from "../auth/AuthContext";
-import axios from 'axios';
+import axios from "axios";
 import Api from "../services/api";
 
 const SAD_CATEGORIES = {
@@ -37,6 +37,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [recentDuration, setRecentDuration] = useState();
   const [screenedPatients, setScreenedPatients] = useState([]);
+  const [nonScreenedPatients, setNonScreenedPatients] = useState([]);
   const [openScreenedModal, setOpenScreenedModal] = useState(false);
   const authUser = useContext(AuthContext);
 
@@ -62,10 +63,12 @@ const Dashboard = () => {
   let patientDetailsPath = "../patient-details/id=";
 
   const getDashboardData = () => {
-      axios.get('/dashboard')
-      .then(res => {
-        setData(res.data)
-      }).catch((error) => console.log(error));
+    axios
+      .get("/dashboard")
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((error) => console.log(error));
 
     setIsLoading(false);
   };
@@ -76,7 +79,18 @@ const Dashboard = () => {
     
     setAverageDuration(data.assessments);
     getCategoryCount(data.screening_details);
+    retrieveToBeScreenedPatients(data.patients, data.screened_patients);
   };
+
+  const retrieveToBeScreenedPatients = (patients, screenedPatients) => {
+    patients.map(patient => {
+      screenedPatients.map(screenedPatient => {
+        if(screenedPatient.id !== patient.id){
+          setNonScreenedPatients(nonScreenedPatients => [...nonScreenedPatients, patient])
+        }
+      })
+    })
+  }
 
   const setAverageDuration = (assessments) => {
     let hours = assessments.map((assessment) => {
@@ -217,17 +231,9 @@ const Dashboard = () => {
 
           <div className="bottom-section">
             <div className="recently-screened-patients-body">
-              <List className="patients-list-container">
+              <List className="patients-list-container" style={{maxHeight: '300px', overflow: 'scroll', overflowX: 'hidden'}}>
                 <ListItem divider={true} className="patient-list-header">
                   <h5>Recently Screened Patients</h5>
-                  <h6>
-                    <Link
-                      to="/patient-records"
-                      style={{ textDecoration: "none" }}
-                    >
-                      View All
-                    </Link>
-                  </h6>
                 </ListItem>
                 {isLoading && (
                   <ListItem
@@ -244,7 +250,7 @@ const Dashboard = () => {
                   </ListItem>
                 )}
                 {!isLoading &&
-                  screenedPatients.slice(0, 3).map((patient, index) => (
+                  screenedPatients.map((patient, index) => (
                     <ListItem
                       key={index}
                       divider={true}
@@ -283,14 +289,63 @@ const Dashboard = () => {
               </List>
             </div>
 
-            <div className="graph-container">
-              <DashboardChart
-                normal={sadCategories.normal}
-                mild={sadCategories.mild}
-                moderate={sadCategories.moderate}
-                severe={sadCategories.severe}
-              />
-            </div>
+              <List className="patients-list-container" style={{maxHeight: '300px', overflow: 'scroll', overflowX: 'hidden'}}>
+                <ListItem divider={true} className="patient-list-header">
+                  <h5>Patients To Be Screened</h5>
+                </ListItem>
+                {isLoading && (
+                  <ListItem
+                    style={{
+                      margin: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Skeleton height={100} width={"100%"} />
+                    <Skeleton height={100} width={"100%"} />
+                    <Skeleton height={100} width={"100%"} />
+                  </ListItem>
+                )}
+                {!isLoading &&
+                  nonScreenedPatients.map((patient, index) => (
+                    <ListItem
+                      key={index}
+                      divider={true}
+                      button={true}
+                      onClick={() => {
+                        navigate(patientDetailsPath + patient.id);
+                      }}
+                      className="patient-information-item"
+                    >
+                      <div className="patient-name">
+                        <NavigateNextIcon />
+
+                        <h5> {patient.fname + " " + patient.lname} </h5>
+                      </div>
+                    </ListItem>
+                  ))}
+
+                {!isLoading && screenedPatients.length === 0 && (
+                  <div
+                    className="no-data"
+                    style={{
+                      display: "flex",
+                      columnGap: "10px",
+                      padding: "100px 0",
+                      lineHeight: "normal",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <HealingIcon style={{ float: "left" }} />
+                    <h6 style={{ color: "gray" }}>
+                      None of your patients have been screened yet
+                    </h6>
+                  </div>
+                )}
+              </List>
+            
           </div>
         </div>
       </div>
