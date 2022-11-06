@@ -8,10 +8,8 @@ class PatientsScreeningDetails(db.Model):
     """
     # __tablename__ = 'patients_screening_details'
     id = db.Column(db.Integer, primary_key = True)
-    assessment_id = db.Column(db.Integer, nullable = False)
+    assessment_id = db.Column(db.Integer, autoincrement=True, nullable = False)
     patient_notes = db.Column(db.Text, nullable = False)
-    sad_category = db.Column(db.String(255), nullable = False)
-    last_edited_by = db.Column(db.String(255), nullable = False)
     last_edited_on = db.Column(db.DateTime, nullable = False)
     created_at = db.Column(db.DateTime, nullable = False, server_default=func.now())
     updated_at = db.Column(db.DateTime, nullable = False, onupdate=func.now())
@@ -22,7 +20,7 @@ class PatientScreeningDetailsSchema(ma.Schema):
     """This is a database schema."""
     class Meta:
         """Specify which fields you want to see in RESTful API"""
-        fields = ('id', 'assessment_id', 'patient_notes', 'sad_category', 'last_edited_by', 'last_edited_on', 'created_at', 'updated_at')
+        fields = ('id', 'assessment_id', 'patient_notes', 'last_edited_on', 'created_at', 'updated_at')
 
 
 """

@@ -52,7 +52,7 @@ def get_patients():
 
     patients = query.all() 
     patients_response_obj = patient_assessments_schema.jsonify(patients)
-
+    print(patients_response_obj.get_json())
     return jsonify({
         "patients": patients_response_obj.get_json(),
         "total": str(ctr)

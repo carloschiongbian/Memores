@@ -3,6 +3,7 @@ from auth.auth import is_authenticated, is_admin
 from flask.json import jsonify
 from models.patients import Patients, db, ma
 from models.assessments import Assessments
+from models.patient_screening_details import PatientsScreeningDetails
 import pymysql
 
 
@@ -37,8 +38,14 @@ def create_patient():
         new_user = Patients(fname=fname, lname=lname, fullname="{} {}".format(
             fname, lname), email=email, phone=phone, age=age, bday=bday, gender=gender, street=street, city=city, country=country, zip=zip, created_by=user_id)
 
+        new_user_screening_details = PatientsScreeningDetails(patient_notes=" ", last_edited_on=" ", updated_at=" ")
+
         db.session.add(new_user)
         db.session.commit()
+
+        db.session.add(new_user_screening_details)
+        db.session.commit()
+
     except pymysql.Error as e:
         print("could not close connection error pymysql %d: %s" %
               (e.args[0], e.args[1]))
@@ -79,3 +86,9 @@ class PatientRecordSchema(ma.Schema):
 
 
 patient_record_schema = PatientRecordSchema(many=True)
+
+class PatientScreeningDetailsSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'assessment_id', 'patient_notes', 'last_edited_on')
+
+patient_screening_details_schema = PatientScreeningDetailsSchema(many=True)
