@@ -38,7 +38,7 @@ def create_patient():
         new_user = Patients(fname=fname, lname=lname, fullname="{} {}".format(
             fname, lname), email=email, phone=phone, age=age, bday=bday, gender=gender, street=street, city=city, country=country, zip=zip, created_by=user_id)
 
-        new_user_screening_details = PatientsScreeningDetails(patient_notes=" ", last_edited_on=" ", updated_at=" ")
+        new_user_screening_details = PatientsScreeningDetails(assessment_id=" ", patient_notes=" ", last_edited_on=" ", updated_at=" ")
 
         db.session.add(new_user)
         db.session.commit()
