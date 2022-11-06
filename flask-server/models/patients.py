@@ -1,7 +1,14 @@
-from sqlalchemy.sql import func
 from connection.connection import db, ma
 
+import os
+import sqlalchemy as sa
+from sqlalchemy_utils import EncryptedType, StringEncryptedType
+from sqlalchemy_utils.types.encrypted.encrypted_type import AesEngine
+from sqlalchemy.sql import func
+
 # Patient Class/Model
+
+secret_key = 'secretkey1234'
 
 
 class Patients(db.Model):
@@ -10,18 +17,54 @@ class Patients(db.Model):
     """
     # __tablename__ = 'patients'
     id = db.Column(db.Integer, primary_key=True)
-    fname = db.Column(db.String(255), nullable=False)
-    lname = db.Column(db.String(255), nullable=False)
-    fullname = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), nullable=False, unique=True)
-    phone = db.Column(db.String(255), nullable=False)
-    age = db.Column(db.Integer, nullable=False)
-    bday = db.Column(db.DateTime, nullable=False)
-    gender = db.Column(db.String(10), nullable=False)
-    street = db.Column(db.String(255), nullable=False)
-    city = db.Column(db.String(255), nullable=False)
-    country = db.Column(db.String(255), nullable=False)
-    zip = db.Column(db.String(255), nullable=False)
+    fname = db.Column(EncryptedType(sa.String,
+                                    secret_key,
+                                    AesEngine,
+                                    'pkcs5'))
+    lname = db.Column(EncryptedType(sa.String,
+                                    secret_key,
+                                    AesEngine,
+                                    'pkcs5'))
+    fullname = db.Column(EncryptedType(sa.String,
+                                       secret_key,
+                                       AesEngine,
+                                       'pkcs5'))
+    email = db.Column(EncryptedType(sa.String,
+                                    secret_key,
+                                    AesEngine,
+                                    'pkcs5'))
+    phone = db.Column(EncryptedType(sa.String,
+                                    secret_key,
+                                    AesEngine,
+                                    'pkcs5'))
+    age = db.Column(EncryptedType(sa.String,
+                                  secret_key,
+                                  AesEngine,
+                                  'pkcs5'))
+    bday = db.Column(EncryptedType(sa.String,
+                                   secret_key,
+                                   AesEngine,
+                                   'pkcs5'))
+    gender = db.Column(EncryptedType(sa.String,
+                                     secret_key,
+                                     AesEngine,
+                                     'pkcs5'))
+    street = db.Column(EncryptedType(sa.String,
+                                     secret_key,
+                                     AesEngine,
+                                     'pkcs5'))
+    city = db.Column(EncryptedType(sa.String,
+                                   secret_key,
+                                   AesEngine,
+                                   'pkcs5'))
+    country = db.Column(EncryptedType(sa.String,
+                                      secret_key,
+                                      AesEngine,
+                                      'pkcs5'))
+    zip = db.Column(EncryptedType(sa.String,
+                                  secret_key,
+                                  AesEngine,
+                                  'pkcs5'))
     created_by = db.Column(db.Integer, db.ForeignKey("users.id"))
     registered_date = db.Column(
         db.DateTime, nullable=False, server_default=func.now())
