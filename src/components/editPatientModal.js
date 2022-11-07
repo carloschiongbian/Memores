@@ -17,6 +17,7 @@ const genders = [
 let editValues = {
   fname: "",
   lname: "",
+  age: "",
   gender: "",
   bday: "",
   city: "",
@@ -39,7 +40,23 @@ const EditPatientModal = ({
   setOpen,
   isScreened,
 }) => {
+  const [patientAge, setPatientAge] = useState(patientDetails.age)
   const [editForm, setEditForm] = useState(editValues);
+
+  const getAge = (dateString) => {
+
+    setEditForm({ ...editForm, bday: dateString })
+
+    let today = new Date();
+    let birthDate = new Date(dateString)
+    let age = today.getFullYear() - birthDate.getFullYear();
+    let month = today.getMonth - birthDate.getMonth();
+    if(month < 0 || (month === 0 && today.getDate() < birthDate.getDate())){
+      age--;
+    }
+    setPatientAge(age)
+    setEditForm({ ...editForm, age: age })
+  }
 
   const handleUpdateEvent = async () => {
     let formValues = editForm;
@@ -134,12 +151,20 @@ const EditPatientModal = ({
                   defaultValue={patientDetails.bday}
                   style={{ width: "100%" }}
                   onChange={(e) =>
-                    setEditForm({ ...editForm, bday: e.target.value })
+                    getAge(e.target.value)
+                    // setEditForm({ ...editForm, bday: e.target.value })
                   }
                   type="date"
                   variant="outlined"
                 />
               </div>
+
+              <TextField
+                id="age"
+                placeholder={patientAge.toString()}
+                disabled
+                variant="outlined"
+              />
 
               <TextField
                 id="city"

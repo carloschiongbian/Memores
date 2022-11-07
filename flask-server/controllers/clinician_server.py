@@ -101,6 +101,7 @@ def retrievePatientScreeningDetails(id):
         fname = request.get_json()['fname']
         lname = request.get_json()['lname']
         fullname = request.get_json()['fullname']
+        age = request.get_json()['age']
         bday = request.get_json()['bday']
         gender = request.get_json()['gender']
         country = request.get_json()['country']
@@ -125,6 +126,7 @@ def retrievePatientScreeningDetails(id):
                 fname=fname,
                 lname=lname,
                 fullname=fullname,
+                age=age,
                 bday=bday,
                 gender=gender,
                 country=country,
@@ -200,7 +202,7 @@ def retrieveDashboardContent():
         Assessments.patient_id == Patients.id).filter(Patients.created_by == user_id).order_by(Patients.id)
     screened_patients_response_object = patient_record_schema.jsonify(
         screened_patients_query)
-        
+
     screening_query = db.session.query(
         *PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails)
     screening_query = screening_query.outerjoin(
