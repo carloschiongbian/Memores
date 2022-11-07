@@ -7,7 +7,14 @@ import dayjs from "dayjs";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Box, IconButton, TextField, Snackbar, Alert } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  TextField,
+  Snackbar,
+  Alert,
+  Dialog,
+} from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import CommonModal from "../components/modal/CommonModal";
@@ -62,6 +69,8 @@ const UserRecord = () => {
   const handleCloseSnackbar = () => {
     setOpenSnackbar({ ...openSnackbar, open: false });
   };
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const {
     register: registerForm1,
@@ -117,10 +126,6 @@ const UserRecord = () => {
   const { inputRefForConfirm, ...inputPropsForConFirm } = register("cnpwd");
 
   const onSubmitUpdateUser = async (data) => {
-    console.log(data);
-    console.log(data.profile[0] instanceof File);
-    console.log(data.img[0] instanceof File);
-
     if (data.img[0] instanceof File && data.profile[0] instanceof File) {
       console.log("Upload both!");
       let formData = new FormData();
@@ -152,11 +157,11 @@ const UserRecord = () => {
           setOpenSnackbar({ open: true });
         }
       } catch (error) {
-        setResponseMessage({
-          status: "error",
-          message: "Something went wrong, try again!",
-        });
-        setOpenSnackbar({ open: true });
+        setAlertMessage(error.response.data.error);
+        setIsAlertOpen(true);
+        setTimeout(() => {
+          setIsAlertOpen(false);
+        }, 2000);
       }
     } else if (data.img[0] instanceof File) {
       console.log("update with image here");
@@ -188,11 +193,11 @@ const UserRecord = () => {
           setOpenSnackbar({ open: true });
         }
       } catch (error) {
-        setResponseMessage({
-          status: "error",
-          message: "Something went wrong, try again!",
-        });
-        setOpenSnackbar({ open: true });
+        setAlertMessage(error.response.data.error);
+        setIsAlertOpen(true);
+        setTimeout(() => {
+          setIsAlertOpen(false);
+        }, 2000);
       }
     } else if (data.profile[0] instanceof File) {
       console.log("upload new profile file here");
@@ -225,11 +230,11 @@ const UserRecord = () => {
           setOpenSnackbar({ open: true });
         }
       } catch (error) {
-        setResponseMessage({
-          status: "error",
-          message: "Something went wrong, try again!",
-        });
-        setOpenSnackbar({ open: true });
+        setAlertMessage(error.response.data.error);
+        setIsAlertOpen(true);
+        setTimeout(() => {
+          setIsAlertOpen(false);
+        }, 2000);
       }
     } else {
       console.log("update bt no new image");
@@ -247,11 +252,11 @@ const UserRecord = () => {
           setOpenSnackbar({ open: true });
         }
       } catch (error) {
-        setResponseMessage({
-          status: "error",
-          message: "Something went wrong, try again!",
-        });
-        setOpenSnackbar({ open: true });
+        setAlertMessage(error.response.data.error);
+        setIsAlertOpen(true);
+        setTimeout(() => {
+          setIsAlertOpen(false);
+        }, 2000);
       }
     }
   };
@@ -278,6 +283,7 @@ const UserRecord = () => {
       });
 
       if (response.ok || response.status === 200) {
+        resetForm1();
         setData(response.data);
         setIsCreateModalOpen(false);
         setResponseMessage({
@@ -287,11 +293,11 @@ const UserRecord = () => {
         setOpenSnackbar({ open: true });
       }
     } catch (error) {
-      setResponseMessage({
-        status: "error",
-        message: "Something went wrong, try again!",
-      });
-      setOpenSnackbar({ open: true });
+      setAlertMessage(error.response.data.error);
+      setIsAlertOpen(true);
+      setTimeout(() => {
+        setIsAlertOpen(false);
+      }, 2000);
     }
   };
   const getUserAccountForView = async (id) => {
@@ -348,13 +354,12 @@ const UserRecord = () => {
         });
         setOpenSnackbar({ open: true });
       }
-    } catch (err) {
-      setResponseMessage({
-        status: "error",
-        message: "Something went wrong, try again!",
-      });
-      setIsDeleteModalOpen(false);
-      setOpenSnackbar({ open: true });
+    } catch (error) {
+      setAlertMessage(error.response.data.error);
+      setIsAlertOpen(true);
+      setTimeout(() => {
+        setIsAlertOpen(false);
+      }, 2000);
     }
   };
 
@@ -447,12 +452,12 @@ const UserRecord = () => {
         });
         setOpenSnackbar({ open: true });
       }
-    } catch (err) {
-      setResponseMessage({
-        status: "error",
-        message: "Something went wrong, try again!",
-      });
-      setOpenSnackbar({ open: true });
+    } catch (error) {
+      setAlertMessage(error.response.data.error);
+      setIsAlertOpen(true);
+      setTimeout(() => {
+        setIsAlertOpen(false);
+      }, 2000);
     }
   };
 
@@ -627,6 +632,23 @@ const UserRecord = () => {
             {responseMessage.message}
           </Alert>
         </Snackbar>
+        <Dialog
+          open={isAlertOpen}
+          onClose={() => setIsAlertOpen(false)}
+          sx={{
+            "& .MuiDialog-container": {
+              justifyContent: "center",
+              alignItems: "flex-start",
+            },
+          }}
+          PaperProps={{
+            sx: {
+              verticalAlign: "top",
+            },
+          }}
+        >
+          <Alert severity="error"> {alertMessage}</Alert>
+        </Dialog>
       </div>
     </Layout>
   );

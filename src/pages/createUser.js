@@ -10,6 +10,7 @@ import {
   Card,
   CardContent,
 } from "@mui/material";
+import dayjs from "dayjs";
 
 const options = [
   { value: "male", label: "Male" },
@@ -224,6 +225,11 @@ const CreateUser = ({
                       autoComplete="off"
                       error={!!errors.birthday}
                       helperText={errors?.birthday?.message}
+                      InputProps={{
+                        inputProps: {
+                          max: dayjs().toISOString().substring(0, 10),
+                        },
+                      }}
                     />
                   )}
                 />
