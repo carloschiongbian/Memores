@@ -24,18 +24,13 @@ def get_updated_users():
     userList = []
 
     for user in users:
-        filepath = os.path.join(
-            app.root_path, app.config['UPLOAD_FOLDER'], user.photo.rsplit('\\', 1)[1])
-        with open(filepath, "rb") as img_file:
-            readFile = img_file.read()
-            base64String = base64.b64encode(readFile)
 
         userList.append({
             "id": user.id,
             "fname": user.fname,
             "lname": user.lname,
             "uname": user.uname,
-            "photo": base64String.decode('utf-8'),
+            "photo": user.photo,
             "role": user.role,
             "email": user.email,
             "created_at": user.created_at,

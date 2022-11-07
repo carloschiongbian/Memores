@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Modal, Button } from "@mui/material";
+import { Box, Modal, Button, Dialog, Alert } from "@mui/material";
 import CommonModal from "../components/modal/CommonModal";
 import CreatePatient from "./createPatient";
 
@@ -9,7 +9,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import MaterialReactTable from "material-react-table";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 
-import axios from "axios";
 import Layout from "../components/Layout";
 import "../public/css/pages/PatientRecord/patientRecord.scss";
 import "../public/css/components/PatientManagementModal/Modal.scss";
@@ -18,6 +17,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { createPatientSchemaValidation } from "../validation/manageValidation";
 import Api from "../services/api";
+import axios from 'axios';
 import dayjs from "dayjs";
 
 const recordActions = {
@@ -31,7 +31,8 @@ const PatientRecord = () => {
   const [openModal, setOpenModal] = useState(false);
   const [patientRecords, setPatientRecords] = useState([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -77,10 +78,15 @@ const PatientRecord = () => {
           };
         });
         setPatientRecords(updatedRecord);
+        reset();
         setIsCreateModalOpen(false);
       }
     } catch (error) {
-      console.log(error);
+      setAlertMessage(error.response.data.error);
+      setIsAlertOpen(true);
+      setTimeout(() => {
+        setIsAlertOpen(false);
+      }, 2000);
     }
   };
 
@@ -120,7 +126,6 @@ const PatientRecord = () => {
             <FindInPageIcon
               style={{ color: "#8860D0", cursor: "pointer" }}
               onClick={() => {
-                console.log(cell.row);
                 handleRecordAction(cell.row, recordActions.EDIT);
               }}
             />
@@ -180,9 +185,6 @@ const PatientRecord = () => {
   const handleDelete = () => {
     axios
       .delete("/patient-records/delete/id=" + +parseInt(getRecord.original.id))
-      .then((res) => {
-        console.log(res);
-      });
 
     const newArr = patientRecords.filter(
       (record) => record.id !== getRecord.original.id
@@ -274,6 +276,23 @@ const PatientRecord = () => {
       >
         <CreatePatient register={register} errors={errors} control={control} />
       </CommonModal>
+      <Dialog
+        open={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        sx={{
+          "& .MuiDialog-container": {
+            justifyContent: "center",
+            alignItems: "flex-start",
+          },
+        }}
+        PaperProps={{
+          sx: {
+            verticalAlign: "top",
+          },
+        }}
+      >
+        <Alert severity="error"> {alertMessage}</Alert>
+      </Dialog>
     </Layout>
   );
 };

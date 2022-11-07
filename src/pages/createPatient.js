@@ -10,6 +10,7 @@ import {
   Card,
   CardContent,
 } from "@mui/material";
+import dayjs from "dayjs";
 
 const options = [
   { value: "male", label: "Male" },
@@ -28,6 +29,13 @@ const CreatePatient = ({ register, errors, control }) => {
   const { inputRefForCity, ...inputPropsForCity } = register("city");
   const { inputRefForCountry, ...inputPropsForCountry } = register("country");
   const { inputRefForZip, ...inputPropsForZip } = register("zip");
+
+  const getAge = (dateString) => {
+    let today = new Date();
+    let birthDate = new Date(dateString)
+    let age = today.getMonth() - birthDate.getFullYear();
+    var month = today.getMonth
+  }
 
   return (
     <form>
@@ -164,6 +172,11 @@ const CreatePatient = ({ register, errors, control }) => {
                       autoComplete="off"
                       error={!!errors.bday}
                       helperText={errors?.bday?.message}
+                      InputProps={{
+                        inputProps: {
+                          max: dayjs().toISOString().substring(0, 10),
+                        },
+                      }}
                     />
                   )}
                 />

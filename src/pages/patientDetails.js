@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import axios from "axios";
+import Api from "../services/api";
 
 import BreadCrumbs from "../components/BreadCrumbs";
 import EditPatientModal from "../components/editPatientModal";
@@ -83,16 +84,13 @@ const PatientDetails = () => {
                     display: "flex",
                     flexDirection: "column",
                     rowGap: "10px",
-                    padding: "10px 0",
+                    padding: "10px 30px",
                   }}
                 >
-                  First Name: <h4>{patientDetails.fname}</h4>
-                  Last Name: <h4>{patientDetails.lname}</h4>
-                  Country: {patientDetails.country}
+                  <h5>{patientDetails.fname} {patientDetails.lname}</h5>
+                  <h6>Age: {patientDetails.age} </h6>
+                  <span>Country: {patientDetails.country}</span>
                 </div>
-
-                {/* <div className="country">
-                </div> */}
               </div>
 
               <div className="patient-information">
