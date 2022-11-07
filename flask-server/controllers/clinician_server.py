@@ -46,8 +46,6 @@ def retrieveData():
     screening_details_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails)
     screening_details_response = patient_screening_details_schema.jsonify(screening_details_query)
 
-    print(screening_details_response)
-
     assessments_query = db.session.query(*Assessments.__table__.columns).select_from(
         Assessments).where(Assessments.patient_id == Patients.id)
     assessment_response_object = patient_assessment_schema.jsonify(
@@ -102,6 +100,7 @@ def retrievePatientScreeningDetails(id):
         lname = request.get_json()['lname']
         fullname = request.get_json()['fullname']
         age = request.get_json()['age']
+        email = request.get_json()['email']
         bday = request.get_json()['bday']
         gender = request.get_json()['gender']
         country = request.get_json()['country']
@@ -128,6 +127,7 @@ def retrievePatientScreeningDetails(id):
                 fullname=fullname,
                 age=age,
                 bday=bday,
+                email=email,
                 gender=gender,
                 country=country,
                 city=city,
