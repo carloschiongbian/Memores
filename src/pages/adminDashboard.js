@@ -313,7 +313,7 @@ const AdminDashboard = () => {
                       <ListItemAvatar>
                         {title === "Deleted User List" && <BlockIcon />}
                         {d.photo && (
-                          <Avatar src={"data:image/png;base64," + d.photo} />
+                          <Avatar src={"http://localhost:5000/" + d.photo} />
                         )}
                       </ListItemAvatar>
                       <ListItemText

@@ -79,7 +79,7 @@ const Header = ({ handleLeftNavigation, isLeftNavigationOpen }) => {
             style={{ marginRight: 5 }}
           >{`${authUser.user.uname}`}</p>
           <Avatar
-            src={"data:image/png;base64," + authUser.user.photo}
+            src={"http://localhost:5000/" + authUser.user.photo}
             sx={{ width: 32, height: 32 }}
           />
         </div>
