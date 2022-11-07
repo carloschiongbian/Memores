@@ -101,6 +101,7 @@ def retrievePatientScreeningDetails(id):
         fname = request.get_json()['fname']
         lname = request.get_json()['lname']
         fullname = request.get_json()['fullname']
+        age = request.get_json()['age']
         bday = request.get_json()['bday']
         gender = request.get_json()['gender']
         country = request.get_json()['country']
@@ -125,6 +126,7 @@ def retrievePatientScreeningDetails(id):
                 fname=fname,
                 lname=lname,
                 fullname=fullname,
+                age=age,
                 bday=bday,
                 gender=gender,
                 country=country,

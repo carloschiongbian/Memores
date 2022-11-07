@@ -29,6 +29,13 @@ const CreatePatient = ({ register, errors, control }) => {
   const { inputRefForCountry, ...inputPropsForCountry } = register("country");
   const { inputRefForZip, ...inputPropsForZip } = register("zip");
 
+  const getAge = (dateString) => {
+    let today = new Date();
+    let birthDate = new Date(dateString)
+    let age = today.getMonth() - birthDate.getFullYear();
+    var month = today.getMonth
+  }
+
   return (
     <form>
       <Grid container spacing={2} columns={16}>
