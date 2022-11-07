@@ -153,7 +153,7 @@ const PatientRecord = () => {
   };
 
   const retrieveRecords = () => {
-    axios
+    Api()
       .get("/patient-records")
       .then((res) => {
         updatePatientRecords(res.data);
@@ -178,7 +178,7 @@ const PatientRecord = () => {
   };
 
   const handleDelete = () => {
-    axios
+    Api()
       .delete("/patient-records/delete/id=" + +parseInt(getRecord.original.id))
       .then((res) => {
         console.log(res);

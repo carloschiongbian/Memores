@@ -27,7 +27,7 @@ connection = pymysql.connect(
 )
 
 
-def retrieveData():
+def retrieve_data():
     user_id = session.get("user_id")
 
     # Check if session exist
@@ -46,8 +46,6 @@ def retrieveData():
     screening_details_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails)
     screening_details_response = patient_screening_details_schema.jsonify(screening_details_query)
 
-    print(screening_details_response)
-
     assessments_query = db.session.query(*Assessments.__table__.columns).select_from(
         Assessments).where(Assessments.patient_id == Patients.id)
     assessment_response_object = patient_assessment_schema.jsonify(
@@ -58,7 +56,7 @@ def retrieveData():
     return records
 
 
-def retrievePatientScreeningDetails(id):
+def retrieve_patient_screening_details(id):
 
     user_id = session.get("user_id")
 
@@ -160,7 +158,7 @@ def retrievePatientScreeningDetails(id):
         return jsonify(request.get_json())
 
 
-def deletePatientRecord(id):
+def delete_patient_record(id):
 
     user_id = session.get("user_id")
 
@@ -178,10 +176,10 @@ def deletePatientRecord(id):
     connect.execute(delete_assessment_query)
     connect.execute(delete_screening_details_query)
 
-    return retrieveData()
+    return retrieve_data()
 
 
-def retrieveDashboardContent():
+def retrieve_dashboard_content():
     user_id = session.get("user_id")
 
     # Check if session exist

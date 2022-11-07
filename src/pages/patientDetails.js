@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import axios from "axios";
+import Api from "../services/api";
 
 import BreadCrumbs from "../components/BreadCrumbs";
 import EditPatientModal from "../components/editPatientModal";
@@ -30,7 +31,7 @@ const PatientDetails = () => {
   };
 
   const getPatientDetails = () => {
-    axios
+    Api()
       .get("/patient-details/id=" + id)
       .then((response) => setData(response.data))
       .catch((error) => console.log(error));

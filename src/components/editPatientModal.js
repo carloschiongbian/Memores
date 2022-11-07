@@ -131,6 +131,8 @@ const EditPatientModal = ({
                 <label style={{ fontSize: "14px" }}>Birthday</label>
                 <TextField
                   id="bday"
+                  InputProps={{ inputProps: {min: '1940-01-01', max: '2020-01-01'} }}
+                  defaultValue={patientDetails.bday}
                   style={{ width: "100%" }}
                   onChange={(e) =>
                     setEditForm({ ...editForm, bday: e.target.value })
@@ -194,6 +196,8 @@ const EditPatientModal = ({
                 }
                 label="Contact Number"
                 placeholder={patientDetails.phone}
+                type="number"
+                inputProps={{ maxLength: 11 }}
                 variant="outlined"
               />
 
@@ -228,10 +232,13 @@ const EditPatientModal = ({
                 <TextField
                   type="date"
                   id="screened_by"
+                  InputProps={{ inputProps: {min: '1940-01-01', max: new Date()} }}
+                  defaultValue={assessmentDetails.date_taken}
                   onChange={(e) =>
                     setEditForm({ ...editForm, date_taken: e.target.value })
                   }
                   disabled={isScreened ? false : true}
+                  InputProps={{ inputProps: {min: '1940-01-01', max: new Date()} }}
                   variant="outlined"
                   style={{ width: "100%" }}
                 />
@@ -244,6 +251,8 @@ const EditPatientModal = ({
                   variant="outlined"
                   style={{ width: "100%" }}
                   className="screened_on"
+                  InputProps={{ inputProps: {min: '1940-01-01', max: new Date()} }}
+                  defaultValue={assessmentDetails.date_finished}
                   onChange={(e) =>
                     setEditForm({ ...editForm, date_finished: e.target.value })
                   }
