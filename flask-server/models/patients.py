@@ -77,7 +77,7 @@ class PatientSchema(ma.Schema):
     class Meta:
         """Specify which fields you want to see in RESTful API"""
         fields = ('id', 'fname', 'lname', 'fullname', 'email', 'phone', 'age', 'bday', 'gender',
-                  'street', 'city', 'country', 'registered_date', 'zip', 'created_at', 'updated_at')
+                  'street', 'city', 'country', 'registered_date', 'zip', 'created_by', 'created_at', 'updated_at')
 
 
 """

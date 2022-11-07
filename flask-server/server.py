@@ -29,9 +29,9 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SESSION_TYPE'] = 'redis'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'None'
-app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SECURE'] = True
+# app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+# app.config['SESSION_COOKIE_HTTPONLY'] = True
+# app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_REDIS'] = redis.from_url("redis://127.0.0.1:6379")
 
 
@@ -82,6 +82,9 @@ app.add_url_rule(SUBMIT_ANSWERS, 'submit_answers',
 # Get Patient Details for screening
 app.add_url_rule(GET_PATIENTS, 'get_patients',
                  get_patients.get_patients, methods=['GET'])
+# Get Patient Details for screening using implementation 2
+app.add_url_rule(GET_PATIENTS_V2, 'get_patients_v2',
+                 get_patients.get_patients_v2, methods=['GET'])
 # add_user
 app.add_url_rule(ADD_USER, 'register_user',
                  register_user.register_user, methods=['POST'])
