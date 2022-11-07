@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { List, ListItem, Skeleton } from "@mui/material";
@@ -12,7 +11,6 @@ import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import Layout from "../components/Layout";
 import "../public/css/pages/Dashboard/Dashboard.scss";
 import CommonModal from "../components/modal/CommonModal";
-import DashboardChart from "../components/dashboard/DashboardChart.js";
 import { useContext } from "react";
 import AuthContext from "../auth/AuthContext";
 import axios from "axios";
@@ -83,8 +81,6 @@ const Dashboard = () => {
   };
 
   const retrieveToBeScreenedPatients = (patients, screenedPatients) => {
-    console.log(patients);
-    console.log(screenedPatients);
     if (screenedPatients.length !== 0) {
       patients.map((patient) => {
         screenedPatients.map((screenedPatient) => {
@@ -103,7 +99,6 @@ const Dashboard = () => {
           patient,
         ]);
       });
-      // setNonScreenedPatients(nonScreenedPatients => [...nonScreenedPatients, patients])
     }
   };
 
@@ -246,14 +241,7 @@ const Dashboard = () => {
 
           <div className="bottom-section">
             <div className="recently-screened-patients-body">
-              <List
-                className="patients-list-container"
-                style={{
-                  maxHeight: "300px",
-                  overflow: "scroll",
-                  overflowX: "hidden",
-                }}
-              >
+              <List className="patients-list-container">
                 <ListItem divider={true} className="patient-list-header">
                   <h5>Recently Screened Patients</h5>
                 </ListItem>
@@ -311,14 +299,7 @@ const Dashboard = () => {
               </List>
             </div>
 
-            <List
-              className="patients-list-container"
-              style={{
-                maxHeight: "300px",
-                overflow: "scroll",
-                overflowX: "hidden",
-              }}
-            >
+            <List className="patients-list-container">
               <ListItem divider={true} className="patient-list-header">
                 <h5>Patients To Be Screened</h5>
               </ListItem>
