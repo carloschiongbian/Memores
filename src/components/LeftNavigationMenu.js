@@ -86,7 +86,9 @@ const LeftNavigationMenu = ({ isLeftNavigationOpen }) => {
                   <Link
                     to={route.link}
                     key={index}
-                    className="list-group-item list-group-item-action py-4 rounded-0"
+                    className={`${
+                      currentLocation.pathname === route.link ? "active" : ""
+                    } list-group-item list-group-item-action py-4 rounded-0`}
                   >
                     <span>
                       <i className={`${route.icon} me-4`}></i>
@@ -112,6 +114,7 @@ const LeftNavigationMenu = ({ isLeftNavigationOpen }) => {
                   const response = await BaseApi.post("/logout");
                   if (response.status === 200) {
                     authUser.setUser({});
+                    localStorage.removeItem("isLogin");
                     navigate(routes.shared.INDEX);
                   }
                 } catch (error) {

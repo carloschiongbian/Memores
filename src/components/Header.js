@@ -74,14 +74,18 @@ const Header = ({ handleLeftNavigation, isLeftNavigationOpen }) => {
           </a>
         </div>
         <div className="d-flex align-items-center justify-content-center">
-          <p
-            className="mr-2 mb-0"
-            style={{ marginRight: 5 }}
-          >{`${authUser.user.uname}`}</p>
-          <Avatar
-            src={"data:image/png;base64," + authUser.user.photo}
-            sx={{ width: 32, height: 32 }}
-          />
+          {Object.keys(authUser.user).length !== 0 && (
+            <>
+              <p
+                className="mr-2 mb-0"
+                style={{ marginRight: 5 }}
+              >{`${authUser.user.uname}`}</p>
+              <Avatar
+                src={"http://localhost:5000/" + authUser.user.photo}
+                sx={{ width: 32, height: 32 }}
+              />
+            </>
+          )}
         </div>
       </div>
     </nav>

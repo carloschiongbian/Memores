@@ -1,7 +1,7 @@
 # input "python server.py" to run the flask server
 from controllers.manage import update_user_account, get_user_account, delete_user_account, get_user_view, get_dashboard_data, get_deleted_users, get_updated_users, get_distinct_roles, get_general_users, update_user_photo_details, update_user_license_details, update_user_both_image, update_user_details_only
 from controllers.screening import get_questions, submit_answers, get_patients
-from controllers import get_users, login, register_user, get_current_user, logout, clinician_server
+from controllers import get_users, login, register_user, get_current_user, logout, clinician_server, create_patient
 import os
 from flask import Flask
 from flask_bcrypt import Bcrypt
@@ -15,7 +15,7 @@ from flask_cors import CORS
 import redis
 from flask_session import Session
 
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = 'static'
 
 dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '.env'))
 load_dotenv(dotenv_path)
@@ -29,9 +29,9 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SESSION_TYPE'] = 'redis'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'None'
-app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SECURE'] = True
+# app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+# app.config['SESSION_COOKIE_HTTPONLY'] = True
+# app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_REDIS'] = redis.from_url("redis://127.0.0.1:6379")
 
 
@@ -82,6 +82,9 @@ app.add_url_rule(SUBMIT_ANSWERS, 'submit_answers',
 # Get Patient Details for screening
 app.add_url_rule(GET_PATIENTS, 'get_patients',
                  get_patients.get_patients, methods=['GET'])
+# Get Patient Details for screening using implementation 2
+app.add_url_rule(GET_PATIENTS_V2, 'get_patients_v2',
+                 get_patients.get_patients_v2, methods=['GET'])
 # add_user
 app.add_url_rule(ADD_USER, 'register_user',
                  register_user.register_user, methods=['POST'])
@@ -95,6 +98,9 @@ app.add_url_rule(LOGOUT, 'logout', logout.logout_user, methods=['POST'])
 # Get Patient Records
 app.add_url_rule(PATIENT_RECORDS, 'patient_records',
                  clinician_server.retrieveData, methods=['GET'])
+# Create a Patient
+app.add_url_rule(CREATE_PATIENT, 'create_patient',
+                 create_patient.create_patient, methods=['POST'])
 # Delete Patient Record
 app.add_url_rule(DELETE_PATIENT_RECORD, 'delete_patient_record',
                  clinician_server.deletePatientRecord, methods=['DELETE'])

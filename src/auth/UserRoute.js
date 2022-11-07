@@ -2,14 +2,20 @@ import { useContext } from "react";
 import AuthContext from "./AuthContext";
 import { Navigate } from "react-router-dom";
 
-const UserRoute = ({ children, isLoading }) => {
+const UserRoute = ({ children }) => {
   const authUser = useContext(AuthContext);
 
-  if (Object.keys(authUser.user).length === 0 && isLoading) {
+  if (
+    Object.keys(authUser.user).length === 0 &&
+    localStorage.getItem("isLogin") === null
+  ) {
     return <Navigate to="/error-404" replace />;
   }
 
-  if (authUser.user.role !== "user" && isLoading) {
+  if (
+    authUser.user.role !== "user" &&
+    localStorage.getItem("isLogin") === null
+  ) {
     return <Navigate to="/error-404" replace />;
   }
 

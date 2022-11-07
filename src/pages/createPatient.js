@@ -1,94 +1,79 @@
 import "../public/css/pages/PatientRecord/patientRecord.css";
 import { Controller } from "react-hook-form";
-// import Select from "react-select";
 import SelectCountries from "../components/countriesSelect";
+// const FILE_SIZE = 720 * 720;
 import {
   TextField,
   Grid,
   Divider,
-  Select,
   MenuItem,
-  IconButton,
-  InputLabel,
-  Button,
   Card,
   CardContent,
 } from "@mui/material";
+import dayjs from "dayjs";
 
 const options = [
   { value: "male", label: "Male" },
   { value: "female", label: "Female" },
-  { value: "other", label: "other" },
 ];
 
-const CreatePatient = ({
-  register,
-  handleSubmit,
-  reset,
-  errors,
-  control,
-  setValueForm1,
-}) => {
-  const { inputRefForLicenseNum, ...inputPropsForLicenseNum } =
-    register("license");
-  const { inputRefForFirstname, ...inputPropsForFirstname } =
-    register("firstname");
-  const { inputRefForLastname, ...inputPropsForLastname } =
-    register("lastname");
+const CreatePatient = ({ register, errors, control }) => {
+  const { inputRefForFname, ...inputPropsForFname } = register("fname");
+  const { inputRefForLname, ...inputPropsForLname } = register("lname");
   const { inputRefForEmail, ...inputPropsForEmail } = register("email");
-  const { inputRefForContact, ...inputPropsForContact } = register("contact");
-  const { inputRefForBirthday, ...inputPropsForBirthday } =
-    register("birthday");
+  const { inputRefForPhone, ...inputPropsForPhone } = register("phone");
+  const { inputRefForAge, ...inputPropsForAge } = register("phone");
+  const { inputRefForBday, ...inputPropsForBday } = register("bday");
   const { inputRefForGender, ...inputPropsForGender } = register("gender");
-  const { inputRefForUsername, ...inputPropsForUsername } =
-    register("username");
-  const { inputRefForPassword, ...inputPropsForPassword } =
-    register("password");
-  const { inputRefForConfirm, ...inputPropsForConfirm } = register("confirm");
-  const { inputRefForAddress, ...inputPropsForAddress } = register("address");
+  const { inputRefForStreet, ...inputPropsForStreet } = register("street");
   const { inputRefForCity, ...inputPropsForCity } = register("city");
   const { inputRefForCountry, ...inputPropsForCountry } = register("country");
-  const { inputRefForZipCode, ...inputPropsForZipCode } = register("zipcode");
+  const { inputRefForZip, ...inputPropsForZip } = register("zip");
+
+  const getAge = (dateString) => {
+    let today = new Date();
+    let birthDate = new Date(dateString)
+    let age = today.getMonth() - birthDate.getFullYear();
+    var month = today.getMonth
+  }
 
   return (
-    <form
-      encType="multipart/form-data"
-    >
+    <form>
       <Grid container spacing={2} columns={16}>
         <Grid item xs={8}>
           <Card variant="outlined">
-            <Divider>Patient Information</Divider>
+            <Divider>Personal Information</Divider>
             <CardContent>
               <Grid item>
                 <Controller
-                  name={"firstname"}
+                  name={"fname"}
                   control={control}
                   render={({ field }) => (
                     <TextField
-                      inputRef={inputRefForFirstname}
-                      {...inputPropsForFirstname}
+                      inputRef={inputRefForFname}
+                      {...inputPropsForFname}
                       {...field}
                       autoFocus
                       margin="dense"
-                      label={"First name"}
+                      label={"First Name"}
                       type="input"
                       fullWidth
                       variant="standard"
                       autoComplete="off"
-                      error={!!errors.firstname}
-                      helperText={errors?.firstname?.message}
+                      error={!!errors.fname}
+                      helperText={errors?.fname?.message}
                     />
                   )}
                 />
               </Grid>
               <Grid item>
                 <Controller
-                  name={"lastname"}
+                  name={"lname"}
                   control={control}
                   render={({ field }) => (
                     <TextField
-                      inputRef={inputRefForLastname}
-                      {...inputPropsForLastname}
+                      inputRef={inputRefForLname}
+                      {...inputPropsForLname}
                       {...field}
                       autoFocus
                       margin="dense"
@@ -97,8 +82,8 @@ const CreatePatient = ({
                       fullWidth
                       variant="standard"
                       autoComplete="off"
-                      error={!!errors.lastname}
-                      helperText={errors?.lastname?.message}
+                      error={!!errors.lname}
+                      helperText={errors?.lname?.message}
                     />
                   )}
                 />
@@ -127,12 +112,12 @@ const CreatePatient = ({
               </Grid>
               <Grid item>
                 <Controller
-                  name={"contact"}
+                  name={"phone"}
                   control={control}
                   render={({ field }) => (
                     <TextField
-                      inputRef={inputRefForContact}
-                      {...inputPropsForContact}
+                      inputRef={inputPropsForPhone}
+                      {...inputRefForPhone}
                       {...field}
                       autoFocus
                       margin="dense"
@@ -141,20 +126,42 @@ const CreatePatient = ({
                       fullWidth
                       variant="standard"
                       autoComplete="off"
-                      error={!!errors.contact}
-                      helperText={errors?.contact?.message}
+                      error={!!errors.phone}
+                      helperText={errors?.phone?.message}
                     />
                   )}
                 />
               </Grid>
               <Grid item>
                 <Controller
-                  name={"birthday"}
+                  name={"age"}
                   control={control}
                   render={({ field }) => (
                     <TextField
-                      inputRef={inputRefForBirthday}
-                      {...inputPropsForBirthday}
+                      inputRef={inputRefForAge}
+                      {...inputPropsForAge}
+                      {...field}
+                      autoFocus
+                      margin="dense"
+                      label={"Age"}
+                      type="number"
+                      fullWidth
+                      variant="standard"
+                      autoComplete="off"
+                      error={!!errors.age}
+                      helperText={errors?.age?.message}
+                    />
+                  )}
+                />
+              </Grid>
+              <Grid item>
+                <Controller
+                  name={"bday"}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      inputRef={inputRefForBday}
+                      {...inputPropsForBday}
                       {...field}
                       autoFocus
                       margin="dense"
@@ -163,8 +170,13 @@ const CreatePatient = ({
                       fullWidth
                       variant="standard"
                       autoComplete="off"
-                      error={!!errors.birthday}
-                      helperText={errors?.birthday?.message}
+                      error={!!errors.bday}
+                      helperText={errors?.bday?.message}
+                      InputProps={{
+                        inputProps: {
+                          max: dayjs().toISOString().substring(0, 10),
+                        },
+                      }}
                     />
                   )}
                 />
@@ -201,88 +213,16 @@ const CreatePatient = ({
         </Grid>
         <Grid item xs={8}>
           <Card variant="outlined">
-            <Divider>Account Information</Divider>
-            <CardContent>
-              <Grid item>
-                <Controller
-                  name={"username"}
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      inputRef={inputRefForUsername}
-                      {...inputPropsForUsername}
-                      {...field}
-                      autoFocus
-                      margin="dense"
-                      label={"Username"}
-                      type="input"
-                      fullWidth
-                      variant="standard"
-                      autoComplete="off"
-                      error={!!errors.username}
-                      helperText={errors?.username?.message}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item>
-                <Controller
-                  name={"password"}
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      inputRef={inputRefForPassword}
-                      {...inputPropsForPassword}
-                      {...field}
-                      autoFocus
-                      margin="dense"
-                      label={"Password"}
-                      type="password"
-                      fullWidth
-                      variant="standard"
-                      autoComplete="off"
-                      error={!!errors.password}
-                      helperText={errors?.password?.message}
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item>
-                <Controller
-                  name={"confirm"}
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      inputRef={inputRefForConfirm}
-                      {...inputPropsForConfirm}
-                      {...field}
-                      autoFocus
-                      margin="dense"
-                      label={"Confirm Password"}
-                      type="password"
-                      fullWidth
-                      variant="standard"
-                      autoComplete="off"
-                      error={!!errors.confirm}
-                      helperText={errors?.confirm?.message}
-                    />
-                  )}
-                />
-              </Grid>
-            </CardContent>
-          </Card>
-
-          <Card variant="outlined" sx={{ marginTop: "37px" }}>
             <Divider>Address Information</Divider>
             <CardContent>
               <Grid item>
                 <Controller
-                  name={"address"}
+                  name={"street"}
                   control={control}
                   render={({ field }) => (
                     <TextField
-                      inputRef={inputRefForAddress}
-                      {...inputPropsForAddress}
+                      inputRef={inputRefForStreet}
+                      {...inputPropsForStreet}
                       {...field}
                       autoFocus
                       margin="dense"
@@ -291,8 +231,8 @@ const CreatePatient = ({
                       fullWidth
                       variant="standard"
                       autoComplete="off"
-                      error={!!errors.address}
-                      helperText={errors?.address?.message}
+                      error={!!errors.street}
+                      helperText={errors?.street?.message}
                     />
                   )}
                 />
@@ -348,12 +288,12 @@ const CreatePatient = ({
               </Grid>
               <Grid item>
                 <Controller
-                  name={"zipcode"}
+                  name={"zip"}
                   control={control}
                   render={({ field }) => (
                     <TextField
-                      inputRef={inputRefForZipCode}
-                      {...inputPropsForZipCode}
+                      inputRef={inputRefForZip}
+                      {...inputPropsForZip}
                       {...field}
                       autoFocus
                       margin="dense"
@@ -362,8 +302,8 @@ const CreatePatient = ({
                       fullWidth
                       variant="standard"
                       autoComplete="off"
-                      error={!!errors.zipcode}
-                      helperText={errors?.zipcode?.message}
+                      error={!!errors.zip}
+                      helperText={errors?.zip?.message}
                     />
                   )}
                 />
@@ -375,5 +315,4 @@ const CreatePatient = ({
     </form>
   );
 };
-
 export default CreatePatient;

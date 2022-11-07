@@ -6,19 +6,15 @@ import {
   TextField,
   Grid,
   Divider,
-  Select,
   MenuItem,
-  IconButton,
-  InputLabel,
-  Button,
   Card,
   CardContent,
 } from "@mui/material";
+import dayjs from "dayjs";
 
 const options = [
   { value: "male", label: "Male" },
   { value: "female", label: "Female" },
-  { value: "other", label: "other" },
 ];
 
 const CreateUser = ({
@@ -229,6 +225,11 @@ const CreateUser = ({
                       autoComplete="off"
                       error={!!errors.birthday}
                       helperText={errors?.birthday?.message}
+                      InputProps={{
+                        inputProps: {
+                          max: dayjs().toISOString().substring(0, 10),
+                        },
+                      }}
                     />
                   )}
                 />

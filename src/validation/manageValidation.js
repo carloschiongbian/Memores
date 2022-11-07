@@ -49,6 +49,7 @@ export const createUserSchemaValidation = yup.object({
       message: "number, dash and spaces only",
       excludeEmptyString: true,
     })
+    .test("len", "Must be exactly 11 digits", (val) => val.length === 11)
     .required(),
   birthday: yup.date().required(),
   gender: yup.string().required(),
@@ -166,6 +167,7 @@ export const updateClinicianSchemaValidation = yup.object({
       message: "number, dash and spaces only",
       excludeEmptyString: true,
     })
+    .test("len", "Must be exactly 11 digits", (val) => val.length === 11)
     .required(),
   birthday: yup.date().required(),
   gender: yup.string().required(),
@@ -173,4 +175,41 @@ export const updateClinicianSchemaValidation = yup.object({
   city: yup.string().required(),
   country: yup.string().required(),
   zipcode: yup.string().required(),
+});
+
+export const createPatientSchemaValidation = yup.object({
+  fname: yup
+    .string()
+    .min(2)
+    .max(25)
+    .matches("^[A-Za-z ]*$", {
+      message: "Special characters is not allowed",
+      excludeEmptyString: true,
+    })
+    .required(),
+  lname: yup
+    .string()
+    .min(2)
+    .max(25)
+    .matches("^[A-Za-z ]*$", {
+      message: "Special characters is not allowed",
+      excludeEmptyString: true,
+    })
+    .required(),
+  email: yup.string().email().required(),
+  phone: yup
+    .string()
+    .matches("^[0-9 -]*$", {
+      message: "number, dash and spaces only",
+      excludeEmptyString: true,
+    })
+    .test("len", "Must be exactly 11 digits", (val) => val.length === 11)
+    .required(),
+  age: yup.number().min(1).max(100).required(),
+  bday: yup.date().required(),
+  gender: yup.string().required(),
+  street: yup.string().required(),
+  city: yup.string().required(),
+  country: yup.string().required(),
+  zip: yup.string().required(),
 });

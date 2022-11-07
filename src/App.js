@@ -18,14 +18,14 @@ import AdminDashboard from "./pages/adminDashboard";
 
 const App = () => {
   const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
       try {
         const response = await Api().get("/@me");
-        setUser(response.data);
-        setLoading(true);
+        if (response.status === 200) {
+          setUser(response.data);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -56,7 +56,7 @@ const App = () => {
             <Route
               path={routes.user.SCREENING}
               element={
-                <UserRoute isLoading={loading}>
+                <UserRoute>
                   <ScreeningPage />
                 </UserRoute>
               }
@@ -64,7 +64,7 @@ const App = () => {
             <Route
               path={routes.user.DASHBOARD}
               element={
-                <UserRoute isLoading={loading}>
+                <UserRoute>
                   <Dashboard />
                 </UserRoute>
               }
@@ -72,7 +72,7 @@ const App = () => {
             <Route
               path={routes.user.PATIENT_RECORDS}
               element={
-                <UserRoute isLoading={loading}>
+                <UserRoute>
                   <PatientRecord />
                 </UserRoute>
               }
@@ -80,7 +80,7 @@ const App = () => {
             <Route
               path={routes.user.PATIENT_DETAILS}
               element={
-                <UserRoute isLoading={loading}>
+                <UserRoute>
                   <PatientDetails />
                 </UserRoute>
               }
@@ -89,7 +89,7 @@ const App = () => {
             <Route
               path={routes.admin.USER_RECORDS}
               element={
-                <ProtectedRoute isLoading={loading}>
+                <ProtectedRoute>
                   <UserRecord />
                 </ProtectedRoute>
               }

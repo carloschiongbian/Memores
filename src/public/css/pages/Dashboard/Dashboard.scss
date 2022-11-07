@@ -2,8 +2,6 @@
   padding-top: 90px;
 
   .dashboard {
-    // background-image: linear-gradient(to right, #8860d0, #a79bff);
-    // border-radius: 7px;
     height: 100%;
 
     .top-section {
@@ -72,29 +70,27 @@
     }
 
     .bottom-section {
+      height: 100%;
       display: grid;
       column-gap: 10px;
-      // border-radius: 10px;
       padding-bottom: 20px;
       margin: 0 20px 90px 20px;
       grid-template-columns: 1fr 1fr;
-      height: 100%;
 
       .patients-list-container {
         padding: 0;
-        box-shadow: 1px 2px 2px gray;
-        border-bottom-left-radius: 10px;
         height: 100%;
         background-color: white;
+        box-shadow: 1px 2px 2px gray;
 
         .patient-list-header {
-          background-color: white;
           display: flex;
           padding: 30px 20px;
-          justify-content: space-between;
+          border-top-left-radius: 0;
+          background-color: white;
           border-bottom-left-radius: 0;
           border-bottom-right-radius: 0;
-          border-top-left-radius: 0;
+          justify-content: space-between;
 
           h5,
           h6 {
@@ -140,10 +136,13 @@
         overflow-y: hidden;
         border-bottom: 1px solid rgb(167, 165, 165);
         box-shadow: 1px 2px 2px gray;
+      }
 
-        .patient-list-container {
-          height: 10px;
-        }
+      .patients-list-container {
+        max-height: 300px;
+        width: 100%;
+        overflow-y: scroll;
+        overflow-x: hidden;
       }
 
       .graph-container {
@@ -151,7 +150,6 @@
         padding: 10px 0;
         align-items: center;
         box-shadow: 1px 2px 2px gray;
-        // border-radius: 10px;
         flex-direction: column;
         justify-content: center;
         border-top-left-radius: 0;

@@ -20,24 +20,15 @@ import {
   ListItemAvatar,
   ListItemButton,
   ListItemText,
-  Paper,
   Avatar,
+  Skeleton,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import UserDialog from "../components/modal/UserDialog";
 import BlockIcon from "@mui/icons-material/Block";
 import { useContext } from "react";
 import AuthContext from "../auth/AuthContext";
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
 
 const capitalize = (s) => (s && s[0].toUpperCase() + s.slice(1)) || "";
 
@@ -48,6 +39,7 @@ const AdminDashboard = () => {
   const [dialogData, setDialogData] = useState({});
   const [isUserDialogOpen, setIsUserDialogOpen] = useState(false);
   const authUser = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getAllUsers = async () => {
     try {
@@ -55,6 +47,7 @@ const AdminDashboard = () => {
       if (response.status === 200) {
         setList(response.data);
         setTitle("User List");
+        setIsLoading(false);
       }
     } catch (e) {
       console.log(e);
@@ -112,7 +105,10 @@ const AdminDashboard = () => {
     const getUser = async () => {
       try {
         const response = await Api().get("/@me");
-        authUser.setUser(response.data);
+        if (response.status === 200) {
+          authUser.setUser(response.data);
+          localStorage.setItem("isLogin", true);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -126,6 +122,7 @@ const AdminDashboard = () => {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     getAllUsers();
   }, []);
 
@@ -219,7 +216,88 @@ const AdminDashboard = () => {
             }}
             disablePadding
           >
-            {list &&
+            {isLoading ? (
+              <>
+                <ListItem
+                  sx={{ width: "100%", bgcolor: "background.paper" }}
+                  key={1}
+                >
+                  <ListItemButton>
+                    <ListItemAvatar>
+                      <Skeleton width={40} height={40} variant="circular" />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Skeleton
+                          variant="text"
+                          sx={{ fontSize: "1rem" }}
+                          width="80%"
+                        />
+                      }
+                      secondary={
+                        <Skeleton
+                          variant="text"
+                          sx={{ fontSize: "1rem" }}
+                          width="40%"
+                        />
+                      }
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem
+                  sx={{ width: "100%", bgcolor: "background.paper" }}
+                  key={2}
+                >
+                  <ListItemButton>
+                    <ListItemAvatar>
+                      <Skeleton width={40} height={40} variant="circular" />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Skeleton
+                          variant="text"
+                          sx={{ fontSize: "1rem" }}
+                          width="80%"
+                        />
+                      }
+                      secondary={
+                        <Skeleton
+                          variant="text"
+                          sx={{ fontSize: "1rem" }}
+                          width="40%"
+                        />
+                      }
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem
+                  sx={{ width: "100%", bgcolor: "background.paper" }}
+                  key={3}
+                >
+                  <ListItemButton>
+                    <ListItemAvatar>
+                      <Skeleton width={40} height={40} variant="circular" />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Skeleton
+                          variant="text"
+                          sx={{ fontSize: "1rem" }}
+                          width="80%"
+                        />
+                      }
+                      secondary={
+                        <Skeleton
+                          variant="text"
+                          sx={{ fontSize: "1rem" }}
+                          width="40%"
+                        />
+                      }
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </>
+            ) : (
               list.map((d, i) => {
                 return title !== "Role List" ? (
                   <ListItem
@@ -235,7 +313,7 @@ const AdminDashboard = () => {
                       <ListItemAvatar>
                         {title === "Deleted User List" && <BlockIcon />}
                         {d.photo && (
-                          <Avatar src={"data:image/png;base64," + d.photo} />
+                          <Avatar src={"http://localhost:5000/" + d.photo} />
                         )}
                       </ListItemAvatar>
                       <ListItemText
@@ -256,8 +334,8 @@ const AdminDashboard = () => {
                     <ListItemText primary={capitalize(d)} />
                   </ListItem>
                 );
-              })}
-            {list.length === 0 && <Item>No Data</Item>}
+              })
+            )}
           </List>
         </Grid>
       </Grid>

@@ -5,6 +5,9 @@ import "../public/css/components/PatientManagementModal/Modal.scss";
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Box, Modal, Button, Dialog, Alert } from "@mui/material";
+import CommonModal from "../components/modal/CommonModal";
+import CreatePatient from "./createPatient";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import MaterialReactTable from "material-react-table";
@@ -24,6 +27,20 @@ import {
 } from "../validation/manageValidation";
 
 
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { createPatientSchemaValidation } from "../validation/manageValidation";
+import Api from "../services/api";
+import axios from 'axios';
+import dayjs from "dayjs";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { createPatientSchemaValidation } from "../validation/manageValidation";
+import Api from "../services/api";
+import axios from 'axios';
+import dayjs from "dayjs";
+
 const recordActions = {
   EDIT: "EDIT",
   DELETE: "DELETE",
@@ -36,326 +53,65 @@ const PatientRecord = () => {
   const [loading, setLoading] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [patientRecords, setPatientRecords] = useState([]);
-  const [userDataForEdit, setUserDataForEdit] = useState({
-    id: "",
-    uname: "",
-    npwd: "",
-    cnpwd: "",
-  });
-  const [userDataForView, setUserDataForView] = useState({
-    id: "",
-    firstname: "",
-    lastname: "",
-    email: "",
-    contact: "",
-    birthday: "",
-    gender: "",
-    address: "",
-    city: "",
-    country: "",
-    zipcode: "",
-  });
-  const [responseMessage, setResponseMessage] = useState({});
-  const [openSnackbar, setOpenSnackbar] = useState({
-    open: false,
-    vertical: "bottom",
-    horizontal: "left",
-  });
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState("");
-  const { open } = openSnackbar;
-  const handleCloseSnackbar = () => {
-    setOpenSnackbar({ ...openSnackbar, open: false });
-  };
-  const {
-    register: registerForm1,
-    handleSubmit: handleSubmitForm1,
-    control: controlForm1,
-    reset: resetForm1,
-    setValue: setValueForm1,
-    formState: { errors: errorsForm1 },
-  } = useForm({
-    resolver: yupResolver(createPatientSchemaValidation),
-    defaultValues: {
-      firstname: "",
-      lastname: "",
-      email: "",
-      contact: "",
-      birthday: "",
-      gender: "",
-      username: "",
-      password: "",
-      confirm: "",
-      address: "",
-      city: "",
-      country: "",
-      zipcode: "",
-    },
-  });
-
-  const {
-    register: registerForm2,
-    handleSubmit: handleSubmitForm2,
-    control: controlForm2,
-    reset: resetForm2,
-    formState: { errors: errorsForm2 },
-  } = useForm({
-    resolver: yupResolver(updateClinicianSchemaValidation),
-    defaultValues: userDataForView,
-  });
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const {
     register,
     handleSubmit,
-    control,
     reset,
+    control,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(updateAccountSchemaValidation),
-    defaultValues: userDataForEdit,
+    resolver: yupResolver(createPatientSchemaValidation),
+    defaultValues: {
+      fname: "",
+      lname: "",
+      email: "",
+      phone: "",
+      age: "",
+      bday: "",
+      gender: "",
+      street: "",
+      city: "",
+      country: "",
+      zip: "",
+    },
   });
-  const { inputRefForId, ...inputPropsForId } = register("id");
-  const { inputRefForUserName, ...inputPropsForUserName } = register("uname");
-  const { inputRefForPassword, ...inputPropsForPassword } = register("npwd");
-  const { inputRefForConfirm, ...inputPropsForConFirm } = register("cnpwd");
 
-  const onSubmitUpdateUser = async (data) => {
-    console.log(data);
-    console.log(data.profile[0] instanceof File);
-    console.log(data.img[0] instanceof File);
-    if (data.img[0] instanceof File && data.profile[0] instanceof File) {
-      console.log("Upload both!");
-      let formData = new FormData();
-      formData.append("profile", data.profile[0]);
-      formData.append("img", data.img[0]);
-      for (let key in data) {
-        if (key === "birthday") {
-          const formatted_date = dayjs(data[key]).format("YYYY-MM-DD");
-          formData.append(key, formatted_date);
-        } else {
-          formData.append(key, data[key]);
-        }
-      }
-      try {
-        const response = await Api().put("/update-both-image", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log(response);
-        if (response.ok || response.status === 200) {
-          setData(response.data);
-          setIsViewModalOpen(false);
-          setResponseMessage({
-            status: "success",
-            message: "Updated Successfully",
-          });
-          setOpenSnackbar({ open: true });
-        }
-      } catch (error) {
-        setResponseMessage({
-          status: "error",
-          message: "Something went wrong, try again!",
-        });
-        setOpenSnackbar({ open: true });
-      }
-    } else if (data.img[0] instanceof File) {
-      console.log("update with image here");
-      let formData = new FormData();
-      formData.append("img", data.img[0]);
-      for (let key in data) {
-        if (key === "birthday") {
-          const formatted_date = dayjs(data[key]).format("YYYY-MM-DD");
-          formData.append(key, formatted_date);
-        } else {
-          formData.append(key, data[key]);
-        }
-      }
-      try {
-        const response = await Api().put("/update-user-and-license", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log(response);
-        if (response.ok || response.status === 200) {
-          setData(response.data);
-          setIsViewModalOpen(false);
-          setResponseMessage({
-            status: "success",
-            message: "Updated Successfully",
-          });
-          setOpenSnackbar({ open: true });
-        }
-      } catch (error) {
-        setResponseMessage({
-          status: "error",
-          message: "Something went wrong, try again!",
-        });
-        setOpenSnackbar({ open: true });
-      }
-    } else if (data.profile[0] instanceof File) {
-      console.log("upload new profile file here");
-      let formData = new FormData();
-      formData.append("profile", data.profile[0]);
-      for (let key in data) {
-        if (key === "birthday") {
-          const formatted_date = dayjs(data[key]).format("YYYY-MM-DD");
-          formData.append(key, formatted_date);
-        } else {
-          formData.append(key, data[key]);
-        }
-      }
-      try {
-        const response = await Api().put("/update-user-and-photo", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log(response);
-        if (response.ok || response.status === 200) {
-          setData(response.data);
-          setIsViewModalOpen(false);
-          setResponseMessage({
-            status: "success",
-            message: "Updated Successfully",
-          });
-          setOpenSnackbar({ open: true });
-        }
-      } catch (error) {
-        setResponseMessage({
-          status: "error",
-          message: "Something went wrong, try again!",
-        });
-        setOpenSnackbar({ open: true });
-      }
-    } else {
-      console.log("update bt no new image");
-      try {
-        const response = await Api().put("/update-user-only", data);
-        console.log(response);
-        if (response.ok || response.status === 200) {
-          setData(response.data);
-          setIsViewModalOpen(false);
-          setResponseMessage({
-            status: "success",
-            message: "Updated Successfully",
-          });
-          setOpenSnackbar({ open: true });
-        }
-      } catch (error) {
-        setResponseMessage({
-          status: "error",
-          message: "Something went wrong, try again!",
-        });
-        setOpenSnackbar({ open: true });
-      }
-    }
-  };
-  const onSubmitCreateUser = async (data) => {
-    let formData = new FormData();
-    formData.append("img", data.img[0]);
-    formData.append("profile", data.profile[0]);
-    for (let key in data) {
-      if (key === "birthday") {
-        const formatted_date = dayjs(data[key]).format("YYYY-MM-DD");
-        formData.append(key, formatted_date);
-      } else {
-        formData.append(key, data[key]);
-      }
-    }
+  const createPatient = async (data) => {
+    data.bday = dayjs(data.bday).format("YYYY-MM-DD");
+
     try {
-      const response = await Api().post("/add-user", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      if (response.ok || response.status === 200) {
-        setData(response.data);
-        setIsCreateModalOpen(false);
-        setResponseMessage({
-          status: "success",
-          message: "Created Successfully",
+      const response = await Api().post("/create-patient", data);
+
+      if (response.status === 200) {
+        const updatedRecord = response.data.patients.map((data) => {
+          return {
+            id: data.id,
+            firstName: data.fname,
+            lastName: data.lname,
+            age: data.age,
+            is_screened: response.data.assessment.find(
+              (assessment) => assessment.patient_id === data.id
+            )
+              ? "Yes"
+              : "No",
+            action: DeleteIcon,
+          };
         });
-        setOpenSnackbar({ open: true });
+        setPatientRecords(updatedRecord);
+        reset();
+        setIsCreateModalOpen(false);
       }
     } catch (error) {
-      setResponseMessage({
-        status: "error",
-        message: "Something went wrong, try again!",
-      });
-      setOpenSnackbar({ open: true });
+      setAlertMessage(error.response.data.error);
+      setIsAlertOpen(true);
+      setTimeout(() => {
+        setIsAlertOpen(false);
+      }, 2000);
     }
   };
-  const getUserAccountForView = async (id) => {
-    const response = await Api().get("/get-user-view", {
-      params: { id: id },
-    });
-    setUserDataForView(response.data);
-    setIsLoaded(true);
-    setImagePreview({ profile: response.data.profile, img: response.data.img });
-    resetForm2({
-      ...response.data,
-      birthday: dayjs(response.data.birthday).format("YYYY-MM-DD"),
-    });
-  };
-  const handleOpenViewModal = (id) => {
-    getUserAccountForView(id);
-    setIsViewModalOpen(true);
-  };
-  const handleClickOpen = (id) => {
-    getUserAccountById(id);
-    setIsEditModalOpen(true);
-  };
-  const handleClose = () => {
-    setIsLoaded(false);
-    setIsEditModalOpen(false);
-  };
-  const handleClickOpenDeleteModal = (id) => {
-    setUserToDelete(id);
-    setIsDeleteModalOpen(true);
-  };
-  const getUserAccountById = async (id) => {
-    const emptyField = { npwd: "", cnpwd: "" };
-    const response = await Api().get("/get-user-account", {
-      params: { id: id },
-    });
-    setUserDataForEdit({ ...response.data[0], ...emptyField });
-    setIsLoaded(true);
-    reset({ ...response.data[0], ...emptyField });
-  };
-  const deleteUserById = async (id) => {
-    try {
-      const response = await Api().put("/delete-user", { id: id });
-      if (response.status === 200) {
-        setData(data.filter((data) => data.id !== id));
-        setIsDeleteModalOpen(false);
-        setResponseMessage({
-          status: "success",
-          message: response.data.success,
-        });
-        setOpenSnackbar({ open: true });
-      }
-    } catch (err) {
-      setResponseMessage({
-        status: "error",
-        message: "Something went wrong, try again!",
-      });
-      setIsDeleteModalOpen(false);
-      setOpenSnackbar({ open: true });
-    }
-  };
-  const getUserData = async () => {
-    const response = await Api().get("/get-users");
-    setData(response.data);
-    setLoading(false);
-  };
-  useEffect(() => {
-    setLoading(true);
-    getUserData();
-  }, []);
 
   const columns = [
     { accessorKey: "id", header: "Patient ID" },
@@ -392,7 +148,9 @@ const PatientRecord = () => {
           >
             <FindInPageIcon
               style={{ color: "#8860D0", cursor: "pointer" }}
-              onClick={() => handleRecordAction(cell.row, recordActions.EDIT)}
+              onClick={() => {
+                handleRecordAction(cell.row, recordActions.EDIT);
+              }}
             />
             <DeleteIcon
               style={{ color: "red", cursor: "pointer" }}
@@ -411,24 +169,23 @@ const PatientRecord = () => {
         firstName: patient.fname,
         lastName: patient.lname,
         age: patient.age,
-        is_screened: (data.assessment.find(assessment => assessment.patient_id === patient.id)) ? 'Yes' : 'No',
+        is_screened: data.assessment.find(
+          (assessment) => assessment.patient_id === patient.id
+        )
+          ? "Yes"
+          : "No",
         action: DeleteIcon,
       };
-
       setPatientRecords((patientRecords) => [...patientRecords, patientRecord]);
     });
   };
 
   const retrieveRecords = () => {
-    fetch("/patient-records", {
-      methods: "GET",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => updatePatientRecords(response))
+    axios
+      .get("/patient-records")
+      .then((res) => {
+        updatePatientRecords(res.data);
+      })
       .catch((error) => console.log(error));
   };
 
@@ -449,9 +206,8 @@ const PatientRecord = () => {
   };
 
   const handleDelete = () => {
-    fetch("/patient-records/delete/id=" + parseInt(getRecord.original.id), {
-      method: "DELETE",
-    });
+    axios
+      .delete("/patient-records/delete/id=" + +parseInt(getRecord.original.id))
 
     const newArr = patientRecords.filter(
       (record) => record.id !== getRecord.original.id
@@ -479,7 +235,7 @@ const PatientRecord = () => {
                   variant="contained"
                   color="primary"
                   size="large"
-                  onClick={() => navigate("/createPatient")}
+                  onClick={() => setIsCreateModalOpen(true)}
                 >
                   Create New Patient
                 </Button>
@@ -492,7 +248,7 @@ const PatientRecord = () => {
               aria-describedby="modal-modal-description"
             >
               <Box className="modal-container-delete-modal">
-                <div className="modal-header-delete-modal">
+                <div className="modal-header-delete-modal bg-primary">
                   <h3>Delete Record</h3>
                 </div>
 
@@ -530,6 +286,36 @@ const PatientRecord = () => {
           </div>
         </div>
       </div>
+      <CommonModal
+        dialogTitle={"Create New Patient"}
+        width={"lg"}
+        openModal={isCreateModalOpen}
+        handleSubmit={handleSubmit(createPatient)}
+        handleClose={() => {
+          reset();
+          setIsCreateModalOpen(false);
+        }}
+        btnPrimaryTxt={"Create"}
+      >
+        <CreatePatient register={register} errors={errors} control={control} />
+      </CommonModal>
+      <Dialog
+        open={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        sx={{
+          "& .MuiDialog-container": {
+            justifyContent: "center",
+            alignItems: "flex-start",
+          },
+        }}
+        PaperProps={{
+          sx: {
+            verticalAlign: "top",
+          },
+        }}
+      >
+        <Alert severity="error"> {alertMessage}</Alert>
+      </Dialog>
     </Layout>
   );
 };
