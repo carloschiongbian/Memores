@@ -8,11 +8,11 @@ class PatientsScreeningDetails(db.Model):
     """
     # __tablename__ = 'patients_screening_details'
     id = db.Column(db.Integer, primary_key = True)
-    assessment_id = db.Column(db.Integer, autoincrement=True, nullable = False)
+    assessment_id = db.Column(db.Integer, nullable = False)
     patient_notes = db.Column(db.Text, nullable = False)
-    last_edited_on = db.Column(db.DateTime, nullable = False)
+    last_edited_on = db.Column(db.DateTime, nullable = False, server_default=func.now())
     created_at = db.Column(db.DateTime, nullable = False, server_default=func.now())
-    updated_at = db.Column(db.DateTime, nullable = False, onupdate=func.now())
+    updated_at = db.Column(db.DateTime, nullable = False, onupdate=func.now(), server_default=func.now())
 
 
 # Patient Schema
