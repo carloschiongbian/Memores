@@ -14,7 +14,7 @@ const UserDialog = ({ openModal, handleClose, dialogData, title }) => {
       {dialogData && (
         <>
           <DialogTitle className="d-flex justify-content-center text-align-right">
-            <Avatar src={"data:image/png;base64," + dialogData.photo}></Avatar>
+            <Avatar src={"http://localhost:5000/" + dialogData.photo}></Avatar>
           </DialogTitle>
           <DialogContent>
             <Grid

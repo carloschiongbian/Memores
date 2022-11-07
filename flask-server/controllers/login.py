@@ -16,7 +16,7 @@ def login():
     if not check_password_hash(user_exist.pwd, password):
         return jsonify({"error": "Unauthorized"}), 401
 
-    session.clear()
+    # session.clear()
     session["user_id"] = user_exist.id
     session.permanent = True
 
