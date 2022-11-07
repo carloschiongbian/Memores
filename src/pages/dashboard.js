@@ -76,21 +76,36 @@ const Dashboard = () => {
   const setData = (data) => {
     setPatients(data.patients);
     setScreenedPatients(data.screened_patients);
-    
+
     setAverageDuration(data.assessments);
     getCategoryCount(data.screening_details);
     retrieveToBeScreenedPatients(data.patients, data.screened_patients);
   };
 
   const retrieveToBeScreenedPatients = (patients, screenedPatients) => {
-    patients.map(patient => {
-      screenedPatients.map(screenedPatient => {
-        if(screenedPatient.id !== patient.id){
-          setNonScreenedPatients(nonScreenedPatients => [...nonScreenedPatients, patient])
-        }
-      })
-    })
-  }
+    console.log(patients);
+    console.log(screenedPatients);
+    if (screenedPatients.length !== 0) {
+      patients.map((patient) => {
+        screenedPatients.map((screenedPatient) => {
+          if (screenedPatient.id !== patient.id) {
+            setNonScreenedPatients((nonScreenedPatients) => [
+              ...nonScreenedPatients,
+              patient,
+            ]);
+          }
+        });
+      });
+    } else {
+      patients.map((patient) => {
+        setNonScreenedPatients((nonScreenedPatients) => [
+          ...nonScreenedPatients,
+          patient,
+        ]);
+      });
+      // setNonScreenedPatients(nonScreenedPatients => [...nonScreenedPatients, patients])
+    }
+  };
 
   const setAverageDuration = (assessments) => {
     let hours = assessments.map((assessment) => {
@@ -134,8 +149,8 @@ const Dashboard = () => {
 
     setRecentDuration(
       isNaN(hoursAvg)
-        ? "None of your patients have been screened yet"
-        : hoursAvg + ":" + minutesAvg + ":" + secondsAvg
+        ? "-- : -- : --"
+        : hoursAvg + " : " + minutesAvg + " : " + secondsAvg
     );
   };
 
@@ -212,7 +227,7 @@ const Dashboard = () => {
                   ))}
                 {screenedPatients.length === 0 && (
                   <span style={{ color: "gray", fontSize: "15px" }}>
-                    "No patients were screened yet"
+                    None of your patients have been screened yet.
                   </span>
                 )}
               </CommonModal>
@@ -231,7 +246,14 @@ const Dashboard = () => {
 
           <div className="bottom-section">
             <div className="recently-screened-patients-body">
-              <List className="patients-list-container" style={{maxHeight: '300px', overflow: 'scroll', overflowX: 'hidden'}}>
+              <List
+                className="patients-list-container"
+                style={{
+                  maxHeight: "300px",
+                  overflow: "scroll",
+                  overflowX: "hidden",
+                }}
+              >
                 <ListItem divider={true} className="patient-list-header">
                   <h5>Recently Screened Patients</h5>
                 </ListItem>
@@ -289,63 +311,70 @@ const Dashboard = () => {
               </List>
             </div>
 
-              <List className="patients-list-container" style={{maxHeight: '300px', overflow: 'scroll', overflowX: 'hidden'}}>
-                <ListItem divider={true} className="patient-list-header">
-                  <h5>Patients To Be Screened</h5>
+            <List
+              className="patients-list-container"
+              style={{
+                maxHeight: "300px",
+                overflow: "scroll",
+                overflowX: "hidden",
+              }}
+            >
+              <ListItem divider={true} className="patient-list-header">
+                <h5>Patients To Be Screened</h5>
+              </ListItem>
+              {isLoading && (
+                <ListItem
+                  style={{
+                    margin: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Skeleton height={100} width={"100%"} />
+                  <Skeleton height={100} width={"100%"} />
+                  <Skeleton height={100} width={"100%"} />
                 </ListItem>
-                {isLoading && (
+              )}
+              {!isLoading &&
+                nonScreenedPatients.length !== 0 &&
+                nonScreenedPatients.map((patient, index) => (
                   <ListItem
-                    style={{
-                      margin: 0,
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
+                    key={index}
+                    divider={true}
+                    button={true}
+                    onClick={() => {
+                      navigate(patientDetailsPath + patient.id);
                     }}
+                    className="patient-information-item"
                   >
-                    <Skeleton height={100} width={"100%"} />
-                    <Skeleton height={100} width={"100%"} />
-                    <Skeleton height={100} width={"100%"} />
+                    <div className="patient-name">
+                      <NavigateNextIcon />
+
+                      <h5> {patient.fname + " " + patient.lname} </h5>
+                    </div>
                   </ListItem>
-                )}
-                {!isLoading &&
-                  nonScreenedPatients.map((patient, index) => (
-                    <ListItem
-                      key={index}
-                      divider={true}
-                      button={true}
-                      onClick={() => {
-                        navigate(patientDetailsPath + patient.id);
-                      }}
-                      className="patient-information-item"
-                    >
-                      <div className="patient-name">
-                        <NavigateNextIcon />
+                ))}
 
-                        <h5> {patient.fname + " " + patient.lname} </h5>
-                      </div>
-                    </ListItem>
-                  ))}
-
-                {!isLoading && screenedPatients.length === 0 && (
-                  <div
-                    className="no-data"
-                    style={{
-                      display: "flex",
-                      columnGap: "10px",
-                      padding: "100px 0",
-                      lineHeight: "normal",
-                      flexDirection: "row",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <HealingIcon style={{ float: "left" }} />
-                    <h6 style={{ color: "gray" }}>
-                      None of your patients have been screened yet
-                    </h6>
-                  </div>
-                )}
-              </List>
-            
+              {!isLoading && nonScreenedPatients.length === 0 && (
+                <div
+                  className="no-data"
+                  style={{
+                    display: "flex",
+                    columnGap: "10px",
+                    padding: "100px 0",
+                    lineHeight: "normal",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <HealingIcon style={{ float: "left" }} />
+                  <h6 style={{ color: "gray" }}>
+                    You currently have no patients registered.
+                  </h6>
+                </div>
+              )}
+            </List>
           </div>
         </div>
       </div>
