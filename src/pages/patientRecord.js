@@ -17,6 +17,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { createPatientSchemaValidation } from "../validation/manageValidation";
 import Api from "../services/api";
+import axios from 'axios';
 import dayjs from "dayjs";
 
 const recordActions = {
@@ -151,7 +152,7 @@ const PatientRecord = () => {
   };
 
   const retrieveRecords = () => {
-    Api()
+    axios
       .get("/patient-records")
       .then((res) => {
         updatePatientRecords(res.data);
@@ -176,7 +177,7 @@ const PatientRecord = () => {
   };
 
   const handleDelete = () => {
-    Api()
+    axios
       .delete("/patient-records/delete/id=" + +parseInt(getRecord.original.id))
 
     const newArr = patientRecords.filter(

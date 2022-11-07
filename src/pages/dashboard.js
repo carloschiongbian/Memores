@@ -61,7 +61,7 @@ const Dashboard = () => {
   let patientDetailsPath = "../patient-details/id=";
 
   const getDashboardData = () => {
-    Api()
+    axios
       .get("/dashboard")
       .then((res) => {
         setData(res.data);

@@ -31,7 +31,7 @@ const PatientDetails = () => {
   };
 
   const getPatientDetails = () => {
-    Api()
+    axios
       .get("/patient-details/id=" + id)
       .then((response) => setData(response.data))
       .catch((error) => console.log(error));

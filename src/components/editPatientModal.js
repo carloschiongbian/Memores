@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 
 import countriesSelect from "./countriesSelect";
 import "../public/css/components/editModal/editModal.scss";
-import Api from "../services/api";
+import axios from 'axios';
 
 const genders = [
   { value: "Male", label: "Male" },
@@ -64,6 +64,7 @@ const EditPatientModal = ({
     let values = {
       fname: "",
       lname: "",
+      age: "",
       fullname: "",
       gender: "",
       bday: "",
@@ -95,7 +96,7 @@ const EditPatientModal = ({
       }
     }
 
-    await Api()
+    await axios
       .put("/patient-details/id=" + patientDetails.id, values)
 
     getPatientDetails();
