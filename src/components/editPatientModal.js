@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 
 import countriesSelect from "./countriesSelect";
 import "../public/css/components/editModal/editModal.scss";
-import axios from "axios";
+import Api from "../services/api";
 
 const genders = [
   { value: "Male", label: "Male" },
@@ -78,9 +78,8 @@ const EditPatientModal = ({
       }
     }
 
-    await axios
+    await Api()
       .put("/patient-details/id=" + patientDetails.id, values)
-      .then((response) => console.log(response));
 
     getPatientDetails();
     setOpen(false);
@@ -158,6 +157,7 @@ const EditPatientModal = ({
                 <Select
                   options={countriesSelect}
                   required={true}
+                  defaultValue={patientDetails.country}
                   placeholder={patientDetails.country}
                   onChange={(choice) =>
                     setEditForm({ ...editForm, country: choice.label })
@@ -171,6 +171,7 @@ const EditPatientModal = ({
                   options={genders}
                   required={true}
                   placeholder={patientDetails.gender}
+                  defaultValue={patientDetails.gender}
                   onChange={(choice) =>
                     setEditForm({ ...editForm, gender: choice.label })
                   }

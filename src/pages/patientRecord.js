@@ -9,7 +9,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import MaterialReactTable from "material-react-table";
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 
-import axios from "axios";
 import Layout from "../components/Layout";
 import "../public/css/pages/PatientRecord/patientRecord.scss";
 import "../public/css/components/PatientManagementModal/Modal.scss";
@@ -120,7 +119,6 @@ const PatientRecord = () => {
             <FindInPageIcon
               style={{ color: "#8860D0", cursor: "pointer" }}
               onClick={() => {
-                console.log(cell.row);
                 handleRecordAction(cell.row, recordActions.EDIT);
               }}
             />
@@ -180,9 +178,6 @@ const PatientRecord = () => {
   const handleDelete = () => {
     Api()
       .delete("/patient-records/delete/id=" + +parseInt(getRecord.original.id))
-      .then((res) => {
-        console.log(res);
-      });
 
     const newArr = patientRecords.filter(
       (record) => record.id !== getRecord.original.id

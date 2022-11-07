@@ -94,22 +94,22 @@ app.add_url_rule(CURRENT_USER, 'get_current_user',
 app.add_url_rule(LOGOUT, 'logout', logout.logout_user, methods=['POST'])
 # Get Patient Records
 app.add_url_rule(PATIENT_RECORDS, 'patient_records',
-                 clinician_server.retrieve_data, methods=['GET'])
+                 clinician_server.retrieveData, methods=['GET'])
 # Create a Patient
 app.add_url_rule(CREATE_PATIENT, 'create_patient',
                  create_patient.create_patient, methods=['POST'])
 # Delete Patient Record
 app.add_url_rule(DELETE_PATIENT_RECORD, 'delete_patient_record',
-                 clinician_server.delete_patient_record, methods=['DELETE'])
+                 clinician_server.deletePatientRecord, methods=['DELETE'])
 # Get Patient Details
 app.add_url_rule(PATIENT_DETAILS, 'patient_details',
-                 clinician_server.retrieve_patient_screening_details, methods=['GET'])
+                 clinician_server.retrievePatientScreeningDetails, methods=['GET'])
 # Update Patient Details
 app.add_url_rule(PATIENT_DETAILS, 'patient_details',
-                 clinician_server.retrieve_patient_screening_details, methods=['PUT'])
+                 clinician_server.retrievePatientScreeningDetails, methods=['PUT'])
 # Get Dashboard Data
 app.add_url_rule(DASHBOARD, 'dashboard',
-                 clinician_server.retrieve_dashboard_content, methods=['GET'])
+                 clinician_server.retrieveDashboardContent, methods=['GET'])
 
 
 # update user

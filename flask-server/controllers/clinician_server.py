@@ -27,7 +27,7 @@ connection = pymysql.connect(
 )
 
 
-def retrieve_data():
+def retrieveData():
     user_id = session.get("user_id")
 
     # Check if session exist
@@ -46,6 +46,8 @@ def retrieve_data():
     screening_details_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails)
     screening_details_response = patient_screening_details_schema.jsonify(screening_details_query)
 
+    print(screening_details_response)
+
     assessments_query = db.session.query(*Assessments.__table__.columns).select_from(
         Assessments).where(Assessments.patient_id == Patients.id)
     assessment_response_object = patient_assessment_schema.jsonify(
@@ -56,7 +58,7 @@ def retrieve_data():
     return records
 
 
-def retrieve_patient_screening_details(id):
+def retrievePatientScreeningDetails(id):
 
     user_id = session.get("user_id")
 
@@ -158,7 +160,7 @@ def retrieve_patient_screening_details(id):
         return jsonify(request.get_json())
 
 
-def delete_patient_record(id):
+def deletePatientRecord(id):
 
     user_id = session.get("user_id")
 
@@ -176,10 +178,10 @@ def delete_patient_record(id):
     connect.execute(delete_assessment_query)
     connect.execute(delete_screening_details_query)
 
-    return retrieve_data()
+    return retrieveData()
 
 
-def retrieve_dashboard_content():
+def retrieveDashboardContent():
     user_id = session.get("user_id")
 
     # Check if session exist
@@ -198,7 +200,7 @@ def retrieve_dashboard_content():
         Assessments.patient_id == Patients.id).filter(Patients.created_by == user_id).order_by(Patients.id)
     screened_patients_response_object = patient_record_schema.jsonify(
         screened_patients_query)
-
+        
     screening_query = db.session.query(
         *PatientsScreeningDetails.__table__.columns).select_from(PatientsScreeningDetails)
     screening_query = screening_query.outerjoin(
