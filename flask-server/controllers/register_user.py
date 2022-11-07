@@ -78,16 +78,13 @@ def register_user():
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             # save file to the uploads folder and insert the directory path to mysql db.
             file.save(filepath)
-            try:
-                binaryLicense = license_file.read()
-                # Finally, Insert new user in mysql
-                new_user = Users(uname=uname, pwd=hashed_password, fname=fname, lname=lname, email=email, phone=contact, bday=bday, gender=gender,
-                                 photo=filepath, license=binaryLicense, license_id=license, street=addr, city=city, country=country, zip=zipcode)
-                db.session.add(new_user)
-                db.session.commit()
-            except pymysql.Error as e:
-                print("could not close connection error pymysql %d: %s" %
-                      (e.args[0], e.args[1]))
+
+            binaryLicense = license_file.read()
+            # Finally, Insert new user in mysql
+            new_user = Users(uname=uname, pwd=hashed_password, fname=fname, lname=lname, email=email, phone=contact, bday=bday, gender=gender,
+                             photo=filepath, license=binaryLicense, license_id=license, street=addr, city=city, country=country, zip=zipcode)
+            db.session.add(new_user)
+            db.session.commit()
 
     users = Users.query.filter_by(role='user', is_deleted=0).with_entities(
         Users.id, Users.uname, Users.fname, Users.lname, Users.role, Users.email, Users.created_at)
