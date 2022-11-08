@@ -57,48 +57,54 @@ const Dashboard = () => {
   }, []);
 
   let patientRecordsPath = "../patient-records";
-  let patientDetailsPath = "../patient-details/id=";
+  let patientDetailsPath = "../patient-details/id="; 
 
   const getDashboardData = async () => {
-    const response = await Api().get("/dashboard")
-    if(response.status === 200){
-      setData(response.data)
+    const response = await Api().get("/dashboard");
+    if (response.status === 200) {
+      setData(response.data);
       setIsLoading(false);
     }
   };
 
   const setData = (data) => {
+
+    const patients = data.patients
+    const assessments = data.assessments
+
     setPatients(data.patients);
     setScreenedPatients(data.screened_patients);
 
+    const difference = [
+      ...getDifference(patients, assessments)
+    ]
+    setNonScreenedPatients(difference)
+
     setAverageDuration(data.assessments);
     getCategoryCount(data.screening_details);
-    retrieveToBeScreenedPatients(data.patients, data.screened_patients);
   };
 
-  const retrieveToBeScreenedPatients = (patients, screenedPatients) => {
-    if (screenedPatients.length !== 0) {
-      patients.map((patient) => {
-        screenedPatients.map((screenedPatient) => {
-          if (screenedPatient.id !== patient.id) {
-            setNonScreenedPatients((nonScreenedPatients) => [
-              ...nonScreenedPatients,
-              patient,
-            ]);
-          }
-        });
-      });
-    } else {
-      patients.map((patient) => {
-        setNonScreenedPatients((nonScreenedPatients) => [
-          ...nonScreenedPatients,
-          patient,
-        ]);
-      });
-    }
-  };
+  const getDifference = (patients, assessments) => {
+    return patients.filter(patient => {
+      return !assessments.some(assessment => {
+        return patient.id === assessment.patient_id;
+      })
+    })
+  }
 
   const setAverageDuration = (assessments) => {
+    let milliseconds = 0
+    assessments.map(assessment => {
+      milliseconds += new Date(assessment.date_finished).getTime() - new Date(assessment.date_taken).getTime()
+    })
+    let avgMilliseconds = milliseconds / assessments.length
+
+    let second = Math.floor(avgMilliseconds/1000)
+    let minute = Math.floor(second/60)
+    let hour = Math.floor(minute/60)
+
+    console.log(new Date(avgMilliseconds).toISOString().slice(11,19));
+
     let hours = assessments.map((assessment) => {
       return (
         new Date(assessment.date_finished).getHours() -

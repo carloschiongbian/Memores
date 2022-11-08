@@ -40,6 +40,7 @@ const EditPatientModal = ({
   openModal,
   setOpen,
   isScreened,
+  parseDate
 }) => {
   const [patientAge, setPatientAge] = useState(patientDetails.age);
   const [firstHasSpecial, setFirstHasSpecial] = useState(false);
@@ -293,12 +294,12 @@ const EditPatientModal = ({
                 rows={5.4}
                 required={true}
                 label="Patient Notes"
-                // defaultValue={screeningDetails !== '[]' ? screeningDetails.patient_notes : null}
+                defaultValue={screeningDetails.patient_notes}
                 className="patient-notes"
                 onChange={(e) =>
                   setEditForm({ ...editForm, patient_notes: e.target.value })
                 }
-                // placeholder={screeningDetails !== '[]' ? screeningDetails.patient_notes : null}
+                placeholder={screeningDetails.patient_notes}
               />
 
               <div className="date-taken">
@@ -306,10 +307,8 @@ const EditPatientModal = ({
                 <TextField
                   type="date"
                   id="screened_by"
-                  InputProps={{
-                    inputProps: { min: "1940-01-01", max: new Date() },
-                  }}
                   defaultValue={assessmentDetails.date_taken}
+                  placeholder={assessmentDetails.date_taken}
                   onChange={(e) =>
                     setEditForm({ ...editForm, date_taken: e.target.value })
                   }
@@ -333,11 +332,11 @@ const EditPatientModal = ({
                     inputProps: { min: "1940-01-01", max: new Date() },
                   }}
                   defaultValue={assessmentDetails.date_finished}
+                  placeholder={assessmentDetails.date_finished}
                   onChange={(e) =>
                     setEditForm({ ...editForm, date_finished: e.target.value })
                   }
                   type="date"
-                  defaultValue={assessmentDetails.date_finished}
                 />
               </div>
 

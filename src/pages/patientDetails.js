@@ -17,7 +17,10 @@ const PatientDetails = () => {
   const [screeningDetails, setScreeningDetails] = useState([]);
 
   const parseDate = (date) => {
-    const [dateValue, timeValue] = date.split(/[T ]/);
+  
+    const [year, month, day, timeValue] = date.split(/[T -]/); 
+    
+    const dateValue = month + "/" + day + "/" + year;
     return dateValue;
   };
 
@@ -127,7 +130,7 @@ const PatientDetails = () => {
 
                 <div className="patient-registered-date">
                   <label htmlFor="email">Email</label>
-                  <span>{parseDate(patientDetails.email)}</span>
+                  <span>{patientDetails.email}</span>
                 </div>
 
                 <div className="patient-date-taken">
@@ -185,7 +188,7 @@ const PatientDetails = () => {
                 <label htmlFor="patient-notes-label">Notes</label>
 
                 <div className="patient-notes">
-                  <span>{screeningDetails}</span>
+                  <span>{screeningDetails.patient_notes}</span>
                 </div>
 
                 <div className="patient-notes-actions">
@@ -204,15 +207,16 @@ const PatientDetails = () => {
                     openModal={open}
                     setOpen={setOpen}
                     isScreened={isScreened}
+                    parseDate={parseDate}
                   />
                 </div>
 
                 <div className="patient-notes-status">
-                  {/* <div className="patient-notes-edited-date">
+                  <div className="patient-notes-edited-date">
                     <label htmlFor="date-edited-on">Last Edited On:</label>
 
                     <p>{parseDate(screeningDetails.last_edited_on)}</p>
-                  </div> */}
+                  </div>
 
                   <div className="patient-registered-date">
                     <label style={{fontWeight: 'bold', color: 'grey', fontSize: '12px', display: 'block'}}>Registered Date</label>
