@@ -1,7 +1,7 @@
 import "../public/css/pages/UserPage/index.css";
 import { useState } from "react";
 import countriesSelect from "../components/countriesSelect";
-
+import dayjs from "dayjs";
 const UserPage = ({
   register,
   handleSubmit,
@@ -296,6 +296,7 @@ const UserPage = ({
                   id="birthdate"
                   name="birthday"
                   readOnly={!isEdittable}
+                  max={dayjs().toISOString().substring(0, 10)}
                 />
                 {errors.birthday && (
                   <span className="text-danger">{errors.birthday.message}</span>

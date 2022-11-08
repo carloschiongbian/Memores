@@ -15,7 +15,7 @@ from flask_cors import CORS
 import redis
 from flask_session import Session
 
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = 'static'
 
 dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '.env'))
 load_dotenv(dotenv_path)
