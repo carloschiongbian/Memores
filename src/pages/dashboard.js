@@ -92,63 +92,28 @@ const Dashboard = () => {
     })
   }
 
+  const formatTo2Digits = (num) => {
+    return num.toString().padStart(2, '0');
+  }
+
   const setAverageDuration = (assessments) => {
     let milliseconds = 0
     assessments.map(assessment => {
-      milliseconds += new Date(assessment.date_finished).getTime() - new Date(assessment.date_taken).getTime()
+      milliseconds += ((new Date(assessment.date_finished).getTime() - new Date(assessment.date_taken).getTime()) / 1000)
     })
+    
+    
     let avgMilliseconds = milliseconds / assessments.length
-
+ 
     let second = Math.floor(avgMilliseconds/1000)
     let minute = Math.floor(second/60)
     let hour = Math.floor(minute/60)
 
-    console.log(new Date(avgMilliseconds).toISOString().slice(11,19));
+    second = second % 60
+    minute = minute % 60
+    hour = hour % 24
 
-    let hours = assessments.map((assessment) => {
-      return (
-        new Date(assessment.date_finished).getHours() -
-        new Date(assessment.date_taken).getHours()
-      );
-    });
-
-    let minutes = assessments.map((assessment) => {
-      return (
-        new Date(assessment.date_finished).getMinutes() -
-        new Date(assessment.date_taken).getMinutes()
-      );
-    });
-
-    let seconds = assessments.map((assessment) => {
-      return (
-        new Date(assessment.date_finished).getSeconds() -
-        new Date(assessment.date_taken).getSeconds()
-      );
-    });
-
-    let hoursSum = 0;
-    let minutesSum = 0;
-    let secondsSum = 0;
-
-    for (const i in hours) {
-      hoursSum += hours[i];
-      minutesSum += minutes[i];
-      secondsSum += seconds[i];
-    }
-
-    let hoursAvg = Math.abs(
-      Math.floor((hoursSum / assessments.length / 60) % 60)
-    );
-    let minutesAvg = Math.abs(
-      Math.floor((minutesSum / assessments.length) % 60)
-    );
-    let secondsAvg = Math.abs(Math.floor(secondsSum / assessments.length));
-
-    setRecentDuration(
-      isNaN(hoursAvg)
-        ? "-- : -- : --"
-        : hoursAvg + " : " + minutesAvg + " : " + secondsAvg
-    );
+    setRecentDuration(formatTo2Digits(hour) + ' : ' + formatTo2Digits(minute) + ' : ' + formatTo2Digits(second))
   };
 
   const getCategoryCount = (data) => {
