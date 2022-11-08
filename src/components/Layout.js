@@ -6,7 +6,6 @@ import "../public/css/components/Layout.css";
 
 const Layout = ({ children }) => {
   const [isLeftNavigationOpen, setIsLeftNavigationOpen] = useState(true);
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   const handleLeftNavigation = () => {
     const sideMenu = document.getElementById("side-menu");
@@ -17,7 +16,6 @@ const Layout = ({ children }) => {
 
     // if small screen
     if (width <= 768) {
-      setIsSmallScreen(true);
       pgContent.style.marginLeft = "0px";
       if (sideMenu.style.width !== "0px") {
         setIsLeftNavigationOpen(false);
@@ -33,7 +31,6 @@ const Layout = ({ children }) => {
       return;
     }
 
-    setIsSmallScreen(false);
     if (sideMenu.style.width !== "0px") {
       setIsLeftNavigationOpen(false);
       sideMenu.style.width = "0px";

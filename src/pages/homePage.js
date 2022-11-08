@@ -28,6 +28,7 @@ const HomePage = () => {
     try {
       const response = await Api().post("/login", data);
       if (response.status === 200) {
+        localStorage.setItem('isLogin', true)
         response.data.role === "admin"
           ? navigate(routes.admin.ADMIN_DASHBOARD)
           : navigate(routes.user.DASHBOARD);
