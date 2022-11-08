@@ -64,102 +64,103 @@ def retrievePatientScreeningDetails(id):
     if not is_authenticated(user_id):
         return jsonify({"error": "Unauthorized"}), 401
 
-    if request.method == 'GET':
-        patients_query = db.session.query(
-            *Patients.__table__.columns).select_from(Patients).filter(Patients.id == id)
-        patient_response_object = patient_record_schema.jsonify(patients_query)
+    else:
+        if request.method == 'GET':
+            patients_query = db.session.query(
+                *Patients.__table__.columns).select_from(Patients).filter(Patients.id == id)
+            patient_response_object = patient_record_schema.jsonify(patients_query)
 
-        assessments_query = db.session.query(
-            *Assessments.__table__.columns).select_from(Assessments).filter(Assessments.patient_id == id)
-        assessment_response_object = patient_assessment_schema.jsonify(
-            assessments_query)
+            assessments_query = db.session.query(
+                *Assessments.__table__.columns).select_from(Assessments).filter(Assessments.patient_id == id)
+            assessment_response_object = patient_assessment_schema.jsonify(
+                assessments_query)
 
-        screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(
-            PatientsScreeningDetails).filter(patient_response_object.get_json()[0]['id'] == PatientsScreeningDetails.id)
-        screening_response_object = patient_screening_details_schema.jsonify(
-            screening_query)
+            screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(
+                PatientsScreeningDetails).filter(patient_response_object.get_json()[0]['id'] == PatientsScreeningDetails.id)
+            screening_response_object = patient_screening_details_schema.jsonify(
+                screening_query)
 
-        records = {
-            'patients': patient_response_object.get_json(),
-            'assessment': assessment_response_object.get_json(),
-            'screeningDetails': screening_response_object.get_json()
-        }
+            records = {
+                'patients': patient_response_object.get_json(),
+                'assessment': assessment_response_object.get_json(),
+                'screeningDetails': screening_response_object.get_json()
+            }
 
-        return records
+            return records
 
-    elif request.method == 'PUT':
+        elif request.method == 'PUT':
 
-        user_id = session.get("user_id")
+            user_id = session.get("user_id")
 
-        # Check if session exist
-        if not is_authenticated(user_id):
-            return jsonify({"error": "Unauthorized"}), 401
-        # update with assessment table
+            # Check if session exist
+            if not is_authenticated(user_id):
+                return jsonify({"error": "Unauthorized"}), 401
+            # update with assessment table
 
-        fname = request.get_json()['fname']
-        lname = request.get_json()['lname']
-        fullname = request.get_json()['fullname']
-        age = request.get_json()['age']
-        email = request.get_json()['email']
-        bday = request.get_json()['bday']
-        gender = request.get_json()['gender']
-        country = request.get_json()['country']
-        city = request.get_json()['city']
-        zip = request.get_json()['zip']
-        phone = request.get_json()['phone']
-        street = request.get_json()['street']
+            fname = request.get_json()['fname']
+            lname = request.get_json()['lname']
+            fullname = request.get_json()['fullname']
+            age = request.get_json()['age']
+            email = request.get_json()['email']
+            bday = request.get_json()['bday']
+            gender = request.get_json()['gender']
+            country = request.get_json()['country']
+            city = request.get_json()['city']
+            zip = request.get_json()['zip']
+            phone = request.get_json()['phone']
+            street = request.get_json()['street']
 
-        # #screening details
-        patient_notes = request.get_json()['patient_notes']
-        last_edited_on = request.get_json()['last_edited_on']
+            # #screening details
+            patient_notes = request.get_json()['patient_notes']
+            last_edited_on = request.get_json()['last_edited_on']
 
-        # #assessment details
-        date_taken = request.get_json()['date_taken']
-        date_finished = request.get_json()['date_finished']
-        result_description = request.get_json()['result_description']
+            # #assessment details
+            date_taken = request.get_json()['date_taken']
+            date_finished = request.get_json()['date_finished']
+            result_description = request.get_json()['result_description']
 
-        update_patient_query = (
-            update(Patients).
-            where(Patients.id == id).
-            values(
-                fname=fname,
-                lname=lname,
-                fullname=fullname,
-                age=age,
-                bday=bday,
-                email=email,
-                gender=gender,
-                country=country,
-                city=city,
-                zip=zip,
-                phone=phone,
-                street=street
+            update_patient_query = (
+                update(Patients).
+                where(Patients.id == id).
+                values(
+                    fname=fname,
+                    lname=lname,
+                    fullname=fullname,
+                    age=age,
+                    bday=bday,
+                    email=email,
+                    gender=gender,
+                    country=country,
+                    city=city,
+                    zip=zip,
+                    phone=phone,
+                    street=street
+                )
             )
-        )
 
-        update_assessment_query = (
-            update(Assessments).
-            where(Assessments.patient_id == id).
-            values(
-                date_taken=date_taken,
-                date_finished=date_finished,
-                result_description=result_description
+            update_assessment_query = (
+                update(Assessments).
+                where(Assessments.patient_id == id).
+                values(
+                    date_taken=date_taken,
+                    date_finished=date_finished,
+                    result_description=result_description
+                )
             )
-        )
-    
-        update_screening_query = (
-            update(PatientsScreeningDetails).
-            where(PatientsScreeningDetails.id == id).
-            values(
-                patient_notes=patient_notes,
-                last_edited_on=last_edited_on
+        
+            update_screening_query = (
+                update(PatientsScreeningDetails).
+                where(PatientsScreeningDetails.id == id).
+                values(
+                    patient_notes=patient_notes,
+                    last_edited_on=last_edited_on
+                )
             )
-        )
 
-        connect.execute(update_patient_query)
-        connect.execute(update_screening_query)
-        connect.execute(update_assessment_query)
-        return jsonify(request.get_json())
+            connect.execute(update_patient_query)
+            connect.execute(update_screening_query)
+            connect.execute(update_assessment_query)
+            return jsonify(request.get_json())
 
 
 def deletePatientRecord(id):
@@ -187,11 +188,10 @@ def retrieveDashboardContent():
     user_id = session.get("user_id")
 
     # Check if session exist
-    if not is_authenticated(user_id):
+    if not user_id:
         return jsonify({"error": "Unauthorized"}), 401
 
-    user_id = session.get("user_id")
-
+    
     patients_query = db.session.query(
         *Patients.__table__.columns).select_from(Patients)
     patients_query = patients_query.outerjoin(Assessments, Patients.id == Assessments.patient_id).filter(

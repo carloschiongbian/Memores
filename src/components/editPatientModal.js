@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import countriesSelect from "./countriesSelect";
 import "../public/css/components/editModal/editModal.scss";
 import axios from "axios";
+import Api from '../services/api';
 
 const genders = [
   { value: "Male", label: "Male" },
@@ -100,7 +101,7 @@ const EditPatientModal = ({
       }
     }
 
-    await axios.put("/patient-details/id=" + patientDetails.id, values);
+    const response = await Api().put("/patient-details/id=" + patientDetails.id, values);
 
     getPatientDetails();
     setOpen(false);
@@ -292,12 +293,12 @@ const EditPatientModal = ({
                 rows={5.4}
                 required={true}
                 label="Patient Notes"
-                defaultValue={screeningDetails.patient_notes}
+                // defaultValue={screeningDetails.patient_notes}
                 className="patient-notes"
                 onChange={(e) =>
                   setEditForm({ ...editForm, patient_notes: e.target.value })
                 }
-                placeholder={screeningDetails.patient_notes}
+                // placeholder={screeningDetails.patient_notes}
               />
 
               <div className="date-taken">

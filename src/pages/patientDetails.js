@@ -2,7 +2,7 @@ import Layout from "../components/Layout";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
-import axios from "axios";
+import Api from "../services/api";
 
 import BreadCrumbs from "../components/BreadCrumbs";
 import EditPatientModal from "../components/editPatientModal";
@@ -29,11 +29,11 @@ const PatientDetails = () => {
     setIsScreened(data.assessment.length > 0 ? true : false);
   };
 
-  const getPatientDetails = () => {
-    axios
-      .get("/patient-details/id=" + id)
-      .then((response) => setData(response.data))
-      .catch((error) => console.log(error));
+  const getPatientDetails = async () => {
+    const response = await Api().get("/patient-details/id=" + id)
+    if(response.status === 200) {
+      setData(response.data)
+    }
   };
 
   useEffect(() => {
@@ -185,7 +185,12 @@ const PatientDetails = () => {
                 <label htmlFor="patient-notes-label">Notes</label>
 
                 <div className="patient-notes">
-                  <span>{screeningDetails.patient_notes}</span>
+                  {!screeningDetails.patient_notes === undefined &&
+                  <span>{screeningDetails}</span>
+                  }
+                  {screeningDetails.patient_notes !== undefined &&
+                    <span>error</span>
+                  }
                 </div>
 
                 <div className="patient-notes-actions">
@@ -208,11 +213,11 @@ const PatientDetails = () => {
                 </div>
 
                 <div className="patient-notes-status">
-                  <div className="patient-notes-edited-date">
+                  {/* <div className="patient-notes-edited-date">
                     <label htmlFor="date-edited-on">Last Edited On:</label>
 
                     <p>{parseDate(screeningDetails.last_edited_on)}</p>
-                  </div>
+                  </div> */}
 
                   <div className="patient-registered-date">
                     <label style={{fontWeight: 'bold', color: 'grey', fontSize: '12px', display: 'block'}}>Registered Date</label>
