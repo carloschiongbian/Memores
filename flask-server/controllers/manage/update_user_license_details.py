@@ -45,6 +45,12 @@ def update_user_license_and_details():
     if 'img' not in request.files or license_file.filename == '':
         return jsonify({"error": "Please upload photo of the user's license"}), 400
 
+     # Check if username or email exist in the database
+    user_exist = Users.query.filter(
+        (Users.email == email) & (Users.id != id)).first()
+    if user_exist:
+        return jsonify({"error": "Email already exist!"}), 409
+
     if license_file and allowed_file(license_file.filename):
         try:
             binaryLicense = license_file.read()

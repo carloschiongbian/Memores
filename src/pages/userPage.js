@@ -9,19 +9,14 @@ const UserPage = ({
   errors,
   imagePreview,
   setImagePreview,
+  isProfileChanged,
+  handleProfileChange,
+  data,
 }) => {
   const [isEdittable, setIsEdittable] = useState(false);
 
   const handleDiscardChanges = () => {
     reset();
-    setIsEdittable(false);
-  };
-
-  const handleSaveChanges = () => {
-    // do a post request
-    // update userInfo object
-    // ...
-
     setIsEdittable(false);
   };
 
@@ -81,53 +76,68 @@ const UserPage = ({
                 </label>
 
                 <div className="position-relative">
-                  <img
-                    style={{ objectFit: "scale-down" }}
-                    src={"data:image/png;base64," + imagePreview.profile}
-                    alt=""
-                    className="professional-license"
-                  />
-
-                  <div
-                    className={`d-flex align-items-center justify-content-center ${
-                      isEdittable ? "upload-image-inner-container" : ""
-                    }`}
-                  >
-                    <div
-                      className="upload-button"
-                      title="Upload a new professional license..."
-                    >
-                      <input
-                        {...register("profile")}
-                        className="inputfile"
-                        type="file"
-                        name="profile"
-                        accept="image/*"
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            let reader = new FileReader();
-                            reader.onload = (e) => {
-                              setImagePreview({
-                                ...imagePreview,
-                                profile: e.target.result.replace(
-                                  /^data:image\/[a-z]+;base64,/,
-                                  ""
-                                ),
-                              });
-                            };
-                            reader.readAsDataURL(e.target.files[0]);
-                          }
-                        }}
-                      />
-                      <label>
-                        <i
-                          className="bi bi-camera-fill text-primary"
-                          height="30"
-                          width="30"
-                        ></i>
-                      </label>
+                  {!imagePreview.profile && (
+                    <div className="upload-loading-state-container">
+                      <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
                     </div>
-                  </div>
+                  )}
+                  {imagePreview.profile && (
+                    <>
+                      <img
+                        style={{ objectFit: "scale-down" }}
+                        src={
+                          isProfileChanged
+                            ? "data:image/png;base64," + imagePreview.profile
+                            : "http://localhost:5000/" + imagePreview.profile
+                        }
+                        alt=""
+                        className="professional-license"
+                      />
+                      <div
+                        className={`d-flex align-items-center justify-content-center ${
+                          isEdittable ? "upload-image-inner-container" : ""
+                        }`}
+                      >
+                        <div
+                          className="upload-button"
+                          title="Upload a new professional license..."
+                        >
+                          <input
+                            {...register("profile")}
+                            className="inputfile"
+                            type="file"
+                            name="profile"
+                            accept="image/*"
+                            onChange={(e) => {
+                              if (e.target.files) {
+                                let reader = new FileReader();
+                                reader.onload = (e) => {
+                                  setImagePreview({
+                                    ...imagePreview,
+                                    profile: e.target.result.replace(
+                                      /^data:image\/[a-z]+;base64,/,
+                                      ""
+                                    ),
+                                  });
+                                  handleProfileChange(true);
+                                };
+                                reader.readAsDataURL(e.target.files[0]);
+                              }
+                            }}
+                          />
+                          <label>
+                            <i
+                              className="bi bi-camera-fill text-primary"
+                              height="30"
+                              width="30"
+                            ></i>
+                          </label>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="mb-3">
@@ -136,53 +146,63 @@ const UserPage = ({
                 </label>
 
                 <div className="position-relative">
-                  <img
-                    style={{ objectFit: "scale-down" }}
-                    src={"data:image/png;base64," + imagePreview.img}
-                    alt=""
-                    className="professional-license"
-                  />
-
-                  <div
-                    className={`d-flex align-items-center justify-content-center ${
-                      isEdittable ? "upload-image-inner-container" : ""
-                    }`}
-                  >
-                    <div
-                      className="upload-button"
-                      title="Upload a new professional license..."
-                    >
-                      <input
-                        {...register("img")}
-                        className="inputfile"
-                        type="file"
-                        name="img"
-                        accept="image/*"
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            let reader = new FileReader();
-                            reader.onload = (e) => {
-                              setImagePreview({
-                                ...imagePreview,
-                                img: e.target.result.replace(
-                                  /^data:image\/[a-z]+;base64,/,
-                                  ""
-                                ),
-                              });
-                            };
-                            reader.readAsDataURL(e.target.files[0]);
-                          }
-                        }}
-                      />
-                      <label>
-                        <i
-                          className="bi bi-camera-fill text-primary"
-                          height="30"
-                          width="30"
-                        ></i>
-                      </label>
+                  {!imagePreview.img && (
+                    <div className="upload-loading-state-container">
+                      <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
                     </div>
-                  </div>
+                  )}
+                  {imagePreview.img && (
+                    <>
+                      <img
+                        style={{ objectFit: "scale-down" }}
+                        src={"data:image/png;base64," + imagePreview.img}
+                        alt=""
+                        className="professional-license"
+                      />
+                      <div
+                        className={`d-flex align-items-center justify-content-center ${
+                          isEdittable ? "upload-image-inner-container" : ""
+                        }`}
+                      >
+                        <div
+                          className="upload-button"
+                          title="Upload a new professional license..."
+                        >
+                          <input
+                            {...register("img")}
+                            className="inputfile"
+                            type="file"
+                            name="img"
+                            accept="image/*"
+                            onChange={(e) => {
+                              if (e.target.files) {
+                                let reader = new FileReader();
+                                reader.onload = (e) => {
+                                  setImagePreview({
+                                    ...imagePreview,
+                                    img: e.target.result.replace(
+                                      /^data:image\/[a-z]+;base64,/,
+                                      ""
+                                    ),
+                                  });
+                                };
+                                reader.readAsDataURL(e.target.files[0]);
+                              }
+                            }}
+                          />
+                          <label>
+                            <i
+                              className="bi bi-camera-fill text-primary"
+                              height="30"
+                              width="30"
+                            ></i>
+                          </label>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="mb-3">

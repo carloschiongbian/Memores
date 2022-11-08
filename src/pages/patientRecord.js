@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Modal, Button, Dialog, Alert } from "@mui/material";
+import { Box, Modal, Button, Dialog, Alert, Snackbar } from "@mui/material";
 import CommonModal from "../components/modal/CommonModal";
 import CreatePatient from "./createPatient";
 
@@ -32,6 +32,16 @@ const PatientRecord = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [responseMessage, setResponseMessage] = useState({});
+  const [openSnackbar, setOpenSnackbar] = useState({
+    open: false,
+    vertical: "bottom",
+    horizontal: "left",
+  });
+  const { open } = openSnackbar;
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar({ ...openSnackbar, open: false });
+  };
   const {
     register,
     handleSubmit,
@@ -79,6 +89,11 @@ const PatientRecord = () => {
         setPatientRecords(updatedRecord);
         reset();
         setIsCreateModalOpen(false);
+        setResponseMessage({
+          status: "success",
+          message: "Updated Successfully",
+        });
+        setOpenSnackbar({ open: true });
       }
     } catch (error) {
       setAlertMessage(error.response.data.error);
@@ -158,7 +173,7 @@ const PatientRecord = () => {
 
   const retrieveRecords = async () => {
     const response = await Api().get("/patient-records");
-    if(response.status === 200){
+    if (response.status === 200) {
       updatePatientRecords(response.data);
     }
   };
@@ -180,13 +195,15 @@ const PatientRecord = () => {
   };
 
   const handleDelete = async () => {
-    const response = await Api().delete("/patient-records/delete/id=" + +parseInt(getRecord.original.id))
+    const response = await Api().delete(
+      "/patient-records/delete/id=" + +parseInt(getRecord.original.id)
+    );
 
-    if(response.status === 200){
+    if (response.status === 200) {
       const newArr = patientRecords.filter(
         (record) => record.id !== getRecord.original.id
       );
-  
+
       setPatientRecords(newArr);
       setOpenModal(false);
     }
@@ -291,6 +308,19 @@ const PatientRecord = () => {
       >
         <Alert severity="error"> {alertMessage}</Alert>
       </Dialog>
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={responseMessage.status}
+          sx={{ width: "100%" }}
+        >
+          {responseMessage.message}
+        </Alert>
+      </Snackbar>
     </Layout>
   );
 };

@@ -126,6 +126,43 @@ const AdminDashboard = () => {
     getAllUsers();
   }, []);
 
+  const userList =
+    list.length !== 0 ? (
+      list.map((d, i) => {
+        return title !== "Role List" ? (
+          <ListItem sx={{ width: "100%", bgcolor: "background.paper" }} key={i}>
+            <ListItemButton
+              onClick={() => {
+                setDialogData(d);
+                setIsUserDialogOpen(true);
+              }}
+            >
+              <ListItemAvatar>
+                {title === "Deleted User List" && <BlockIcon />}
+                {d.photo && <Avatar src={"http://localhost:5000/" + d.photo} />}
+              </ListItemAvatar>
+              <ListItemText
+                primary={d.uname}
+                secondary={`${d.fname} ${d.lname}`}
+              />
+            </ListItemButton>
+          </ListItem>
+        ) : (
+          <ListItem sx={{ width: "100%", bgcolor: "background.paper" }} key={i}>
+            <ListItemAvatar>
+              {d === "user" && <AccountBoxIcon />}
+              {d === "admin" && <AdminPanelSettingsIcon />}
+            </ListItemAvatar>
+            <ListItemText primary={capitalize(d)} />
+          </ListItem>
+        );
+      })
+    ) : (
+      <ListItem sx={{ width: "100%", bgcolor: "background.paper" }} key={1}>
+        <ListItemText primary={"No Data"} style={{ textAlign: "center" }} />
+      </ListItem>
+    );
+
   return (
     <Layout>
       <div className="d-flex justify-content-end w-100 mt-5">{title}</div>
@@ -298,43 +335,7 @@ const AdminDashboard = () => {
                 </ListItem>
               </>
             ) : (
-              list.map((d, i) => {
-                return title !== "Role List" ? (
-                  <ListItem
-                    sx={{ width: "100%", bgcolor: "background.paper" }}
-                    key={i}
-                  >
-                    <ListItemButton
-                      onClick={() => {
-                        setDialogData(d);
-                        setIsUserDialogOpen(true);
-                      }}
-                    >
-                      <ListItemAvatar>
-                        {title === "Deleted User List" && <BlockIcon />}
-                        {d.photo && (
-                          <Avatar src={"http://localhost:5000/" + d.photo} />
-                        )}
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={d.uname}
-                        secondary={`${d.fname} ${d.lname}`}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                ) : (
-                  <ListItem
-                    sx={{ width: "100%", bgcolor: "background.paper" }}
-                    key={i}
-                  >
-                    <ListItemAvatar>
-                      {d === "user" && <AccountBoxIcon />}
-                      {d === "admin" && <AdminPanelSettingsIcon />}
-                    </ListItemAvatar>
-                    <ListItemText primary={capitalize(d)} />
-                  </ListItem>
-                );
-              })
+              <>{userList}</>
             )}
           </List>
         </Grid>

@@ -11,10 +11,10 @@ def login():
     user_exist = Users.query.filter_by(uname=user).first()
 
     if user_exist is None:
-        return jsonify({"error": "Unauthorized"}), 401
+        return jsonify({"error": "Username does not exist!"}), 401
 
     if not check_password_hash(user_exist.pwd, password):
-        return jsonify({"error": "Unauthorized"}), 401
+        return jsonify({"error": "Incorrect Password!"}), 401
 
     # session.clear()
     session["user_id"] = user_exist.id

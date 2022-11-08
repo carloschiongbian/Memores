@@ -13,6 +13,15 @@
     right: 0;
 }
 
+.upload-loading-state-container{
+    background-color: transparent;
+    border: 1px solid #8866E9;
+    width: 543.5px;
+    height: 192px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 .upload-image-inner-container:hover {
     background: linear-gradient(hsl(0 0% 0% / 1),

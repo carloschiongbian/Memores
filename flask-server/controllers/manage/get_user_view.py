@@ -3,8 +3,6 @@ from models.users import Users
 from flask.json import jsonify
 from auth.auth import is_authenticated, is_admin
 import base64
-import os
-from flask import current_app as app
 
 
 def get_user_account_view():
@@ -23,15 +21,10 @@ def get_user_account_view():
     user = Users.query.filter_by(id=id).first()
 
     imageBase64 = base64.b64encode(user.license)
-    filepath = os.path.join(
-        app.root_path, app.config['UPLOAD_FOLDER'], user.photo.rsplit('\\', 1)[1])
-    with open(filepath, "rb") as img_file:
-        readFile = img_file.read()
-        base64String = base64.b64encode(readFile)
 
     return jsonify({
         "id": user.id,
-        "profile": base64String.decode('utf-8'),
+        "profile": user.photo,
         "img": str(imageBase64.decode('utf-8')),
         "license": user.license_id,
         "firstname": user.fname,

@@ -71,6 +71,7 @@ const UserRecord = () => {
   };
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [isProfileChanged, setIsProfileChanged] = useState(false);
 
   const {
     register: registerForm1,
@@ -164,7 +165,6 @@ const UserRecord = () => {
         }, 2000);
       }
     } else if (data.img[0] instanceof File) {
-      console.log("update with image here");
       let formData = new FormData();
       formData.append("img", data.img[0]);
       for (let key in data) {
@@ -181,8 +181,6 @@ const UserRecord = () => {
             "Content-Type": "multipart/form-data",
           },
         });
-        console.log(response);
-
         if (response.ok || response.status === 200) {
           setData(response.data);
           setIsViewModalOpen(false);
@@ -604,6 +602,7 @@ const UserRecord = () => {
           openModal={isViewModalOpen}
           textAlign={"center"}
           handleClose={() => {
+            setIsProfileChanged(false);
             setImagePreview("");
             setIsViewModalOpen(false);
           }}
@@ -617,6 +616,9 @@ const UserRecord = () => {
             handleSubmit={handleSubmitForm2(onSubmitUpdateUser)}
             imagePreview={imagePreview}
             setImagePreview={setImagePreview}
+            isProfileChanged={isProfileChanged}
+            handleProfileChange={setIsProfileChanged}
+            data={userDataForView}
           />
         </CommonModal>
         <Snackbar

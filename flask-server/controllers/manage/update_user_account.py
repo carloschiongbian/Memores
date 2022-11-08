@@ -37,6 +37,11 @@ def update_user_by_admin():
         return jsonify({"success": "Updated Password Successfully"}), 200
 
     # if password and confirm password is empty, it means the user wants to update his username only
+    # Check if username or email exist in the database
+    user_exist = Users.query.filter(Users.uname == username).first()
+    if user_exist:
+        return jsonify({"error": "Username already exist!"}), 409
+
     user = Users.query.get(id)
     user.uname = username
     db.session.commit()

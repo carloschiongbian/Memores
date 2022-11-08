@@ -3,7 +3,6 @@ from flask.json import jsonify
 from models.users import Users, users_schema
 from flask import current_app as app
 from werkzeug.utils import secure_filename
-import pymysql
 import uuid
 import os
 from models.users import db
@@ -46,8 +45,8 @@ def register_user():
         return jsonify({"error": "Unauthorized"}), 401
 
     # Check if username or email exist in the database
-    user_exist = Users.query.filter_by(
-        uname=uname, email=email).first() is not None
+    user_exist = Users.query.filter(
+        (Users.email == email) | (Users.uname == uname)).first()
     if user_exist:
         return jsonify({"error": "Username or email already exist!"}), 409
 

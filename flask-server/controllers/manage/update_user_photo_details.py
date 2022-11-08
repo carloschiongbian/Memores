@@ -48,6 +48,12 @@ def update_user_photo_and_details():
     if 'profile' not in request.files or file.filename == '':
         return jsonify({"error": "Please upload profile picture"}), 400
 
+     # Check if username or email exist in the database
+    user_exist = Users.query.filter(
+        (Users.email == email) & (Users.id != id)).first()
+    if user_exist:
+        return jsonify({"error": "Email already exist!"}), 409
+
     if file and allowed_file(file.filename):
         # rename file to a unique uuid
         file.filename = uuid.uuid4().hex+'.'+file.filename.split(".")[-1]
