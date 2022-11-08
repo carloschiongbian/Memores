@@ -43,6 +43,7 @@ const App = () => {
       <div className="App">
         <BrowserRouter>
           <Routes>
+
             <Route
               path={routes.shared.INDEX}
               element={
@@ -51,6 +52,8 @@ const App = () => {
                 </LoginRedirect>
               }
             />
+
+            {/* Error 404 route: /error-404 */}
             <Route path={routes.shared.ERROR_404} element={<Error404 />} />
 
             <Route
@@ -61,6 +64,7 @@ const App = () => {
                 </UserRoute>
               }
             />
+
             <Route
               path={routes.user.DASHBOARD}
               element={
@@ -69,6 +73,7 @@ const App = () => {
                 </UserRoute>
               }
             />
+
             <Route
               path={routes.user.PATIENT_RECORDS}
               element={
@@ -77,12 +82,22 @@ const App = () => {
                 </UserRoute>
               }
             />
+
             <Route
               path={routes.user.PATIENT_DETAILS}
               element={
                 <UserRoute>
                   <PatientDetails />
                 </UserRoute>
+              }
+            />
+
+            <Route
+              path={routes.admin.ADMIN_DASHBOARD}
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
               }
             />
 
@@ -94,14 +109,10 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path={routes.admin.ADMIN_DASHBOARD}
-              element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
+            
+            {/* Error 404 route: Catch all routes */}
+            <Route path='*' element={<Error404 />} />
+
           </Routes>
         </BrowserRouter>
       </div>
