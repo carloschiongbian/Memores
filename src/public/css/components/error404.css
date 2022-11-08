@@ -1,0 +1,45 @@
+.h1 {
+    font-size: 7.5em;
+    margin: 15px 0px;
+    font-weight: bold;
+}
+.h2 {
+    font-weight: bold;
+}
+.btn-error404 {
+    z-index: 1;
+    overflow: hidden;
+    background: transparent;
+    position: relative;
+    padding: 8px 50px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1em;
+    letter-spacing: 2px;
+    transition: 0.2s ease;
+    font-weight: bold;
+    margin: 5px 0px;
+}
+.btn-error404.green {
+    border: 4px solid var(--green);
+    color: var(--blue);
+}
+.btn-error404.green:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0%;
+    height: 100%;
+    background: var(--green);
+    z-index: -1;
+    transition: 0.2s ease;
+}
+.btn-err0r404.green:hover {
+    color: var(--white);
+    background: var(--green);
+    transition: 0.2s ease;
+}
+.btn-error404.green:hover:before {
+    width: 100%;
+}
