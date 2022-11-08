@@ -27,6 +27,7 @@ const ScreeningPage = () => {
     // remove if implementation 1 is used
     const [allPatients, setAllPatients] = useState([])
     const [allSearchedPatients, setAllSearchedPatients] = useState([])
+    const [nameQuery, setNameQuery] = useState('')
 
     const handleSelection = (patient) => {
         setPatientSelected(patient)
@@ -58,6 +59,7 @@ const ScreeningPage = () => {
          *   })
          * 
          */
+        setNameQuery('')
         setCurrentPage(1)
         const p = allPatients.slice((currentPage - 1) * perPage, currentPage * perPage)
         setPatients(p)
@@ -113,6 +115,8 @@ const ScreeningPage = () => {
      */
 
     const handleSearch = () => {
+        setNameQuery(searchQuery.current.value)
+
         if (searchQuery.current.value === '') {
             const p = allPatients.slice((currentPage - 1) * perPage, currentPage * perPage)
             setPatients(p)
@@ -143,7 +147,7 @@ const ScreeningPage = () => {
 
     useEffect(() => {
         // no data is fetched yet and search input is empty
-        if (total <= 0 && searchQuery.current.value === '') {
+        if (total <= 0 && nameQuery === '') {
             Api().get('/get-patients-v2', { params: { createdBy: user.id } })
                 .then(res => {
                     setAllPatients(res.data.patients)
@@ -156,14 +160,14 @@ const ScreeningPage = () => {
         }
 
         // something changed while there are searched patients and still searching
-        if (allSearchedPatients.length > 0 && searchQuery.current.value !== '') {
+        if (allSearchedPatients.length > 0 && nameQuery !== '') {
             // since there are searched patients, use it for displaying
             const p = allSearchedPatients.slice((currentPage - 1) * perPage, currentPage * perPage)
             setPatients(p)
             return
         } 
         // something changed while there are no searched patients and still searching
-        else if (allSearchedPatients.length <= 0 && searchQuery.current.value !== '') {
+        else if (allSearchedPatients.length <= 0 && nameQuery !== '') {
             // no searched patient found, therefore, should be empty
             setPatients([])
             return
@@ -173,7 +177,7 @@ const ScreeningPage = () => {
         const p = allPatients.slice((currentPage - 1) * perPage, currentPage * perPage)
         setPatients(p)
 
-    }, [allSearchedPatients, allPatients, total, currentPage, user]);
+    }, [nameQuery, allSearchedPatients, allPatients, total, currentPage, user]);
 
 
 
