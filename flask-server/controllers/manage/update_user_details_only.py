@@ -29,6 +29,12 @@ def update_user_details_only():
     zipcode = request.json['zipcode']
     license_id = request.json['license']
 
+    # Check if username or email exist in the database
+    user_exist = Users.query.filter(
+        (Users.email == email) & (Users.id != id)).first()
+    if user_exist:
+        return jsonify({"error": "Email already exist!"}), 409
+
     try:
         # Finally, update a user in mysql
         user = Users.query.get(id)

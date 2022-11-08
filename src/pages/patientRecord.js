@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Modal, Button, Dialog, Alert } from "@mui/material";
+import { Box, Modal, Button, Dialog, Alert, Snackbar } from "@mui/material";
 import CommonModal from "../components/modal/CommonModal";
 import CreatePatient from "./createPatient";
 
@@ -17,7 +17,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { createPatientSchemaValidation } from "../validation/manageValidation";
 import Api from "../services/api";
-import axios from 'axios';
+import axios from "axios";
 import dayjs from "dayjs";
 
 const recordActions = {
@@ -33,6 +33,16 @@ const PatientRecord = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [responseMessage, setResponseMessage] = useState({});
+  const [openSnackbar, setOpenSnackbar] = useState({
+    open: false,
+    vertical: "bottom",
+    horizontal: "left",
+  });
+  const { open } = openSnackbar;
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar({ ...openSnackbar, open: false });
+  };
   const {
     register,
     handleSubmit,
@@ -80,6 +90,11 @@ const PatientRecord = () => {
         setPatientRecords(updatedRecord);
         reset();
         setIsCreateModalOpen(false);
+        setResponseMessage({
+          status: "success",
+          message: "Updated Successfully",
+        });
+        setOpenSnackbar({ open: true });
       }
     } catch (error) {
       setAlertMessage(error.response.data.error);
@@ -183,8 +198,9 @@ const PatientRecord = () => {
   };
 
   const handleDelete = () => {
-    axios
-      .delete("/patient-records/delete/id=" + +parseInt(getRecord.original.id))
+    axios.delete(
+      "/patient-records/delete/id=" + +parseInt(getRecord.original.id)
+    );
 
     const newArr = patientRecords.filter(
       (record) => record.id !== getRecord.original.id
@@ -293,6 +309,19 @@ const PatientRecord = () => {
       >
         <Alert severity="error"> {alertMessage}</Alert>
       </Dialog>
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={responseMessage.status}
+          sx={{ width: "100%" }}
+        >
+          {responseMessage.message}
+        </Alert>
+      </Snackbar>
     </Layout>
   );
 };

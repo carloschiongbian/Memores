@@ -54,6 +54,12 @@ def update_user_both_image():
     if 'img' not in request.files or license_file.filename == '':
         return jsonify({"error": "Please upload photo of the user's license"}), 400
 
+    # Check if username or email exist in the database
+    user_exist = Users.query.filter(
+        (Users.email == email) & (Users.id != id)).first()
+    if user_exist:
+        return jsonify({"error": "Email already exist!"}), 409
+
     if file and allowed_file(file.filename) and license_file and allowed_file(license_file.filename):
         # rename file to a unique uuid
         file.filename = uuid.uuid4().hex+'.'+file.filename.split(".")[-1]
@@ -85,8 +91,7 @@ def update_user_both_image():
             db.session.commit()
 
         except pymysql.Error as e:
-            print("could not close connection error pymysql %d: %s" %
-                  (e.args[0], e.args[1]))
+            return jsonify({"error": "could not close connection error pymysql"})
 
     updatedUser = Users.query.filter_by(role='user', is_deleted=0).with_entities(
         Users.id, Users.uname, Users.fname, Users.lname, Users.role, Users.email, Users.created_at)

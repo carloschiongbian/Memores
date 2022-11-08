@@ -4,9 +4,10 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import routes from "../routes/routes";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "../auth/AuthContext";
 import Api from "../services/api";
+import { Alert } from "@mui/material";
 
 const schema = yup.object({
   user: yup.string().required(),
@@ -14,6 +15,8 @@ const schema = yup.object({
 });
 
 const HomePage = () => {
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const user = useContext(AuthContext);
   const {
     register,
@@ -28,14 +31,19 @@ const HomePage = () => {
     try {
       const response = await Api().post("/login", data);
       if (response.status === 200) {
-        localStorage.setItem('isLogin', true)
+        localStorage.setItem("isLogin", true);
         response.data.role === "admin"
           ? navigate(routes.admin.ADMIN_DASHBOARD)
           : navigate(routes.user.DASHBOARD);
         user.setUser(response.data);
       }
     } catch (error) {
-      console.log(error);
+      setAlertMessage(error.response.data.error);
+      setIsAlertOpen(true);
+      setTimeout(() => {
+        setIsAlertOpen(false);
+        setAlertMessage("");
+      }, 3000);
     }
   };
 
@@ -82,6 +90,7 @@ const HomePage = () => {
         <div className="homepage-right-section">
           <div className="homepage-user-login">
             <div className="login-modal">
+              {isAlertOpen && <Alert severity="error">{alertMessage}</Alert>}
               <p className="login-modal-header">Login here</p>
 
               <div className="login-modal-inputs">
