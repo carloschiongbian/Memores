@@ -49,7 +49,7 @@ def retrieveData():
     print(screening_details_response)
 
     assessments_query = db.session.query(*Assessments.__table__.columns).select_from(
-        Assessments).where(Assessments.patient_id == Patients.id)
+        Assessments).filter(Assessments.patient_id == Patients.id)
     assessment_response_object = patient_assessment_schema.jsonify(
         assessments_query)
 
@@ -68,16 +68,16 @@ def retrievePatientScreeningDetails(id):
 
     if request.method == 'GET':
         patients_query = db.session.query(
-            *Patients.__table__.columns).select_from(Patients).where(Patients.id == id)
+            *Patients.__table__.columns).select_from(Patients).filter(Patients.id == id)
         patient_response_object = patient_record_schema.jsonify(patients_query)
 
         assessments_query = db.session.query(
-            *Assessments.__table__.columns).select_from(Assessments).where(Assessments.patient_id == id)
+            *Assessments.__table__.columns).select_from(Assessments).filter(Assessments.patient_id == id)
         assessment_response_object = patient_assessment_schema.jsonify(
             assessments_query)
 
         screening_query = db.session.query(*PatientsScreeningDetails.__table__.columns).select_from(
-            PatientsScreeningDetails).where(patient_response_object.get_json()[0]['id'] == PatientsScreeningDetails.id)
+            PatientsScreeningDetails).filter(patient_response_object.get_json()[0]['id'] == PatientsScreeningDetails.id)
         screening_response_object = patient_screening_details_schema.jsonify(
             screening_query)
 
@@ -198,7 +198,7 @@ def retrieveDashboardContent():
         Patients.created_by == user_id).order_by(Patients.id)
     patient_response_object = patient_record_schema.jsonify(patients_query)
 
-    screened_patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients).where(
+    screened_patients_query = db.session.query(*Patients.__table__.columns).select_from(Patients).filter(
         Assessments.patient_id == Patients.id).filter(Patients.created_by == user_id).order_by(Patients.id)
     screened_patients_response_object = patient_record_schema.jsonify(
         screened_patients_query)
@@ -210,7 +210,7 @@ def retrieveDashboardContent():
     screening_response_object = patient_screening_details_schema.jsonify(
         screening_query)
 
-    assessments_query = db.session.query(*Assessments.__table__.columns).select_from(Assessments).where(
+    assessments_query = db.session.query(*Assessments.__table__.columns).select_from(Assessments).filter(
         Assessments.patient_id == Patients.id).filter(Patients.created_by == user_id).order_by(Assessments.date_finished.desc())
     assessment_response_object = patient_assessment_schema.jsonify(
         assessments_query)

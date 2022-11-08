@@ -225,7 +225,7 @@ const PatientRecord = () => {
               aria-describedby="modal-modal-description"
             >
               <Box className="modal-container-delete-modal">
-                <div className="modal-header-delete-modal">
+                <div className="modal-header-delete-modal bg-primary">
                   <h3>Delete Record</h3>
                 </div>
 
