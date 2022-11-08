@@ -293,12 +293,12 @@ const EditPatientModal = ({
                 rows={5.4}
                 required={true}
                 label="Patient Notes"
-                defaultValue={screeningDetails !== '[]' ? screeningDetails.patient_notes : null}
+                // defaultValue={screeningDetails !== '[]' ? screeningDetails.patient_notes : null}
                 className="patient-notes"
                 onChange={(e) =>
                   setEditForm({ ...editForm, patient_notes: e.target.value })
                 }
-                placeholder={screeningDetails !== '[]' ? screeningDetails.patient_notes : null}
+                // placeholder={screeningDetails !== '[]' ? screeningDetails.patient_notes : null}
               />
 
               <div className="date-taken">
