@@ -7,7 +7,6 @@ import TextField from "@mui/material/TextField";
 
 import countriesSelect from "./countriesSelect";
 import "../public/css/components/editModal/editModal.scss";
-import axios from "axios";
 import Api from '../services/api';
 
 const genders = [
@@ -46,7 +45,6 @@ const EditPatientModal = ({
   const [firstHasSpecial, setFirstHasSpecial] = useState(false);
   const [lastHasSpecial, setLastHasSpecial] = useState(false);
   const [editForm, setEditForm] = useState(editValues);
-  const [isEmail, setIsEmail] = useState(false);
 
   const getAge = (dateString) => {
     setEditForm({ ...editForm, bday: dateString });
@@ -102,9 +100,11 @@ const EditPatientModal = ({
     }
 
     const response = await Api().put("/patient-details/id=" + patientDetails.id, values);
+    if(response.status === 200){
+      getPatientDetails();
+      setOpen(false);
+    }
 
-    getPatientDetails();
-    setOpen(false);
   };
 
   return (
@@ -293,12 +293,12 @@ const EditPatientModal = ({
                 rows={5.4}
                 required={true}
                 label="Patient Notes"
-                // defaultValue={screeningDetails.patient_notes}
+                defaultValue={screeningDetails !== '[]' ? screeningDetails.patient_notes : null}
                 className="patient-notes"
                 onChange={(e) =>
                   setEditForm({ ...editForm, patient_notes: e.target.value })
                 }
-                // placeholder={screeningDetails.patient_notes}
+                placeholder={screeningDetails !== '[]' ? screeningDetails.patient_notes : null}
               />
 
               <div className="date-taken">
@@ -375,7 +375,6 @@ const EditPatientModal = ({
             type="submit"
             size="large"
             variant="contained"
-            // handlesubmit={handlesubmit(handleUpdateEvent)}
             onClick={() => {
               handleUpdateEvent();
             }}

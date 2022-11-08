@@ -185,12 +185,7 @@ const PatientDetails = () => {
                 <label htmlFor="patient-notes-label">Notes</label>
 
                 <div className="patient-notes">
-                  {!screeningDetails.patient_notes === undefined &&
-                  <span>{screeningDetails}</span>
-                  }
-                  {screeningDetails.patient_notes !== undefined &&
-                    <span>error</span>
-                  }
+                  <span>{screeningDetails.patient_notes}</span>
                 </div>
 
                 <div className="patient-notes-actions">
