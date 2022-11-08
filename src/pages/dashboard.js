@@ -13,7 +13,6 @@ import "../public/css/pages/Dashboard/Dashboard.scss";
 import CommonModal from "../components/modal/CommonModal";
 import { useContext } from "react";
 import AuthContext from "../auth/AuthContext";
-import axios from "axios";
 import Api from "../services/api";
 
 const SAD_CATEGORIES = {
@@ -58,95 +57,63 @@ const Dashboard = () => {
   }, []);
 
   let patientRecordsPath = "../patient-records";
-  let patientDetailsPath = "../patient-details/id=";
+  let patientDetailsPath = "../patient-details/id="; 
 
-  const getDashboardData = () => {
-    axios
-      .get("/dashboard")
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((error) => console.log(error));
-
-    setIsLoading(false);
+  const getDashboardData = async () => {
+    const response = await Api().get("/dashboard");
+    if (response.status === 200) {
+      setData(response.data);
+      setIsLoading(false);
+    }
   };
 
   const setData = (data) => {
+
+    const patients = data.patients
+    const assessments = data.assessments
+
     setPatients(data.patients);
     setScreenedPatients(data.screened_patients);
 
+    const difference = [
+      ...getDifference(patients, assessments)
+    ]
+    setNonScreenedPatients(difference)
+
     setAverageDuration(data.assessments);
     getCategoryCount(data.screening_details);
-    retrieveToBeScreenedPatients(data.patients, data.screened_patients);
   };
 
-  const retrieveToBeScreenedPatients = (patients, screenedPatients) => {
-    if (screenedPatients.length !== 0) {
-      patients.map((patient) => {
-        screenedPatients.map((screenedPatient) => {
-          if (screenedPatient.id !== patient.id) {
-            setNonScreenedPatients((nonScreenedPatients) => [
-              ...nonScreenedPatients,
-              patient,
-            ]);
-          }
-        });
-      });
-    } else {
-      patients.map((patient) => {
-        setNonScreenedPatients((nonScreenedPatients) => [
-          ...nonScreenedPatients,
-          patient,
-        ]);
-      });
-    }
-  };
+  const getDifference = (patients, assessments) => {
+    return patients.filter(patient => {
+      return !assessments.some(assessment => {
+        return patient.id === assessment.patient_id;
+      })
+    })
+  }
+
+  const formatTo2Digits = (num) => {
+    return num.toString().padStart(2, '0');
+  }
 
   const setAverageDuration = (assessments) => {
-    let hours = assessments.map((assessment) => {
-      return (
-        new Date(assessment.date_finished).getHours() -
-        new Date(assessment.date_taken).getHours()
-      );
-    });
+    let milliseconds = 0
+    assessments.map(assessment => {
+      milliseconds += ((new Date(assessment.date_finished).getTime() - new Date(assessment.date_taken).getTime()) / 1000)
+    })
+    
+    
+    let avgMilliseconds = milliseconds / assessments.length
+ 
+    let second = Math.floor(avgMilliseconds/1000)
+    let minute = Math.floor(second/60)
+    let hour = Math.floor(minute/60)
 
-    let minutes = assessments.map((assessment) => {
-      return (
-        new Date(assessment.date_finished).getMinutes() -
-        new Date(assessment.date_taken).getMinutes()
-      );
-    });
+    second = second % 60
+    minute = minute % 60
+    hour = hour % 24
 
-    let seconds = assessments.map((assessment) => {
-      return (
-        new Date(assessment.date_finished).getSeconds() -
-        new Date(assessment.date_taken).getSeconds()
-      );
-    });
-
-    let hoursSum = 0;
-    let minutesSum = 0;
-    let secondsSum = 0;
-
-    for (const i in hours) {
-      hoursSum += hours[i];
-      minutesSum += minutes[i];
-      secondsSum += seconds[i];
-    }
-
-    let hoursAvg = Math.abs(
-      Math.floor((hoursSum / assessments.length / 60) % 60)
-    );
-    let minutesAvg = Math.abs(
-      Math.floor((minutesSum / assessments.length) % 60)
-    );
-    let secondsAvg = Math.abs(Math.floor(secondsSum / assessments.length));
-
-    setRecentDuration(
-      isNaN(hoursAvg)
-        ? "-- : -- : --"
-        : hoursAvg + " : " + minutesAvg + " : " + secondsAvg
-    );
+    setRecentDuration(formatTo2Digits(hour) + ' : ' + formatTo2Digits(minute) + ' : ' + formatTo2Digits(second))
   };
 
   const getCategoryCount = (data) => {

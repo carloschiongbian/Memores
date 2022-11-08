@@ -2,7 +2,6 @@ import Layout from "../components/Layout";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
-import axios from "axios";
 import Api from "../services/api";
 
 import BreadCrumbs from "../components/BreadCrumbs";
@@ -18,7 +17,10 @@ const PatientDetails = () => {
   const [screeningDetails, setScreeningDetails] = useState([]);
 
   const parseDate = (date) => {
-    const [dateValue, timeValue] = date.split(/[T ]/);
+  
+    const [year, month, day, timeValue] = date.split(/[T -]/); 
+    
+    const dateValue = month + "/" + day + "/" + year;
     return dateValue;
   };
 
@@ -30,11 +32,11 @@ const PatientDetails = () => {
     setIsScreened(data.assessment.length > 0 ? true : false);
   };
 
-  const getPatientDetails = () => {
-    axios
-      .get("/patient-details/id=" + id)
-      .then((response) => setData(response.data))
-      .catch((error) => console.log(error));
+  const getPatientDetails = async () => {
+    const response = await Api().get("/patient-details/id=" + id)
+    if(response.status === 200) {
+      setData(response.data)
+    }
   };
 
   useEffect(() => {
@@ -87,7 +89,9 @@ const PatientDetails = () => {
                     padding: "10px 30px",
                   }}
                 >
-                  <h5>{patientDetails.fname} {patientDetails.lname}</h5>
+                  <h5>
+                    {patientDetails.fname} {patientDetails.lname}
+                  </h5>
                   <h6>Age: {patientDetails.age} </h6>
                   <span>Country: {patientDetails.country}</span>
                 </div>
@@ -125,8 +129,8 @@ const PatientDetails = () => {
                 </div>
 
                 <div className="patient-registered-date">
-                  <label htmlFor="registered-date">Registered Date</label>
-                  <span>{parseDate(patientDetails.registered_date)}</span>
+                  <label htmlFor="email">Email</label>
+                  <span>{patientDetails.email}</span>
                 </div>
 
                 <div className="patient-date-taken">
@@ -194,6 +198,7 @@ const PatientDetails = () => {
                   >
                     Edit
                   </button>
+
                   <EditPatientModal
                     patientDetails={patientDetails}
                     screeningDetails={screeningDetails}
@@ -202,25 +207,20 @@ const PatientDetails = () => {
                     openModal={open}
                     setOpen={setOpen}
                     isScreened={isScreened}
+                    parseDate={parseDate}
                   />
                 </div>
 
                 <div className="patient-notes-status">
-                  {/* I decided to comment this out for the meantime since it */}
-                  {/* wouldn't make sense if a record were to be edited by any other */}
-                  {/* person since only this clinician can see this record */}
-
-                  {/* <div className="patient-notes-editor">
-                    <label htmlFor="notes-edited-by">Last Edited By:</label>
-                    {isScreened === true && (
-                      <p>{screeningDetails.last_edited_by}</p>
-                    )}
-                  </div> */}
-
                   <div className="patient-notes-edited-date">
                     <label htmlFor="date-edited-on">Last Edited On:</label>
 
                     <p>{parseDate(screeningDetails.last_edited_on)}</p>
+                  </div>
+
+                  <div className="patient-registered-date">
+                    <label style={{fontWeight: 'bold', color: 'grey', fontSize: '12px', display: 'block'}}>Registered Date</label>
+                    <p style={{fontSize: '12px'}}>{parseDate(patientDetails.registered_date)}</p>
                   </div>
                 </div>
               </div>
