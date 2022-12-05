@@ -195,15 +195,11 @@ const PatientDetails = () => {
                         <option value='usa'>United States of America</option>
                         <option value='japan'>Japan</option>
                         <option value='philippines'>Philippines</option>
-                        <option>...</option>
                       </select>
                     </div>
                     <div className="col-md-2">
                       <label htmlFor="zip" className="form-label">Zip</label>
                       <input type="text" className="form-control" id="zip" readOnly={!isEdittable} value={testUser.zip}/>
-                    </div>
-                    <div className="col-12">
-
                     </div>
                   </form>
                 </div>
@@ -222,14 +218,14 @@ const PatientDetails = () => {
                     <div className="col-12 col-md-7 pt-2">
                       <p className="fw-bold mb-3">Assessment Logs</p>
 
-                      <div className="accordion mb-4" id="accordionExample">
+                      <div className="accordion mb-4" id="accordion">
                         <div className="accordion-item">
                           <h2 className="accordion-header" id="headingOne">
-                            <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                               Section 1: Demographic
                             </button>
                           </h2>
-                          <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                          <div id="collapseOne" className="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordion">
                             <div className="accordion-body">
                               <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element.
                             </div>
@@ -241,7 +237,7 @@ const PatientDetails = () => {
                               Section 2: Emotional Symptoms
                             </button>
                           </h2>
-                          <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                          <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion">
                             <div className="accordion-body">
                               <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element.
                             </div>
@@ -253,7 +249,7 @@ const PatientDetails = () => {
                               Section 3: Physical Symptoms
                             </button>
                           </h2>
-                          <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                          <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordion">
                             <div className="accordion-body">
                               <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element.
                             </div>
@@ -265,7 +261,7 @@ const PatientDetails = () => {
                               Section 4: Liebowitz Social Anxiety Scale
                             </button>
                           </h2>
-                          <div id="collapseFour" className="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                          <div id="collapseFour" className="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordion">
                             <div className="accordion-body">
                               <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element.
                             </div>
@@ -277,7 +273,7 @@ const PatientDetails = () => {
                               Section 5: Social Phobia Inventory
                             </button>
                           </h2>
-                          <div id="collapseFive" className="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                          <div id="collapseFive" className="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordion">
                             <div className="accordion-body">
                               <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element.
                             </div>
