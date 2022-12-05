@@ -92,7 +92,7 @@ const PatientDetails = () => {
             <nav aria-label="breadcrumb" className="breadcrumb-should-show">
               <ol className="breadcrumb mb-0">
                 <li className="breadcrumb-item">
-                  <Link to={'/patient-records'}>
+                  <Link to={'/patient-records'} className="text-decoration-none">
                     Patient Records
                   </Link>
                 </li>
@@ -159,11 +159,11 @@ const PatientDetails = () => {
                   <form className="row mx-2 my-4">
                     <div className="col-md-6">
                       <label htmlFor="firstName" className="form-label">First Name</label>
-                      <input type="text" className="form-control" id="firstName" readOnly={!isEdittable} value={testUser.firstName}/>
+                      <input type="text" className="form-control" id="firstName" readOnly={!isEdittable} value={testUser.firstName} />
                     </div>
                     <div className="col-md-6">
                       <label htmlFor="lastName" className="form-label">Last Name</label>
-                      <input type="text" className="form-control" id="lastName" placeholder="test hello" readOnly={!isEdittable} value={testUser.lastName}/>
+                      <input type="text" className="form-control" id="lastName" placeholder="test hello" readOnly={!isEdittable} value={testUser.lastName} />
                     </div>
                     <div className="col-md-6">
                       <label htmlFor="gender" className="form-label">Gender</label>
@@ -174,19 +174,19 @@ const PatientDetails = () => {
                     </div>
                     <div className="col-md-6">
                       <label htmlFor="birthday" className="form-label">Birthday</label>
-                      <input type="date" className="form-control" id="birthday" readOnly={!isEdittable} max={new Date().toISOString().substring(0, 10)} value={testUser.birthday}/>
+                      <input type="date" className="form-control" id="birthday" readOnly={!isEdittable} max={new Date().toISOString().substring(0, 10)} value={testUser.birthday} />
                     </div>
                     <div className="col-md-6">
                       <label htmlFor="contact" className="form-label">Contact Number</label>
-                      <input type="text" className="form-control" id="contact" readOnly={!isEdittable} value={testUser.contactNumber}/>
+                      <input type="text" className="form-control" id="contact" readOnly={!isEdittable} value={testUser.contactNumber} />
                     </div>
                     <div className="col-md-6">
                       <label htmlFor="street" className="form-label">Street</label>
-                      <input type="text" className="form-control" id="street" readOnly={!isEdittable} value={testUser.street}/>
+                      <input type="text" className="form-control" id="street" readOnly={!isEdittable} value={testUser.street} />
                     </div>
                     <div className="col-md-6">
                       <label htmlFor="city" className="form-label">City</label>
-                      <input type="text" className="form-control" id="city" readOnly={!isEdittable} value={testUser.city}/>
+                      <input type="text" className="form-control" id="city" readOnly={!isEdittable} value={testUser.city} />
                     </div>
                     <div className="col-md-4">
                       <label htmlFor="country" className="form-label">Country</label>
@@ -199,7 +199,7 @@ const PatientDetails = () => {
                     </div>
                     <div className="col-md-2">
                       <label htmlFor="zip" className="form-label">Zip</label>
-                      <input type="text" className="form-control" id="zip" readOnly={!isEdittable} value={testUser.zip}/>
+                      <input type="text" className="form-control" id="zip" readOnly={!isEdittable} value={testUser.zip} />
                     </div>
                   </form>
                 </div>
@@ -209,8 +209,13 @@ const PatientDetails = () => {
               <div className="row mt-3">
                 <div className="col bg-white rounded-4 px-4 pt-4 pb-2 ">
 
-                  <div className="border-bottom">
-                    <h5 className="fw-bold">Additional Details</h5>
+                  <div className="border-bottom mb-4 pb-2 d-flex align-items-center justify-content-between">
+                    <h5 className="fw-bold mb-0">Additional Details</h5>
+                    <button className="btn btn-outline-primary">
+                      <span>
+                        <i className="bi bi-printer-fill"></i>
+                      </span>
+                    </button>
                   </div>
 
                   <div className="row">
