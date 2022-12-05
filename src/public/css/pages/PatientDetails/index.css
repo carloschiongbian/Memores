@@ -1,0 +1,29 @@
+/* width */
+.text-area-scrollbar::-webkit-scrollbar {
+    width: 3px;
+}
+
+/* Track */
+.text-area-scrollbar::-webkit-scrollbar-track{
+    background: #f1f1f1;
+}
+
+/* Handle */
+.text-area-scrollbar::-webkit-scrollbar-thumb{
+    background: #8866E9;
+}
+
+/* Handle on hover */
+.text-area-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #7e5ed8;
+}
+
+.breadcrumb-should-show {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .breadcrumb-should-show {
+        display: none;
+    }
+}

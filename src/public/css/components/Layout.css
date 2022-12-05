@@ -2,7 +2,7 @@
     transition: margin-left 0.5s;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
     .pg-content {
         margin-left: 0px !important;
     }
