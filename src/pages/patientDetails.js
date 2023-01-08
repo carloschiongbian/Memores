@@ -47,17 +47,81 @@ const PatientDetails = () => {
   //   };
   // };
 
-  const testUser = {
-    firstName: 'Velvet',
-    lastName: 'Crowe',
-    gender: 'male',
-    birthday: '1991-03-29',
-    contactNumber: '09273939111',
-    street: '719 Aball Street',
-    city: 'Village of Aball',
-    country: 'philippines',
-    zip: 6014
+  const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [patient, setPatient] = useState({
+    id: null,
+    assessment_id: null,
+    fname: '',
+    lname: '',
+    fullname: '',
+    email: '',
+    phone: '',
+    age: '',
+    bday: '',
+    gender: '',
+    street: '',
+    city: '',
+    zip: '',
+    country: '',
+    registered_date: '',
+    prediction_result: null,
+    classification_probability: null,
+    result_description: null,
+    date_taken: null,
+    date_finished: null,
+    patient_notes: '',
+    last_edited_on: null
+  })
+
+  const formatNotes = (text) => {
+    let x = text.replace(/(\\r)*\\n/g, '<br>');
+    return JSON.parse(x);
   }
+
+  const formatDate = (date) => {
+
+    if (date === null)
+      return 'N/A'
+
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    let d = new Date(date);
+    let hours = d.getHours()
+    let minutes = d.getMinutes()
+    let seconds = d.getSeconds()
+
+    let time;
+    if (hours > 0 && hours <= 12) {
+      time = '' + hours
+    } else if (hours > 12) {
+      time = '' + (hours - 12)
+    } else if (hours === 0) {
+      time = '12'
+    }
+
+    time += (minutes < 10) ? ':0' + minutes : ':' + minutes;  // get minutes
+    time += (seconds < 10) ? ':0' + seconds : ':' + seconds;  // get seconds
+    time += (hours >= 12) ? ' P.M.' : ' A.M.';  // get AM/PM
+
+    return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()} ${time}`;
+  }
+
+  useEffect(() => {
+    Api().get(`/get-patient-details/id=${id}`)
+      .then((res) => {
+        console.log(res.data)
+        setPatient(res.data)
+        setIsLoading(false)
+      })
+      .catch(() => {
+        console.log('error getting patient details.')
+        setIsLoading(false)
+      })
+  }, [])
 
   const [isEdittable, setIsEdittable] = useState(false);
   const [isNotesEdittable, setIsNotesEdittable] = useState(false);
@@ -97,7 +161,7 @@ const PatientDetails = () => {
                   </Link>
                 </li>
                 <li className="breadcrumb-item active" aria-current="page">
-                  {handleEllipsis('Velvet Crowe', 20)}
+                  {handleEllipsis(patient.fullname, 20)}
                 </li>
               </ol>
             </nav>
@@ -148,10 +212,10 @@ const PatientDetails = () => {
 
                 <div className="col-12 col-md-4 mt-4 mt-lg-0 d-flex flex-column align-items-center justify-content-center">
                   <div className="d-flex align-items-center justify-content-center border p-1 border-primary rounded-circle bg-primary p-0" height="120" width="120" style={{ minHeight: "175px", minWidth: "175px" }}>
-                    <h1 className="mb-0 text-white" style={{ 'fontSize': '4.275rem' }}>VC</h1>
+                    <h1 className="mb-0 text-white" style={{ 'fontSize': '4.275rem' }}>{patient.fname[0]}{patient.lname[0]}</h1>
                   </div>
                   <p className="mb-0 mt-2 fw-bold fs-4 text-center">
-                    {handleEllipsis('Velvet Crowe', 20)}
+                    {handleEllipsis(patient.fullname, 20)}
                   </p>
                 </div>
 
@@ -159,38 +223,38 @@ const PatientDetails = () => {
                   <form className="row mx-2 my-4">
                     <div className="col-md-6">
                       <label htmlFor="firstName" className="form-label">First Name</label>
-                      <input type="text" className="form-control" id="firstName" readOnly={!isEdittable} value={testUser.firstName} />
+                      <input type="text" className="form-control" id="firstName" readOnly={!isEdittable} value={patient.fname} />
                     </div>
                     <div className="col-md-6">
                       <label htmlFor="lastName" className="form-label">Last Name</label>
-                      <input type="text" className="form-control" id="lastName" placeholder="test hello" readOnly={!isEdittable} value={testUser.lastName} />
+                      <input type="text" className="form-control" id="lastName" placeholder="test hello" readOnly={!isEdittable} value={patient.lname} />
                     </div>
                     <div className="col-md-6">
                       <label htmlFor="gender" className="form-label">Gender</label>
-                      <select id="gender" className="form-select" disabled={!isEdittable} value={testUser.gender}>
+                      <select id="gender" className="form-select" disabled={!isEdittable} value={patient.gender}>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                       </select>
                     </div>
                     <div className="col-md-6">
                       <label htmlFor="birthday" className="form-label">Birthday</label>
-                      <input type="date" className="form-control" id="birthday" readOnly={!isEdittable} max={new Date().toISOString().substring(0, 10)} value={testUser.birthday} />
+                      <input type="date" className="form-control" id="birthday" readOnly={!isEdittable} max={new Date().toISOString().substring(0, 10)} value={patient.bday} />
                     </div>
                     <div className="col-md-6">
                       <label htmlFor="contact" className="form-label">Contact Number</label>
-                      <input type="text" className="form-control" id="contact" readOnly={!isEdittable} value={testUser.contactNumber} />
+                      <input type="text" className="form-control" id="contact" readOnly={!isEdittable} value={patient.phone} />
                     </div>
                     <div className="col-md-6">
                       <label htmlFor="street" className="form-label">Street</label>
-                      <input type="text" className="form-control" id="street" readOnly={!isEdittable} value={testUser.street} />
+                      <input type="text" className="form-control" id="street" readOnly={!isEdittable} value={patient.street} />
                     </div>
                     <div className="col-md-6">
                       <label htmlFor="city" className="form-label">City</label>
-                      <input type="text" className="form-control" id="city" readOnly={!isEdittable} value={testUser.city} />
+                      <input type="text" className="form-control" id="city" readOnly={!isEdittable} value={patient.city} />
                     </div>
                     <div className="col-md-4">
                       <label htmlFor="country" className="form-label">Country</label>
-                      <select id="country" className="form-select" disabled={!isEdittable} value={testUser.country}>
+                      <select id="country" className="form-select" disabled={!isEdittable} value={patient.country}>
                         <option value='southKorea'>South Korea</option>
                         <option value='usa'>United States of America</option>
                         <option value='japan'>Japan</option>
@@ -199,7 +263,7 @@ const PatientDetails = () => {
                     </div>
                     <div className="col-md-2">
                       <label htmlFor="zip" className="form-label">Zip</label>
-                      <input type="text" className="form-control" id="zip" readOnly={!isEdittable} value={testUser.zip} />
+                      <input type="text" className="form-control" id="zip" readOnly={!isEdittable} value={patient.zip} />
                     </div>
                   </form>
                 </div>
@@ -337,7 +401,7 @@ const PatientDetails = () => {
                     <h5 className="fw-bold mb-0">Notes</h5>
 
                     {!isNotesEdittable && (
-                      <button className="btn btn-primary" onClick={() => setIsNotesEdittable(true)}>
+                      <button className="btn btn-primary" onClick={() => setIsNotesEdittable(true)} disabled={patient.assessment_id === null}>
                         <span>
                           <i className="bi bi-pencil-square"></i>
                         </span>
@@ -360,17 +424,18 @@ const PatientDetails = () => {
                     )}
                   </div>
 
-                  <div className="alert alert-primary alert-dismissible fade show" role="alert">
-                    You can only add or update this section once the patient is already screened.
-                    <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
+                  {patient.assessment_id === null && (<div className='alert alert-primary alert-dismissible fade show' role="alert">
+                        You can only add or update this section once the patient is already screened.
+                        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>)}
 
                   <div className="flex-grow-1">
-                    <textarea className="form-control text-area-scrollbar" id="floatingTextarea2" style={{ "height": "100%", "minHeight": "250px", "resize": "none" }} disabled={!isNotesEdittable}></textarea>
+                    <textarea className="form-control text-area-scrollbar" id="floatingTextarea2" style={{ "height": "100%", "minHeight": "250px", "resize": "none" }} disabled={!isNotesEdittable} defaultValue={patient.patient_notes}>
+                    </textarea>
 
                   </div>
                   <p className="fs-7 pt-3">
-                    <span className="fw-bold">Last edited on:</span> <span className="text-black-50">December 12, 2022 5:24 PM</span>
+                    <span className="fw-bold">Last edited on:</span> <span className="text-black-50">{formatDate(patient.last_edited_on)}</span>
                   </p>
                 </div>
               </div>
