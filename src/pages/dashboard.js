@@ -144,7 +144,6 @@ const Dashboard = () => {
           <div className="top-section">
             <div
               className="number-of-patients-container"
-              onClick={() => navigate(patientRecordsPath)}
             >
               <h4>
                 <GroupIcon /> Patients
@@ -153,46 +152,12 @@ const Dashboard = () => {
             </div>
 
             <div
-              onClick={() => handleModal()}
               className="number-of-patients-screened-container"
             >
               <h4>
                 <MedicalServicesIcon /> Screened
               </h4>
               <h1>{screenedPatients.length}</h1>
-
-              <CommonModal
-                dialogTitle="Your Screened Patients"
-                btnPrimaryText="Okay"
-                width="300"
-                handleSubmit={handleModal}
-                openModal={openScreenedModal}
-                handleClose={handleModal}
-              >
-                {screenedPatients.length !== 0 &&
-                  screenedPatients.map((patient, index) => (
-                    <ListItem
-                      key={index}
-                      divider={true}
-                      button={true}
-                      onClick={() => {
-                        navigate(patientDetailsPath + patient.id);
-                      }}
-                      className="patient-information-item"
-                    >
-                      <div className="patient-name">
-                        <h5>
-                          {index + 1} {patient.fname + " " + patient.lname}{" "}
-                        </h5>
-                      </div>
-                    </ListItem>
-                  ))}
-                {screenedPatients.length === 0 && (
-                  <span style={{ color: "gray", fontSize: "15px" }}>
-                    None of your patients have been screened yet.
-                  </span>
-                )}
-              </CommonModal>
             </div>
 
             <div className="average-time-duration-of-screening-container">
