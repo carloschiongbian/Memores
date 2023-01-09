@@ -64,7 +64,6 @@ const Dashboard = () => {
     setNonScreenedPatients(difference)
 
     setAverageDuration(data.assessments);
-    getCategoryCount(data.screening_details);
   };
 
   const getDifference = (patients, assessments) => {
