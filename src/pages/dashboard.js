@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
 import { List, ListItem, Skeleton } from "@mui/material";
 
 import GroupIcon from "@mui/icons-material/Group";
@@ -8,35 +8,20 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 
-import Layout from "../components/Layout";
-import "../public/css/pages/Dashboard/Dashboard.scss";
-import CommonModal from "../components/modal/CommonModal";
-import { useContext } from "react";
-import AuthContext from "../auth/AuthContext";
 import Api from "../services/api";
-
-const SAD_CATEGORIES = {
-  NORMAL: "Normal",
-  MILD: "Mild",
-  MODERATE: "Moderate",
-  SEVERE: "Severe",
-};
+import Layout from "../components/Layout";
+import AuthContext from "../auth/AuthContext";
+import "../public/css/pages/Dashboard/Dashboard.scss";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [sadCategories, setSADCategories] = useState({
-    normal: 0,
-    mild: 0,
-    moderate: 0,
-    severe: 0,
-  });
+  const authUser = useContext(AuthContext);
+
   const [patients, setPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [recentDuration, setRecentDuration] = useState();
   const [screenedPatients, setScreenedPatients] = useState([]);
   const [nonScreenedPatients, setNonScreenedPatients] = useState([]);
-  const [openScreenedModal, setOpenScreenedModal] = useState(false);
-  const authUser = useContext(AuthContext);
 
   const getUser = async () => {
     try {
@@ -56,7 +41,6 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  let patientRecordsPath = "../patient-records";
   let patientDetailsPath = "../patient-details/id="; 
 
   const getDashboardData = async () => {
@@ -68,7 +52,6 @@ const Dashboard = () => {
   };
 
   const setData = (data) => {
-
     const patients = data.patients
     const assessments = data.assessments
 
@@ -102,9 +85,7 @@ const Dashboard = () => {
       milliseconds += ((new Date(assessment.date_finished).getTime() - new Date(assessment.date_taken).getTime()) / 1000)
     })
     
-    
     let avgMilliseconds = milliseconds / assessments.length
- 
     let second = Math.floor(avgMilliseconds/1000)
     let minute = Math.floor(second/60)
     let hour = Math.floor(minute/60)
@@ -114,27 +95,6 @@ const Dashboard = () => {
     hour = hour % 24
 
     setRecentDuration(formatTo2Digits(hour) + ' : ' + formatTo2Digits(minute) + ' : ' + formatTo2Digits(second))
-  };
-
-  const getCategoryCount = (data) => {
-    const countCategory = (patients, sadCategory) => {
-      const categories = patients.filter((data) => {
-        return data.sad_category === sadCategory;
-      });
-      return categories.length;
-    };
-
-    setSADCategories({
-      ...sadCategories,
-      normal: countCategory(data, SAD_CATEGORIES.NORMAL),
-      mild: countCategory(data, SAD_CATEGORIES.MILD),
-      moderate: countCategory(data, SAD_CATEGORIES.MODERATE),
-      severe: countCategory(data, SAD_CATEGORIES.SEVERE),
-    });
-  };
-
-  const handleModal = () => {
-    setOpenScreenedModal(!openScreenedModal ? true : false);
   };
 
   return (
