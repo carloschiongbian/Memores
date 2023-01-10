@@ -1,7 +1,7 @@
 from flask import session, jsonify
 from connection.connection import db, ma
 from models.patients import Patients
-from models.patient_screening_details import PatientsScreeningDetails, PatientScreeningDetailsSchema
+from models.patient_screening_details import PatientsScreeningDetails
 from models.assessments import Assessments
 
 # @param - id. A patient id, usually passed through url route
@@ -25,7 +25,7 @@ def get_patient_details(id):
     
     patient = query.first()
     patient_response_obj = patient_details_schema.jsonify(patient)
-    return patient_response_obj.get_json()
+    return patient_response_obj.get_json(), 200
 
 
 class PatientDetailsSchema(ma.Schema):

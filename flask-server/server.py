@@ -1,7 +1,8 @@
 # input "python server.py" to run the flask server
 from controllers.manage import update_user_account, get_user_account, delete_user_account, get_user_view, get_dashboard_data, get_deleted_users, get_updated_users, get_distinct_roles, get_general_users, update_user_photo_details, update_user_license_details, update_user_both_image, update_user_details_only
 from controllers.screening import get_questions, submit_answers, get_patients
-from controllers import get_users, login, register_user, get_current_user, logout, clinician_server, create_patient, get_patient_details
+from controllers.patient_details import get_patient_details, update_patient_details, update_patient_notes
+from controllers import get_users, login, register_user, get_current_user, logout, clinician_server, create_patient
 import os
 from flask import Flask
 from flask_bcrypt import Bcrypt
@@ -108,6 +109,11 @@ app.add_url_rule(DELETE_PATIENT_RECORD, 'delete_patient_record',
 app.add_url_rule(GET_PATIENT_DETAILS, 'get_patient_details', 
                 get_patient_details.get_patient_details, methods=['GET'])
 # Update Patient Details
+app.add_url_rule(UPDATE_PATIENT_DETAILS, 'update_patient_details', 
+                update_patient_details.update_patient_details, methods=['PUT'])
+# Update Patient Notes
+app.add_url_rule(UPDATE_PATIENT_NOTES, 'update_patient_notes', 
+                update_patient_notes.update_patient_notes, methods=['PUT'])
 
 # Get Dashboard Data
 app.add_url_rule(DASHBOARD, 'dashboard',

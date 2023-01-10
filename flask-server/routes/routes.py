@@ -16,6 +16,8 @@ QUESTIONS = "/api/get-assessment-questions"
 GET_PATIENTS = "/api/get-patients"
 GET_PATIENTS_V2 = "/api/get-patients-v2"
 GET_PATIENT_DETAILS = "/api/get-patient-details/id=<id>"
+UPDATE_PATIENT_DETAILS = '/api/update-patient-details'
+UPDATE_PATIENT_NOTES = '/api/update-patient-notes'
 CREATE_PATIENT = "/api/create-patient"
 ADD_USER = "/api/add-user"
 LOGIN = "/api/login"
