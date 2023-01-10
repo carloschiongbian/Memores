@@ -6,6 +6,7 @@ import "../public/css/pages/PatientDetails/index.css";
 import countriesSelect from "../components/countriesSelect";
 import PersonalDetailsSkeleton from "../components/patientDetails/personalDetailsSkeleton";
 import TextSkeleton from "../components/patientDetails/textSkeleton";
+import ServerError from "../components/serverError";
 
 const PatientDetails = () => {
   const { id } = useParams()
@@ -15,6 +16,7 @@ const PatientDetails = () => {
   const [isNotesEdittable, setIsNotesEdittable] = useState(false)
   const [isSubmittingPatientDetails, setIsSubmittingPatientDetails] = useState(false)
   const [isSubmittingNotes, setIsSubmittingNotes] = useState(false)
+  const [hasErrorDuringPageLoad, setHasErrorDuringPageLoad] = useState(false)
   const [alertMessage, setAlertMessage] = useState({
     message: '',
     icon: '',
@@ -182,6 +184,7 @@ const PatientDetails = () => {
   }
 
   const handleSubmitNewDetails = async () => {
+    console.log(currentPatientPersonalDetails)
     const successAlertMessage = {
       message: "Patient's information is successfully updated!",
       icon: 'bi bi-check-circle',
@@ -230,8 +233,8 @@ const PatientDetails = () => {
       ...currentPatientNotesInfo,
       last_edited_on: new Date().toISOString()
     }
-    const isSaved = await saveToDatabase(latest, '/update-patient-notes', 
-        successAlertMessage, failedAlertMessage)
+    const isSaved = await saveToDatabase(latest, '/update-patient-notes',
+      successAlertMessage, failedAlertMessage)
     if (isSaved) {
       const latestPatientDetails = {
         ...patient, ...latest
@@ -239,7 +242,7 @@ const PatientDetails = () => {
       setPatient(latestPatientDetails)
       setIsNotesEdittable(false)
     }
-  
+
     showAlertEffect()
     setIsSubmittingNotes(false)
   }
@@ -272,6 +275,7 @@ const PatientDetails = () => {
       })
       .catch(() => {
         console.log('error getting patient details.')
+        setHasErrorDuringPageLoad(true)
         setIsLoading(false)
       })
   }, [id])
@@ -279,6 +283,8 @@ const PatientDetails = () => {
 
   return (
     <Layout>
+      {
+        (hasErrorDuringPageLoad && <ServerError></ServerError> ) || 
       <div className="container">
 
         {/* Alert: Success and Error */}
@@ -601,6 +607,7 @@ const PatientDetails = () => {
           </div>
         </section>
       </div>
+      }
     </Layout>
   );
 };
