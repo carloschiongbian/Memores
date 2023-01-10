@@ -15,6 +15,9 @@ GET_USERS = "/api/get-users"
 QUESTIONS = "/api/get-assessment-questions"
 GET_PATIENTS = "/api/get-patients"
 GET_PATIENTS_V2 = "/api/get-patients-v2"
+GET_PATIENT_DETAILS = "/api/get-patient-details/id=<id>"
+UPDATE_PATIENT_DETAILS = '/api/update-patient-details'
+UPDATE_PATIENT_NOTES = '/api/update-patient-notes'
 CREATE_PATIENT = "/api/create-patient"
 ADD_USER = "/api/add-user"
 LOGIN = "/api/login"
@@ -22,7 +25,6 @@ CURRENT_USER = "/api/@me"
 LOGOUT = "/api/logout"
 PATIENT_RECORDS = "/api/patient-records"
 DELETE_PATIENT_RECORD = "/api/patient-records/delete/id=<id>"
-PATIENT_DETAILS = "/api/patient-details/id=<id>"
 DASHBOARD = "/api/dashboard"
 
 SUBMIT_ANSWERS = "/api/submit-answers"
