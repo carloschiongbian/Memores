@@ -25,5 +25,10 @@ insert_values = ("memores", password, "admin", "admin", "admin", "memores_admin@
                  "male", "static\default-admin.png", testImage, "0000", "No Address", "No city", "No country", "0000")
 insert_cursor.execute(sql_insert_query, insert_values)
 
+sql_insert_query = "INSERT INTO `users` (`uname`,`pwd`,`role`,`fname`,`lname`,`email`,`phone`,`bday`,`gender`,`photo`,`license`,`license_id`,`street`,`city`,`country`,`zip`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+insert_values = ("user", password, "user", "user", "user", "user@gmail.com", "000000", "2022-04-17",
+                 "male", "static\default-admin.png", testImage, "0000", "No Address", "No city", "No country", "0000")
+insert_cursor.execute(sql_insert_query, insert_values)
+
 new_conn.commit()
 new_conn.close()
