@@ -15,7 +15,7 @@ const ScreeningWizard = () => {
     const [totalAnswered, setTotalAnswered] = useState(0)
     const [shouldEnableSubmit, setShouldEnableSubmit] = useState(false)
     const [sections, setSections] = useState({})
-    const {answers, setAnswers, patientSelected, dateStarted} = useContext(AnswerContext)
+    const {answers, setAnswers, patientSelected, dateStarted, setShowDialog} = useContext(AnswerContext)
     const { user } = useContext(AuthContext)
     const [classification, setClassification] = useState(null)
     const [classProbability, setClassProbability] = useState(null)
@@ -91,6 +91,10 @@ const ScreeningWizard = () => {
     }
 
     const handleReturn = () => {
+        setShowDialog(false)
+        localStorage.removeItem('inProgress')
+        window.onbeforeunload = null
+        
         setTimeout(() => {
             setMustShowResult(false)
             setShouldEnableSubmit(false)
