@@ -23,6 +23,9 @@ const Layout = ({ children }) => {
       if (!inProgress) {
         document.querySelector('.modal-backdrop')?.remove()
       }
+      // Remove the added style of the body due to the modal pop up
+      document.body.style.overflow = ''
+      document.body.style.paddingRight = ''
     }
 
     if (inProgress && location.pathname === '/screening') {
