@@ -1,11 +1,37 @@
 import LeftNavigationMenu from "./LeftNavigationMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { screen } from "@testing-library/react";
 import Header from "./Header";
 import "../public/css/components/Layout.css";
+import { useLocation } from "react-router-dom";
+
 
 const Layout = ({ children }) => {
   const [isLeftNavigationOpen, setIsLeftNavigationOpen] = useState(true);
+  const location = useLocation()
+
+  // Catch browser refresh and back button: 
+  // we do not need the dependency array
+  useEffect(() => {
+    const inProgress = localStorage.getItem('inProgress')
+
+    window.onpopstate = (ev) => {
+      // Remove the backdrop of the modal if the user
+      // navigates away from the screening page without
+      // starting the assessment. Otherwise, the dialogBox.js
+      // handles the removal of the modal backdrop.
+      if (!inProgress) {
+        document.querySelector('.modal-backdrop')?.remove()
+      }
+    }
+
+    if (inProgress && location.pathname === '/screening') {
+      window.onbeforeunload = () => { return true }
+    } else {
+      window.onbeforeunload = null
+      localStorage.removeItem('inProgress')
+    }
+  })
 
   const handleLeftNavigation = () => {
     const sideMenu = document.getElementById("side-menu");

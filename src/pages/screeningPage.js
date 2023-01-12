@@ -9,9 +9,19 @@ import Api from '../services/api'
 import Pagination from '../components/customPagination/Pagination'
 import { useRef } from 'react'
 import AuthContext from '../auth/AuthContext'
+import { useCallbackPrompt } from '../lib/useCallbackPrompt'
+import DialogBox from '../components/screening/dialogBox'
 
 
 const ScreeningPage = () => {
+
+    const [showDialog, setShowDialog] = useState(false)
+    const [showPrompt, confirmNavigation, cancelNavigation] = useCallbackPrompt(showDialog)
+    useEffect(() => {
+        // Used to reset inProgress if the user opts
+        //  to cancel the assessment
+        localStorage.removeItem('inProgress')
+    }, [])
 
     const { user } = useContext(AuthContext)
     const searchQuery = useRef(null)
@@ -67,6 +77,11 @@ const ScreeningPage = () => {
     }
 
     const handleProceed = () => {
+        // Shows a warning dialog if a user leaves the page
+        setShowDialog(true)
+        localStorage.setItem('inProgress', true)
+        window.onbeforeunload = () => { return true }
+
         // When proceed is clicked, take note of when the screening started
         // This is to be used to get time elapsed for the total screening duration
         const date = new Date().toLocaleString('en-ZA', { hour12: false }).replaceAll('/', '-').replace(',', '')
@@ -180,10 +195,12 @@ const ScreeningPage = () => {
     }, [nameQuery, allSearchedPatients, allPatients, total, currentPage, user]);
 
 
-
     return (
         <Layout>
-            <AnswerContext.Provider value={{ answers, setAnswers, patientSelected, dateStarted }}>
+            <AnswerContext.Provider value={{ answers, setAnswers, patientSelected, dateStarted, setShowDialog }}>
+
+                <DialogBox showDialog={showPrompt} confirmNavigation={confirmNavigation} cancelNavigation={cancelNavigation}></DialogBox>
+
                 <div className='d-flex flex-column h-100 '>
                     <div className="container mt-2">
                         <div className="vh-75 d-flex flex-column align-items-center justify-content-center">
@@ -207,7 +224,7 @@ const ScreeningPage = () => {
                 <ScreeningWizard />
 
 
-                <div className="modal fade" id="select-a-patient" tabIndex="-1" aria-labelledby="select-a-patient-modal-title" aria-hidden="true">
+                <div className="modal fade" id="select-a-patient" tabIndex="-1" aria-labelledby="select-a-patient-modal-title" aria-hidden="true" data-bs-keyboard="true">
                     <div className="modal-dialog  modal-dialog-centered modal-dialog-scrollable modal-lg">
                         <div className="modal-content border-0">
                             <div className="modal-header bg-primary">
